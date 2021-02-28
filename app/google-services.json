@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "843370455090",
+    "project_id": "qlique-fbd4b",
+    "storage_bucket": "qlique-fbd4b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:843370455090:android:8223ba4925c9d923dc9c2b",
+        "android_client_info": {
+          "package_name": "com.example.qlique"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "843370455090-kc9t8j8fb6pbijjs0v1lfoauii2sqtft.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEYg3k2hcWMyjGlv4PuUcgtKuZ2-syFHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "843370455090-kc9t8j8fb6pbijjs0v1lfoauii2sqtft.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
