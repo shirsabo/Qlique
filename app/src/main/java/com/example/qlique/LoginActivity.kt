@@ -37,8 +37,8 @@ class LoginActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         loginBtn.setOnClickListener {
-            var email: String = emailEt.text.toString()
-            var password: String = passwordEt.text.toString()
+            val email: String = emailEt.text.toString()
+            val password: String = passwordEt.text.toString()
 
             if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
                 Toast.makeText(this@LoginActivity, "Please fill all the fields", Toast.LENGTH_LONG).show()

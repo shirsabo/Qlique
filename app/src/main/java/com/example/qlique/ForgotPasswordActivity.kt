@@ -33,7 +33,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
         }
 
         resetPasswordBtn.setOnClickListener {
-            var email: String = emailEt.text.toString()
+            val email: String = emailEt.text.toString()
             if (TextUtils.isEmpty(email)) {
                 Toast.makeText(this, "Please enter email id", Toast.LENGTH_LONG).show()
             } else {

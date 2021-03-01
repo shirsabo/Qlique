@@ -40,8 +40,8 @@ import com.google.firebase.auth.FirebaseAuth
         signUpBtn = findViewById(R.id.signup_btn)
 
         signUpBtn.setOnClickListener{
-            var email: String = emailEt.text.toString()
-            var password: String = passwordEt.text.toString()
+            val email: String = emailEt.text.toString()
+            val password: String = passwordEt.text.toString()
 
             if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
                 Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()

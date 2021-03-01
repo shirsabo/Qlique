@@ -31,14 +31,14 @@ class MainActivity : AppCompatActivity() {
 
         logoutBtn = findViewById(R.id.logout_btn)
         updatePass = findViewById(R.id.update_pass_btn)
-
+        // when clicking the logout we will return to the login activity.
         logoutBtn.setOnClickListener{
             FirebaseAuth.getInstance().signOut()
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
-
+        // when clicking the change password we will enter the change password activity.
         updatePass.setOnClickListener{
             val intent = Intent(this, UpdatePassword::class.java)
             startActivity(intent)

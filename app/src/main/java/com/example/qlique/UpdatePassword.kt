@@ -34,7 +34,7 @@ class UpdatePassword : AppCompatActivity() {
         }
 
         changePasswordBtn.setOnClickListener{
-            var password: String = passwordEt.text.toString()
+            val password: String = passwordEt.text.toString()
             if (TextUtils.isEmpty(password)) {
                 Toast.makeText(this, "Please enter password", Toast.LENGTH_LONG).show()
             } else {
