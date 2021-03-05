@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var logoutBtn: Button
     private lateinit var updatePass: Button
+    private lateinit var chatBtn :Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,10 +32,18 @@ class MainActivity : AppCompatActivity() {
 
         logoutBtn = findViewById(R.id.logout_btn)
         updatePass = findViewById(R.id.update_pass_btn)
+        chatBtn = findViewById(R.id.btn_chat_feed)
         // when clicking the logout we will return to the login activity.
         logoutBtn.setOnClickListener{
             FirebaseAuth.getInstance().signOut()
             val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        chatBtn.setOnClickListener{
+            val intent = Intent(this, ChatListActivity::class.java)
+            Toast.makeText(this, "chat", Toast.LENGTH_LONG)
+                .show()
             startActivity(intent)
             finish()
         }

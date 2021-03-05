@@ -27,7 +27,7 @@ class UpdatePassword : AppCompatActivity() {
         passwordEt = findViewById(R.id.password_edt_text)
 
         changePasswordBtn = findViewById(R.id.reset_pass_btn)
-        back = findViewById(R.id.back_btn)
+        back = findViewById(R.id.back_btn_update_pass)
 
         back.setOnClickListener{
             finish()
