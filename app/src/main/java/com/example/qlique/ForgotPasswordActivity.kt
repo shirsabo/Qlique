@@ -26,7 +26,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
         emailEt = findViewById(R.id.email_edt_text)
 
         resetPasswordBtn = findViewById(R.id.reset_pass_btn)
-        back = findViewById(R.id.back_btn)
+        back = findViewById(R.id.back_button_forgot_pass)
 
         back.setOnClickListener {
             finish()
