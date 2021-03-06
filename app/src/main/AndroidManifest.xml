@@ -9,7 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NewMessageActivity"></activity>
+        <activity android:name=".chatLogActivity">  <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".chatLogActivity"/></activity>
+        <activity android:name=".NewMessageActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ChatListActivity" />
+
+
+        </activity>
         <activity android:name=".ProfilePage" />
         <activity
             android:name=".MainActivity"
@@ -24,7 +33,8 @@
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".UpdatePassword" />
-        <activity android:name=".ChatListActivity" />
+        <activity android:name=".ChatListActivity"/>
+
     </application>
 
 </manifest>
