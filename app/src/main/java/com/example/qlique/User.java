@@ -14,6 +14,7 @@ public class User {
         this.city = city;
         this.gender = gender;
         this.friends = new ArrayList<>();
+        this.friends.add("shirsabo@gmail.com");
     }
 
     public User() {
