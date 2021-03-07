@@ -1,13 +1,20 @@
 package com.example.qlique
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+//import com.google.firebase.firestore.FirebaseFirestore
+import java.io.IOException
+import java.util.HashMap
 
 class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -19,7 +26,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
-
         if(auth.currentUser == null){
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -27,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         }else{
             Toast.makeText(this, "Already logged in", Toast.LENGTH_LONG).show()
         }
-
         setContentView(R.layout.activity_main)
 
         logoutBtn = findViewById(R.id.logout_btn)
@@ -53,4 +58,5 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
 }
