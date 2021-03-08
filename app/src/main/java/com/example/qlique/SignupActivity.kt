@@ -5,19 +5,20 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
- */class SignupActivity : AppCompatActivity() {
+ */class SignupActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
@@ -38,6 +39,10 @@ import com.google.firebase.ktx.Firebase
     private var filePath: Uri? = null
     private val PICK_IMAGE_REQUEST = 71
 
+    var listView: ListView? = null
+    var arrayAdapter:ArrayAdapter<String> ? = null
+    var hobbiesList:MutableList<String> = mutableListOf<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
@@ -54,6 +59,16 @@ import com.google.firebase.ktx.Firebase
         genderbtn = findViewById(R.id.Gender)
         maleBtn = findViewById(R.id.radioM)
         femaleBtn = findViewById(R.id.radioF)
+
+        listView = findViewById(R.id.multiple_list_view)
+        arrayAdapter = ArrayAdapter(applicationContext,
+        android.R.layout.simple_list_item_multiple_choice,
+        resources.getStringArray(R.array.hobbies_item))
+        
+        listView?.adapter = arrayAdapter
+        listView?.choiceMode = ListView.CHOICE_MODE_MULTIPLE
+        listView?.onItemClickListener = this
+
         signUpBtn.setOnClickListener {
             val email: String = emailEt.text.toString()
             val password: String = passwordEt.text.toString()
@@ -62,19 +77,31 @@ import com.google.firebase.ktx.Firebase
             val lname : String = lastNameEt.text.toString()
             var gender : String
             if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(city)
-              || TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname) || genderbtn.checkedRadioButtonId == -1) {
+              || TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname) ||
+                genderbtn.checkedRadioButtonId == -1 || hobbiesList.size == 0) {
                 Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()
             } else {
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, OnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            gender = if(maleBtn.isChecked) {
+                            gender = if (maleBtn.isChecked) {
                                 "Male"
                             } else {
                                 "Female"
                             }
-                            auth.currentUser?.let { it1 -> writeNewUser(it1.uid, fname, lname, city, email, gender) }
-                            Toast.makeText(this,"Successfully Registered", Toast.LENGTH_LONG).show()
+                            auth.currentUser?.let { it1 ->
+                                writeNewUser(
+                                    it1.uid,
+                                    fname,
+                                    lname,
+                                    city,
+                                    email,
+                                    gender,
+                                    hobbiesList
+                                )
+                            }
+                            Toast.makeText(this, "Successfully Registered", Toast.LENGTH_LONG)
+                                .show()
                             val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)
                             finish()
@@ -93,13 +120,31 @@ import com.google.firebase.ktx.Firebase
     }
 
 
-    private fun writeNewUser(userId: String, fName: String, lName: String, city: String, email: String, gender: String) {
-        val user = User(fName, lName, city, email, gender)
+    private fun writeNewUser(
+        userId: String,
+        fName: String,
+        lName: String,
+        city: String,
+        email: String,
+        gender: String,
+        hobbies: List<String>
+    ) {
+        val user = User(fName, lName, city, email, gender, hobbies)
         database.child("users").child(userId).setValue(user)
         database.child("users").child(userId).get().addOnSuccessListener {
             Log.i("firebase", "Got value ${it.value}")
         }.addOnFailureListener{
             Log.e("firebase", "Error getting data", it)
+        }
+    }
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        // when clicking one of the hobbies we will add or remove them from the hobbies list
+        val items:String = parent?.getItemAtPosition(position) as String
+        if (items in hobbiesList){
+            hobbiesList.remove(items)
+        } else {
+            hobbiesList.add(items)
         }
     }
 }

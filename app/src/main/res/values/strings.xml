@@ -22,4 +22,12 @@
     <string name="desc">your desc goes here</string>
     <string name="choose">Choose profile photo</string>
     <string name="upload">upload</string>
+    <string name="interests">What are your interests?</string>
+    <string-array name="hobbies_item">
+        <item>Sport</item>
+        <item>Initiative</item>
+        <item>Business</item>
+        <item>Fashion</item>
+        <item>Social</item>
+    </string-array>
 </resources>

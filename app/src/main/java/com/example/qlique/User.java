@@ -6,8 +6,9 @@ import java.util.List;
 public class User {
     public String firstName, lastName, email, city, gender;
     public List<String> friends;
+    public List<String> hobbies;
 
-    public User(String firstName, String lastName, String city, String email, String gender) {
+    public User(String firstName, String lastName, String city, String email, String gender, List<String> hobbies) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -15,6 +16,7 @@ public class User {
         this.gender = gender;
         this.friends = new ArrayList<>();
         this.friends.add("shirsabo@gmail.com");
+        this.hobbies = hobbies;
     }
 
     public User() {
