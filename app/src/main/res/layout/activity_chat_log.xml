@@ -8,16 +8,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_chat"
-        android:layout_width="413dp"
-        android:layout_height="1061dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="414dp"
+        android:layout_height="612dp"
+        android:layout_marginTop="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:background="@color/coolGreen"
-        app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/email_edt_text"

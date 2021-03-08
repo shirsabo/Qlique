@@ -26,14 +26,30 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     ]]>
 
     <TextView
         android:id="@+id/textView12"
-        android:layout_width="329dp"
-        android:layout_height="57dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginLeft="100dp"
+        android:layout_width="272dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginLeft="76dp"
+        android:background="@drawable/rounded"
         android:text="user_name"
         android:textColor="@android:color/black"
         android:textSize="16sp"
@@ -41,12 +57,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.805" />
+        app:layout_constraintVertical_bias="0.727" />
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/circularImageView"
-        android:layout_width="98dp"
-        android:layout_height="93dp"
+        android:layout_width="61dp"
+        android:layout_height="74dp"
         app:civ_border_color="#000000"
         app:civ_border_width="5dp"
         app:civ_shadow="false"
@@ -54,10 +70,12 @@
         app:civ_shadow_radius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/textView12"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.372"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_login_hero" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
