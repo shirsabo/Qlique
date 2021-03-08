@@ -18,7 +18,11 @@ class NewMessageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_new_message)
         supportActionBar?.title="Select User"
         val adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
-        fetchFriends()
+        adapter.add(UserItem())
+        adapter.add(UserItem())
+        adapter.add(UserItem())
+        adapter.add(UserItem())
+        adapter.add(UserItem())
         newMessageRecycle.adapter= adapter
         adapter.setOnItemClickListener{item,view->
             val intent = Intent (view.context,chatLogActivity::class.java)
@@ -35,6 +39,7 @@ private fun fetchFriends(){
     mFirebaseDatabase!!.child(userId!!).addValueEventListener(object: ValueEventListener{
         override fun onDataChange(dataSnapshot: DataSnapshot){
             val user=dataSnapshot.getValue(User::class.java)
+            /*
             if(user!=null){
                 for (friend in user.getFriends()){ val q: Query = mFirebaseDatabase.child("users").orderByChild("email")
                         .equalTo(friend)
@@ -54,10 +59,9 @@ private fun fetchFriends(){
                     }
 
                 }
+
             }
-
-
-
+  */
         }
         override fun onCancelled(error: DatabaseError){
             //Failed to read value
