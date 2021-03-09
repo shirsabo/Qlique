@@ -12,21 +12,33 @@ class chatLogActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
-        supportActionBar?.title="Chat"
+        val user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
+        supportActionBar?.title= user?.firstName+ " "+user?.lastName
         val adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
-        adapter.add(ChatItem())
-        adapter.add(ChatItem())
-        adapter.add(ChatItem())
+        adapter.add(ChatFromItem())
+        adapter.add(ChatToItem())
+        adapter.add(ChatFromItem())
+        adapter.add(ChatToItem())
         recyclerView_chat.adapter= adapter
     }
 }
-class ChatItem: Item<com.xwray.groupie.GroupieViewHolder>(){
+class ChatFromItem: Item<com.xwray.groupie.GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder,position:Int){
 
     }
 
     override fun getLayout(): Int {
         return R.layout.chat_from_row
+    }
+
+}
+class ChatToItem: Item<com.xwray.groupie.GroupieViewHolder>(){
+    override fun bind(viewHolder: GroupieViewHolder,position:Int){
+
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.chat_to_row
     }
 
 }
