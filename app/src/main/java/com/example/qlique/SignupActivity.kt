@@ -129,7 +129,7 @@ import com.google.firebase.ktx.Firebase
         gender: String,
         hobbies: List<String>
     ) {
-        val user = User(fName, lName, city, email, gender, hobbies)
+        val user = User(fName, lName, city, email, gender,FirebaseAuth.getInstance().uid, hobbies)
         database.child("users").child(userId).setValue(user)
         database.child("users").child(userId).get().addOnSuccessListener {
             Log.i("firebase", "Got value ${it.value}")

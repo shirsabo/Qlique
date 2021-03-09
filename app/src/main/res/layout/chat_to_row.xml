@@ -18,7 +18,7 @@
         tools:ignore="MissingConstraints">
 
         <TextView
-            android:id="@+id/message"
+            android:id="@+id/messageTo"
 
             android:layout_width="166dp"
             android:layout_height="57dp"
