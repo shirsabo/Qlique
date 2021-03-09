@@ -228,7 +228,7 @@
 
     <Button
         android:id="@+id/button2"
-        style="@style/Widget.AppCompat.Button.Bor"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="43dp"
         android:layout_height="45dp"
         android:layout_marginStart="280dp"
