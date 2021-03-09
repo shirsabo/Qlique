@@ -23,6 +23,28 @@
             android:layout_height="56dp">
 
             <EditText
+                android:id="@+id/fName_edt_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="first name"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp">
+
+            <EditText
+                android:id="@+id/lName_edt_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="last name"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp">
+
+            <EditText
                 android:id="@+id/email_edt_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -39,22 +61,99 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="password"
-                android:inputType="textPassword"/>
+                />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp">
+
+            <EditText
+                android:id="@+id/city_edt_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="city" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <RadioGroup
+            android:id="@+id/Gender"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <RadioButton
+                android:id="@+id/radioM"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:checked="true"
+                android:layout_weight="1"
+                android:textSize="14dp"
+                android:text="Male" />
+            <RadioButton
+                android:id="@+id/radioF"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:checked="false"
+                android:layout_weight="1"
+                android:textSize="14dp"
+                android:text="Female" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/txtview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/interests" />
+
+        <!--
+        <Button
+            android:id="@+id/btnChoose"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="0dp"
+            android:layout_weight="1"
+            android:text="Choose profile photo" />
+
+        <Button
+            android:id="@+id/btnUpload"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="0dp"
+            android:layout_weight="1"
+            android:text="Upload" />
+
+        <ImageView
+            android:id="@+id/imgView"
+            android:layout_width="match_parent"
+            android:layout_height="268dp" />
+-->
+
+        <ListView
+            android:id="@+id/multiple_list_view"
+            android:layout_width="wrap_content"
+            android:layout_height="113dp"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="25sp"
+            android:textStyle="italic" />
 
         <Button
             android:id="@+id/signup_btn"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_marginTop="32dp"
-            android:text="signup"/>
+            android:layout_marginTop="0dp"
+            android:text="signup" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="0dp">
 
             <TextView
                 android:id="@+id/tvText"
@@ -88,7 +187,7 @@
             android:id="@+id/login_btn"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="0dp"
             android:text="login" />
 
     </LinearLayout>
