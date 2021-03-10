@@ -3,6 +3,7 @@ package com.example.qlique
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -37,7 +38,8 @@ import com.google.firebase.ktx.Firebase
     private lateinit var btnUpload: Button
     private lateinit var imageView: ImageView
     private var filePath: Uri? = null
-    private val PICK_IMAGE_REQUEST = 71
+    private val REQUEST_IMAGE_CAPTURE = 100
+    private val TAKE_IMAGE_CODE = 10001
 
     var listView: ListView? = null
     var arrayAdapter:ArrayAdapter<String> ? = null
@@ -61,13 +63,16 @@ import com.google.firebase.ktx.Firebase
         femaleBtn = findViewById(R.id.radioF)
 
         listView = findViewById(R.id.multiple_list_view)
-        arrayAdapter = ArrayAdapter(applicationContext,
-        android.R.layout.simple_list_item_multiple_choice,
-        resources.getStringArray(R.array.hobbies_item))
+        arrayAdapter = ArrayAdapter(
+            applicationContext,
+            android.R.layout.simple_list_item_multiple_choice,
+            resources.getStringArray(R.array.hobbies_item)
+        )
         
         listView?.adapter = arrayAdapter
         listView?.choiceMode = ListView.CHOICE_MODE_MULTIPLE
         listView?.onItemClickListener = this
+
 
         signUpBtn.setOnClickListener {
             val email: String = emailEt.text.toString()
@@ -119,7 +124,6 @@ import com.google.firebase.ktx.Firebase
         }
     }
 
-
     private fun writeNewUser(
         userId: String,
         fName: String,
@@ -129,7 +133,8 @@ import com.google.firebase.ktx.Firebase
         gender: String,
         hobbies: List<String>
     ) {
-        val user = User(fName, lName, city, email, gender,FirebaseAuth.getInstance().uid, hobbies)
+        val uid: String? = FirebaseAuth.getInstance().uid
+        val user = User(fName, lName, city, email, gender, uid, hobbies)
         database.child("users").child(userId).setValue(user)
         database.child("users").child(userId).get().addOnSuccessListener {
             Log.i("firebase", "Got value ${it.value}")
@@ -147,4 +152,14 @@ import com.google.firebase.ktx.Firebase
             hobbiesList.add(items)
         }
     }
+
+
+
+    fun handleImageClick(view: View) {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(intent, 1)
+    }
+
 }
