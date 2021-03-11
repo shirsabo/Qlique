@@ -1,5 +1,6 @@
 package com.example.qlique
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -33,6 +34,7 @@ import com.google.firebase.ktx.Firebase
     private lateinit var genderbtn : RadioGroup
     private lateinit var maleBtn : RadioButton
     private lateinit var femaleBtn : RadioButton
+    private lateinit var instagram : ImageView
 
     private lateinit var btnChoose: Button
     private lateinit var btnUpload: Button
@@ -61,7 +63,7 @@ import com.google.firebase.ktx.Firebase
         genderbtn = findViewById(R.id.Gender)
         maleBtn = findViewById(R.id.radioM)
         femaleBtn = findViewById(R.id.radioF)
-
+        instagram =  findViewById(R.id.imp_instagram)
         listView = findViewById(R.id.multiple_list_view)
         arrayAdapter = ArrayAdapter(
             applicationContext,
@@ -121,6 +123,17 @@ import com.google.firebase.ktx.Firebase
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
+        }
+
+        instagram.setOnClickListener{
+            val uri = Uri.parse("http://instagram.com/_u/nikolbabai")
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            intent.setPackage("com.instagram.android")
+            try {
+                startActivity(intent)
+            } catch (e : ActivityNotFoundException){
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://instagram.com/_u/nikolbabai")))
+            }
         }
     }
 

@@ -81,10 +81,21 @@
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/img_plus"
+                android:layout_width="34dp"
+                android:layout_height="33dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_plus"
+                app:civ_shadow="true"
+                app:civ_shadow_radius="1dp"
+                tools:layout_editor_absoluteX="221dp"
+                tools:layout_editor_absoluteY="58dp" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/imp_instagram"
                 android:layout_width="@dimen/ic_plus_width"
                 android:layout_height="@dimen/ic_plus_width"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_plus"
+                app:srcCompat="@drawable/ic_instagram"
                 app:civ_shadow="true"
                 app:civ_shadow_radius="1dp"
                 tools:layout_editor_absoluteX="221dp"
