@@ -19,7 +19,6 @@
 
         <TextView
             android:id="@+id/messageTo"
-
             android:layout_width="166dp"
             android:layout_height="57dp"
             android:layout_alignParentTop="true"

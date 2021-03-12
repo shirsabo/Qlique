@@ -1,14 +1,18 @@
 package com.example.qlique
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.MediaStore.Images.Media.getBitmap
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.gms.tasks.OnCompleteListener
@@ -16,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+
 
 
 /**
@@ -29,16 +34,19 @@ import com.google.firebase.ktx.Firebase
     private lateinit var cityEt: EditText
     private lateinit var signUpBtn: Button
     private lateinit var loginBtn: Button
+    private lateinit var btnUpload: com.mikhaellopez.circularimageview.CircularImageView
     private lateinit var firstNameEt : EditText
     private lateinit var lastNameEt : EditText
     private lateinit var genderbtn : RadioGroup
     private lateinit var maleBtn : RadioButton
     private lateinit var femaleBtn : RadioButton
     private lateinit var instagram : ImageView
-
+    private lateinit var profilPicture : com.mikhaellopez.circularimageview.CircularImageView
     private lateinit var btnChoose: Button
-    private lateinit var btnUpload: Button
+    ////
+
     private lateinit var imageView: ImageView
+    ////
     private var filePath: Uri? = null
     private val REQUEST_IMAGE_CAPTURE = 100
     private val TAKE_IMAGE_CODE = 10001
@@ -46,7 +54,15 @@ import com.google.firebase.ktx.Firebase
     var listView: ListView? = null
     var arrayAdapter:ArrayAdapter<String> ? = null
     var hobbiesList:MutableList<String> = mutableListOf<String>()
-
+    var selectedPhotoUri:Uri?=null
+    var launchSomeActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            selectedPhotoUri = result.data?.data
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,selectedPhotoUri)
+            val bitmapDrawble= BitmapDrawable(bitmap)
+            profilPicture.setImageBitmap(bitmap)
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
@@ -62,6 +78,8 @@ import com.google.firebase.ktx.Firebase
         signUpBtn = findViewById(R.id.signup_btn)
         genderbtn = findViewById(R.id.Gender)
         maleBtn = findViewById(R.id.radioM)
+        btnUpload = findViewById(R.id.img_plus)
+        profilPicture = findViewById(R.id.img_profile)
         femaleBtn = findViewById(R.id.radioF)
         instagram =  findViewById(R.id.imp_instagram)
         listView = findViewById(R.id.multiple_list_view)
@@ -135,6 +153,13 @@ import com.google.firebase.ktx.Firebase
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://instagram.com/_u/nikolbabai")))
             }
         }
+        btnUpload.setOnClickListener{
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type="image/*"
+            launchSomeActivity.launch(intent)
+        }
+
+
     }
 
     private fun writeNewUser(
