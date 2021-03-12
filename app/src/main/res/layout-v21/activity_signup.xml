@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_waves"
     tools:context=".SignupActivity">
 
     <!-- <Toolbar
@@ -20,9 +19,10 @@
 
      <include layout="@layout/layout_toolbar_profile" />
      -->
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="@drawable/ic_waves"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -81,10 +81,21 @@
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/img_plus"
+                android:layout_width="34dp"
+                android:layout_height="33dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_plus"
+                app:civ_shadow="true"
+                app:civ_shadow_radius="1dp"
+                tools:layout_editor_absoluteX="221dp"
+                tools:layout_editor_absoluteY="58dp" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/imp_instagram"
                 android:layout_width="@dimen/ic_plus_width"
                 android:layout_height="@dimen/ic_plus_width"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_plus"
+                app:srcCompat="@drawable/ic_instagram"
                 app:civ_shadow="true"
                 app:civ_shadow_radius="1dp"
                 tools:layout_editor_absoluteX="221dp"
@@ -163,44 +174,53 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <RadioGroup
-                android:id="@+id/Gender"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:orientation="horizontal">
+                android:layout_height="60dp">
 
-                <RadioButton
-                    android:id="@+id/radioM"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="start"
-                    android:layout_weight="1"
-                    android:background="@drawable/rounded"
-                    android:checked="true"
-                    android:text="@string/male"
-                    android:textSize="14sp" />
+                <RadioGroup
+                    android:id="@+id/Gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-                <RadioButton
-                    android:id="@+id/radioF"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:background="@drawable/rounded"
-                    android:checked="false"
-                    android:text="@string/female"
-                    android:textSize="14sp" />
-            </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioM"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="start"
+                        android:layout_weight="1"
+                        android:background="@drawable/rounded"
+                        android:checked="true"
+                        android:text="@string/male"
+                        android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/txtview"
+                    <RadioButton
+                        android:id="@+id/radioF"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:background="@drawable/rounded"
+                        android:checked="false"
+                        android:text="@string/female"
+                        android:textSize="18sp" />
+                </RadioGroup>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/rounded"
-                android:text="@string/interests"
-                android:textSize="18sp" />
+                android:layout_height="60dp">
 
-            <!--
+                <TextView
+                    android:id="@+id/txtview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded"
+                    android:text="@string/interests"
+                    android:textSize="20sp" />
+
+                <!--
             <Button
                 android:id="@+id/btnChoose"
                 android:layout_width="match_parent"
@@ -223,16 +243,23 @@
                 android:layout_height="268dp" />
     -->
 
-            <ListView
-                android:id="@+id/multiple_list_view"
-                android:layout_width="match_parent"
-                android:layout_height="253dp"
-                android:background="@drawable/rounded"
-                android:gravity="center"
-                android:textColor="@color/colorPrimary"
-                android:textSize="25sp"
-                android:textStyle="italic" />
 
+            </com.google.android.material.textfield.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ListView
+                    android:id="@+id/multiple_list_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="143dp"
+                    android:background="@drawable/rounded"
+                    android:gravity="center"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="25sp"
+                    android:textStyle="italic"
+                    android:nestedScrollingEnabled="true"
+                    />
+            </LinearLayout>
             <Button
                 android:background="@drawable/rounded"
                 android:id="@+id/signup_btn"
@@ -288,6 +315,6 @@
                 android:text="@string/login" />
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
