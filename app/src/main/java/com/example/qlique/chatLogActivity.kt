@@ -57,7 +57,6 @@ class chatLogActivity : AppCompatActivity() {
                         adapter.add(ChatToItem(msg.text))
                     }
                 }
-
             }
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
