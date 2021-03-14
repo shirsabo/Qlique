@@ -17,10 +17,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import java.util.*
+import kotlin.concurrent.thread
 
 
 /**
@@ -43,6 +47,7 @@ import com.google.firebase.ktx.Firebase
     private lateinit var instagram : ImageView
     private lateinit var profilPicture : com.mikhaellopez.circularimageview.CircularImageView
     private lateinit var btnChoose: Button
+    var url : String? = ""
     ////
 
     private lateinit var imageView: ImageView
@@ -66,6 +71,7 @@ import com.google.firebase.ktx.Firebase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
+
 
         auth = FirebaseAuth.getInstance()
         database = Firebase.database.reference
@@ -94,49 +100,6 @@ import com.google.firebase.ktx.Firebase
         listView?.onItemClickListener = this
 
 
-        signUpBtn.setOnClickListener {
-            val email: String = emailEt.text.toString()
-            val password: String = passwordEt.text.toString()
-            val city: String = cityEt.text.toString()
-            val fname : String = firstNameEt.text.toString()
-            val lname : String = lastNameEt.text.toString()
-            var gender : String
-            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(city)
-              || TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname) ||
-                genderbtn.checkedRadioButtonId == -1 || hobbiesList.size == 0) {
-                Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()
-            } else {
-                auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, OnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            gender = if (maleBtn.isChecked) {
-                                "Male"
-                            } else {
-                                "Female"
-                            }
-                            auth.currentUser?.let { it1 ->
-                                writeNewUser(
-                                    it1.uid,
-                                    fname,
-                                    lname,
-                                    city,
-                                    email,
-                                    gender,
-                                    hobbiesList
-                                )
-                            }
-                            Toast.makeText(this, "Successfully Registered", Toast.LENGTH_LONG)
-                                .show()
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            Toast.makeText(this, "Registration Failed", Toast.LENGTH_LONG).show()
-                        }
-                    })
-            }
-        }
-
         loginBtn.setOnClickListener{
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -152,6 +115,54 @@ import com.google.firebase.ktx.Firebase
             } catch (e : ActivityNotFoundException){
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://instagram.com/_u/nikolbabai")))
             }
+        }
+        signUpBtn.setOnClickListener {
+            val email: String = emailEt.text.toString()
+            val password: String = passwordEt.text.toString()
+            val city: String = cityEt.text.toString()
+            val fname : String = firstNameEt.text.toString()
+            val lname : String = lastNameEt.text.toString()
+            var gender : String
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(city)
+                || TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname) ||
+                genderbtn.checkedRadioButtonId == -1 || hobbiesList.size == 0) {
+                Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()
+            } else {
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, OnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            gender = if (maleBtn.isChecked) {
+                                "Male"
+                            } else {
+                                "Female"
+                            }
+                            uploadImage()
+                            auth.currentUser?.let { it1 ->
+                                if (url != null) {
+                                    writeNewUser(
+                                        it1.uid,
+                                        fname,
+                                        lname,
+                                        city,
+                                        email,
+                                        gender,
+                                        hobbiesList,
+                                        url!!
+                                    )
+                                }
+                            }
+                            Toast.makeText(this, "Successfully Registered", Toast.LENGTH_LONG)
+                                .show()
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            Toast.makeText(this, "Registration Failed", Toast.LENGTH_LONG).show()
+                        }
+                    })
+            }
+
+
         }
         btnUpload.setOnClickListener{
             val intent = Intent(Intent.ACTION_PICK)
@@ -169,10 +180,11 @@ import com.google.firebase.ktx.Firebase
         city: String,
         email: String,
         gender: String,
-        hobbies: List<String>
+        hobbies: List<String>,
+        url: String
     ) {
         val uid: String? = FirebaseAuth.getInstance().uid
-        val user = User(fName, lName, city, email, gender, uid, hobbies)
+        val user = User(fName, lName, city, email, gender, uid, hobbies,url)
         database.child("users").child(userId).setValue(user)
         database.child("users").child(userId).get().addOnSuccessListener {
             Log.i("firebase", "Got value ${it.value}")
@@ -198,6 +210,40 @@ import com.google.firebase.ktx.Firebase
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(intent, 1)
+    }
+    fun uploadImage(){
+        if(selectedPhotoUri==null){
+            return
+        }else{
+            val filename = UUID.randomUUID().toString()
+            val ref = FirebaseStorage.getInstance().getReference("images/$filename")
+            ref.putFile(selectedPhotoUri!!).addOnSuccessListener {
+                ref.downloadUrl.addOnSuccessListener {
+                    url = it.toString()
+                    val uid = FirebaseAuth.getInstance().uid
+                    val ref =FirebaseDatabase.getInstance().getReference("/users/$uid")
+                    val newUser =Firebase.database.reference.child("/users/$uid").addValueEventListener(object :
+                        ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot){
+                            val user1=dataSnapshot.getValue(User::class.java)
+                            if (user1!=null){
+                                user1.url=url
+                                ref.setValue(user1)
+                                Log.d("finish",url)
+                            }
+                        }
+                        override fun onCancelled(error: DatabaseError){
+                            //Failed to read value
+                        }
+                    })
+                }
+
+            }
+
+
+
+        }
+
     }
 
 }

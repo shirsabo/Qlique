@@ -11,11 +11,12 @@ import kotlinx.android.parcel.Parcelize;
 
 @Parcelize
 public class User implements Parcelable{
-    public String firstName, lastName, email, city, gender, uid;
+    public String firstName, lastName, email, city, gender, uid,url;
     public List<String> friends;
     public List<String> hobbies;
 
-    public User(String firstName, String lastName, String city, String email, String gender,String uid, List<String> hobbies)
+
+    public User(String firstName, String lastName, String city, String email, String gender,String uid, List<String> hobbies,String url)
     {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -26,6 +27,7 @@ public class User implements Parcelable{
         friends.add("shirsabo");
         this.hobbies = hobbies;
         this.uid = uid;
+        this.url = url;
     }
 
     public User() {
@@ -38,6 +40,7 @@ public class User implements Parcelable{
         city = in.readString();
         gender = in.readString();
         uid =in.readString();
+        url = in.readString();
         friends = in.createStringArrayList();
         hobbies = in.createStringArrayList();
     }
@@ -71,6 +74,7 @@ public class User implements Parcelable{
         dest.writeString(city);
         dest.writeString(gender);
         dest.writeString(uid);
+        dest.writeString(url);
         dest.writeStringList(friends);
         dest.writeStringList(hobbies);
     }
