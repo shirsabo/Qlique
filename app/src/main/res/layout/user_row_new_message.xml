@@ -43,12 +43,14 @@
 
 
 
+
+
     ]]>
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/circularImageView"
-        android:layout_width="78dp"
-        android:layout_height="118dp"
+        android:layout_width="73dp"
+        android:layout_height="70dp"
         app:civ_border_color="#000000"
         app:civ_border_width="5dp"
         app:civ_shadow="false"
@@ -56,17 +58,18 @@
         app:civ_shadow_radius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/user_name"
-        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/ic_login_hero" />
 
     <TextView
         android:id="@+id/user_name"
-        android:layout_width="271dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="76dp"
-        android:layout_marginLeft="76dp"
+        android:layout_width="270dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginLeft="104dp"
         android:background="@drawable/rounded"
         android:text="user_name"
         android:textColor="@android:color/black"
@@ -75,7 +78,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.727" />
+        app:layout_constraintVertical_bias="0.627" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
