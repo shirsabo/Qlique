@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp">
 
+
     <RelativeLayout
         android:id="@+id/chatLayout"
         android:layout_width="241dp"

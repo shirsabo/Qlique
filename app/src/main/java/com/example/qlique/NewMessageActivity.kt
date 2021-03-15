@@ -99,6 +99,7 @@ class UserItem(val user: User): Item<com.xwray.groupie.GroupieViewHolder>(){
        Picasso.get().load(ur).into(viewHolder.itemView.circularImageView)
     }
     override fun getLayout(): Int {
+
        return R.layout.user_row_new_message
     }
 }

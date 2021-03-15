@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ChatListActivity::class.java)
             Toast.makeText(this, "chat", Toast.LENGTH_LONG)
                 .show()
+
             startActivity(intent)
             finish()
         }

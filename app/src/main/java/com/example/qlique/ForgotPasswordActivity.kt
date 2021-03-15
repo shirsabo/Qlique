@@ -17,6 +17,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
     private lateinit var resetPasswordBtn: Button
     private lateinit var back: Button
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password)

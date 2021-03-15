@@ -26,6 +26,7 @@ class chatLogActivity : AppCompatActivity() {
         supportActionBar?.title= user?.firstName+ " "+user?.lastName
         //dummySetUP()
         sendBtn.setOnClickListener{
+
             performSendMessage()
         }
         listenForMessages()

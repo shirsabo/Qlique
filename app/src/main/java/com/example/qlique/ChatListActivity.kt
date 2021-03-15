@@ -18,6 +18,7 @@ class ChatListActivity: AppCompatActivity()  {
         setContentView(R.layout.activity_chat_list)
         verifyUserIsLoggedIn()
 
+
     }
     private fun verifyUserIsLoggedIn(){
         val uid = FirebaseAuth.getInstance().uid

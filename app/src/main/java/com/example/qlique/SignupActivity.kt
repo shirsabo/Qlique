@@ -134,6 +134,7 @@ import kotlin.concurrent.thread
                             gender = if (maleBtn.isChecked) {
                                 "Male"
                             } else {
+
                                 "Female"
                             }
                             uploadImage()

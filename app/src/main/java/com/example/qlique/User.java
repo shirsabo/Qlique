@@ -16,6 +16,7 @@ public class User implements Parcelable{
     public List<String> hobbies;
 
 
+
     public User(String firstName, String lastName, String city, String email, String gender,String uid, List<String> hobbies,String url)
     {
         this.firstName = firstName;
