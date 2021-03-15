@@ -11,13 +11,13 @@ import kotlinx.android.parcel.Parcelize;
 
 @Parcelize
 public class User implements Parcelable{
-    public String firstName, lastName, email, city, gender, uid,url;
+    public String firstName, lastName, email, city, gender, uid, url, instagramUserName;
     public List<String> friends;
     public List<String> hobbies;
 
 
 
-    public User(String firstName, String lastName, String city, String email, String gender,String uid, List<String> hobbies,String url)
+    public User(String firstName, String lastName, String city, String email, String gender,String uid, List<String> hobbies,String url, String instagramUserName)
     {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -29,6 +29,7 @@ public class User implements Parcelable{
         this.hobbies = hobbies;
         this.uid = uid;
         this.url = url;
+        this.instagramUserName = instagramUserName;
     }
 
     public User() {
