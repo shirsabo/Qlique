@@ -23,7 +23,6 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
-import kotlin.collections.HashMap
 
 
 /**
@@ -67,7 +66,7 @@ import kotlin.collections.HashMap
     private var launchSomeActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             selectedPhotoUri = result.data?.data
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,selectedPhotoUri)
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
             val bitmapDrawble= BitmapDrawable(bitmap)
             profilPicture.setImageBitmap(bitmap)
         }
@@ -92,29 +91,23 @@ import kotlin.collections.HashMap
         profilPicture = findViewById(R.id.img_profile)
         femaleBtn = findViewById(R.id.radioF)
         instagram =  findViewById(R.id.imp_instagram)
-        listView = findViewById(R.id.multiple_list_view)
-        mApp = InstagramApp(this, AppConfig.CLIENT_ID, AppConfig.CLIENT_SECRET, AppConfig.CALLBACK_URL)
+       // listView = findViewById(R.id.multiple_list_view)
+        mApp = InstagramApp(
+            this,
+            AppConfig.CLIENT_ID,
+            AppConfig.CLIENT_SECRET,
+            AppConfig.CALLBACK_URL
+        )
         mApp.setListener(object : InstagramApp.OAuthAuthenticationListener {
-            override fun onSuccess(){
+            override fun onSuccess() {
                 mApp.fetchUserName(handler)
             }
 
             override fun onFail(error: String?) {
-                Toast.makeText(this@SignupActivity,error.toString(), Toast.LENGTH_LONG).show()
+                Toast.makeText(this@SignupActivity, error.toString(), Toast.LENGTH_LONG).show()
 
             }
         })
-        arrayAdapter = ArrayAdapter(
-            applicationContext,
-            android.R.layout.simple_list_item_multiple_choice,
-            resources.getStringArray(R.array.hobbies_item)
-        )
-        
-        listView?.adapter = arrayAdapter
-        listView?.choiceMode = ListView.CHOICE_MODE_MULTIPLE
-        listView?.onItemClickListener = this
-
-
         loginBtn.setOnClickListener{
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -141,7 +134,7 @@ import kotlin.collections.HashMap
             var gender : String
             if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(city)
                 || TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname) ||
-                genderbtn.checkedRadioButtonId == -1 || hobbiesList.size == 0) {
+                genderbtn.checkedRadioButtonId == -1) {
                 Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()
             } else {
                 auth.createUserWithEmailAndPassword(email, password)
@@ -163,16 +156,10 @@ import kotlin.collections.HashMap
                                         city,
                                         email,
                                         gender,
-                                        hobbiesList,
                                         url!!
                                     )
                                 }
                             }
-                            Toast.makeText(this, "Successfully Registered", Toast.LENGTH_LONG)
-                                .show()
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
                         } else {
                             Toast.makeText(this, "Registration Failed", Toast.LENGTH_LONG).show()
                         }
@@ -197,18 +184,19 @@ import kotlin.collections.HashMap
         city: String,
         email: String,
         gender: String,
-        hobbies: List<String>,
         url: String,
     ) {
         val uid: String? = FirebaseAuth.getInstance().uid
-        val instagram : String? = userInfoHashMap[InstagramApp.TAG_USERNAME]
-        val user = User(fName, lName, city, email, gender, uid, hobbies, url, instagram)
+        // var instagram : String? = userInfoHashMap[InstagramApp.TAG_USERNAME]
+        val instagram = ""
+        val user = User(fName, lName, city, email, gender, uid, url, instagram)
+        // Creating a new user and saving it in the real time database.
         database.child("users").child(userId).setValue(user)
-        database.child("users").child(userId).get().addOnSuccessListener {
-            Log.i("firebase", "Got value ${it.value}")
-        }.addOnFailureListener{
-            Log.e("firebase", "Error getting data", it)
-        }
+        // Creating a new intent if selecting hobbies and passing the uid to it.
+        val myIntent = Intent(this, HobbiesSelection::class.java)
+        myIntent.putExtra("StringVariableName", uid)
+        startActivity(myIntent)
+        finish()
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -232,20 +220,22 @@ import kotlin.collections.HashMap
                     url = it.toString()
                     val uid = FirebaseAuth.getInstance().uid
                     val ref =FirebaseDatabase.getInstance().getReference("/users/$uid")
-                    val newUser =Firebase.database.reference.child("/users/$uid").addValueEventListener(object :
-                        ValueEventListener {
-                        override fun onDataChange(dataSnapshot: DataSnapshot){
-                            val user1=dataSnapshot.getValue(User::class.java)
-                            if (user1!=null){
-                                user1.url=url
-                                ref.setValue(user1)
-                                Log.d("finish",url)
+                    val newUser =Firebase.database.reference.child("/users/$uid").addValueEventListener(
+                        object :
+                            ValueEventListener {
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                val user1 = dataSnapshot.getValue(User::class.java)
+                                if (user1 != null) {
+                                    user1.url = url
+                                    ref.setValue(user1)
+                                    Log.d("finish", url)
+                                }
                             }
-                        }
-                        override fun onCancelled(error: DatabaseError){
-                            //Failed to read value
-                        }
-                    })
+
+                            override fun onCancelled(error: DatabaseError) {
+                                //Failed to read value
+                            }
+                        })
                 }
 
             }

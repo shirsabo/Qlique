@@ -17,7 +17,7 @@ public class User implements Parcelable{
 
 
 
-    public User(String firstName, String lastName, String city, String email, String gender,String uid, List<String> hobbies,String url, String instagramUserName)
+    public User(String firstName, String lastName, String city, String email, String gender,String uid,String url, String instagramUserName)
     {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -26,7 +26,6 @@ public class User implements Parcelable{
         this.gender = gender;
         this.friends = new ArrayList<>();
         friends.add("shirsabo");
-        this.hobbies = hobbies;
         this.uid = uid;
         this.url = url;
         this.instagramUserName = instagramUserName;

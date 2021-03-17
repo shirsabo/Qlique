@@ -39,32 +39,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
-            <!--
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="200dp">
-
-                <ImageView
-                    android:layout_width="193dp"
-                    android:layout_height="200dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="80dp"
-                    android:layout_marginLeft="80dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="75dp"
-                    android:layout_marginRight="75dp"
-                    android:layout_marginBottom="0dp"
-                    android:onClick="handleImageClick"/>
-
-            </RelativeLayout>
-            -->
-
-
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/img_profile"
                 android:layout_width="@dimen/toolbar_profile_width"
@@ -208,58 +182,7 @@
                 </RadioGroup>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp">
 
-                <TextView
-                    android:id="@+id/txtview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rounded"
-                    android:text="@string/interests"
-                    android:textSize="20sp" />
-
-                <!--
-            <Button
-                android:id="@+id/btnChoose"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="0dp"
-                android:layout_weight="1"
-                android:text="Choose profile photo" />
-
-            <Button
-                android:id="@+id/btnUpload"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="0dp"
-                android:layout_weight="1"
-                android:text="Upload" />
-
-            <ImageView
-                android:id="@+id/imgView"
-                android:layout_width="match_parent"
-                android:layout_height="268dp" />
-    -->
-
-
-            </com.google.android.material.textfield.TextInputLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <ListView
-                    android:id="@+id/multiple_list_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="143dp"
-                    android:background="@drawable/rounded"
-                    android:gravity="center"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="25sp"
-                    android:textStyle="italic"
-                    android:nestedScrollingEnabled="true"
-                    />
-            </LinearLayout>
             <Button
                 android:background="@drawable/rounded"
                 android:id="@+id/signup_btn"
@@ -315,6 +238,7 @@
                 android:text="@string/login" />
 
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
