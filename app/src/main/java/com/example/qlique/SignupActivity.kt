@@ -44,7 +44,6 @@ import java.util.*
     private lateinit var femaleBtn : RadioButton
     private lateinit var instagram : ImageView
     private lateinit var profilPicture : com.mikhaellopez.circularimageview.CircularImageView
-    private lateinit var btnChoose: Button
     private lateinit var mApp : InstagramApp
     private lateinit var userInfoHashMap: HashMap<String, String>
     private var handler = object : Handler(){
@@ -75,7 +74,6 @@ import java.util.*
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
-
         auth = FirebaseAuth.getInstance()
         database = Firebase.database.reference
         firstNameEt = findViewById(R.id.fName_edt_text)
@@ -91,7 +89,6 @@ import java.util.*
         profilPicture = findViewById(R.id.img_profile)
         femaleBtn = findViewById(R.id.radioF)
         instagram =  findViewById(R.id.imp_instagram)
-       // listView = findViewById(R.id.multiple_list_view)
         mApp = InstagramApp(
             this,
             AppConfig.CLIENT_ID,
@@ -140,24 +137,11 @@ import java.util.*
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, OnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            gender = if (maleBtn.isChecked) {
-                                "Male"
-                            } else {
-
-                                "Female"
-                            }
+                            gender = if (maleBtn.isChecked) { "Male" } else { "Female" }
                             uploadImage()
                             auth.currentUser?.let { it1 ->
                                 if (url != null) {
-                                    writeNewUser(
-                                        it1.uid,
-                                        fname,
-                                        lname,
-                                        city,
-                                        email,
-                                        gender,
-                                        url!!
-                                    )
+                                    writeNewUser( it1.uid, fname, lname, city, email, gender, url!!)
                                 }
                             }
                         } else {
@@ -192,6 +176,10 @@ import java.util.*
         val user = User(fName, lName, city, email, gender, uid, url, instagram)
         // Creating a new user and saving it in the real time database.
         database.child("users").child(userId).setValue(user)
+
+        // Send a verification email to the new user.
+        FirebaseAuth.getInstance().currentUser?.sendEmailVerification()
+
         // Creating a new intent if selecting hobbies and passing the uid to it.
         val myIntent = Intent(this, HobbiesSelection::class.java)
         myIntent.putExtra("StringVariableName", uid)
