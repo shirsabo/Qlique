@@ -19,7 +19,7 @@ import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_new_message.*
 import kotlinx.android.synthetic.main.user_row_new_message.view.*
 
-public val adapter=GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
+public var adapter=GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
 
 class NewMessageActivity : AppCompatActivity() {
     companion object {
