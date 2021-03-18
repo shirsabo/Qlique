@@ -44,6 +44,7 @@ class HobbiesSelection : AppCompatActivity() , AdapterView.OnItemClickListener{
         R.drawable.ic_google_plus
     )
 
+
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_hobbies_selection)

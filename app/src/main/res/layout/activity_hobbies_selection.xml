@@ -20,6 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtview" />
 
+
     <ListView
         android:listSelector="@drawable/custom_selector"
         android:id="@+id/multiple_list_view"

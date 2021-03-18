@@ -33,6 +33,7 @@ public class CustomViewAdapter extends ArrayAdapter<RowItemHobby> {
         ViewHolder viewHolder = null;
         RowItemHobby rowItemHobby = getItem(position);
 
+
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null){
             convertView = mInflater.inflate(R.layout.list_item, null);

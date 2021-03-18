@@ -17,6 +17,7 @@ public class User implements Parcelable{
 
 
 
+
     public User(String firstName, String lastName, String city, String email, String gender,String uid,String url, String instagramUserName)
     {
         this.firstName = firstName;

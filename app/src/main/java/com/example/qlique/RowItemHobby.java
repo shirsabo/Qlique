@@ -9,6 +9,7 @@ public class RowItemHobby {
         this.hobby = hobby;
     }
 
+
     public int getImageId() {
         return imageId;
     }

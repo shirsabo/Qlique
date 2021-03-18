@@ -24,11 +24,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var updatePass: Button
     private lateinit var chatBtn :Button
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
         if(auth.currentUser == null){
-            val intent = Intent(this, HobbiesSelection::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }else{

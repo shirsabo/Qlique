@@ -23,6 +23,8 @@
         app:srcCompat="@drawable/ic_id_card"
         android:contentDescription="TODO" />
 
+
+
     <TextView
         android:id="@+id/hobby"
         android:layout_width="336dp"
