@@ -8,10 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import java.util.List;
 
 public class CustomViewAdapter extends ArrayAdapter<RowItemHobby> {
@@ -22,10 +20,12 @@ public class CustomViewAdapter extends ArrayAdapter<RowItemHobby> {
         this.context = context;
     }
 
-    private class ViewHolder{
+    private static class ViewHolder{
         ImageView imageView;
         TextView hobby;
     }
+
+
 
     @NonNull
     @Override
@@ -37,14 +37,17 @@ public class CustomViewAdapter extends ArrayAdapter<RowItemHobby> {
         if (convertView == null){
             convertView = mInflater.inflate(R.layout.list_item, null);
             viewHolder = new ViewHolder();
-            viewHolder.hobby = (TextView) convertView.findViewById(R.id.hobby);
-            viewHolder.imageView = (ImageView) convertView.findViewById(R.id.icon);
+            viewHolder.hobby = convertView.findViewById(R.id.hobby);
+            viewHolder.imageView = convertView.findViewById(R.id.icon);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        assert rowItemHobby != null;
         viewHolder.hobby.setText(rowItemHobby.getHobby());
         viewHolder.imageView.setImageResource(rowItemHobby.getImageId());
         return convertView;
     }
+
+
 }

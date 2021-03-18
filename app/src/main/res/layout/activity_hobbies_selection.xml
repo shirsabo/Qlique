@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_waves"
+    android:background="@color/White"
     tools:context=".HobbiesSelection">
 
     <TextView
@@ -21,11 +21,12 @@
         app:layout_constraintTop_toBottomOf="@+id/txtview" />
 
     <ListView
+        android:listSelector="@drawable/custom_selector"
         android:id="@+id/multiple_list_view"
         android:layout_width="399dp"
         android:layout_height="401dp"
         android:gravity="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/White"
         android:textSize="25sp"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="@+id/scrollView2"

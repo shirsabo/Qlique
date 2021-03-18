@@ -16,15 +16,31 @@ class HobbiesSelection : AppCompatActivity() , AdapterView.OnItemClickListener{
     var listView: ListView? = null
     private lateinit var rowItemHobby : ArrayList<RowItemHobby>
     // var arrayAdapter:ArrayAdapter<String> ? = null
-    private val hobbies = arrayListOf("Sport", "Initiative", "Business", "Fashion", "Social",
-        "Entertainment", "Study", "Beauty and style", "Comedy", "Drama" , "Food", "Animals",
+    private val hobbies = arrayListOf(
+        "Sport", "Initiative", "Business", "Fashion", "Social",
+        "Entertainment", "Study", "Beauty and style", "Comedy", "Drama", "Food", "Animals",
         "Talent", "Cars", "Love and dating", "Fitness and health",
-        "Dance", "Outdoor activities", "Home and garden")
+        "Dance", "Outdoor activities", "Home and garden"
+    )
     private val images = intArrayOf(
-        R.drawable.ic_facebook, R.drawable.ic_instagram, R.drawable.ic_like,
-        R.drawable.ic_google_plus, R.drawable.ic_id_card, R.drawable.ic_facebook, R.drawable.ic_instagram, R.drawable.ic_like,
-        R.drawable.ic_google_plus, R.drawable.ic_id_card, R.drawable.ic_facebook, R.drawable.ic_instagram, R.drawable.ic_like,
-        R.drawable.ic_google_plus, R.drawable.ic_id_card, R.drawable.ic_facebook, R.drawable.ic_instagram, R.drawable.ic_like,
+        R.drawable.ic_facebook,
+        R.drawable.ic_instagram,
+        R.drawable.ic_like,
+        R.drawable.ic_google_plus,
+        R.drawable.ic_id_card,
+        R.drawable.ic_facebook,
+        R.drawable.ic_instagram,
+        R.drawable.ic_like,
+        R.drawable.ic_google_plus,
+        R.drawable.ic_id_card,
+        R.drawable.ic_facebook,
+        R.drawable.ic_instagram,
+        R.drawable.ic_like,
+        R.drawable.ic_google_plus,
+        R.drawable.ic_id_card,
+        R.drawable.ic_facebook,
+        R.drawable.ic_instagram,
+        R.drawable.ic_like,
         R.drawable.ic_google_plus
     )
 
@@ -41,21 +57,10 @@ class HobbiesSelection : AppCompatActivity() , AdapterView.OnItemClickListener{
                 rowItemHobby.add(item)
             }
             listView = findViewById(R.id.multiple_list_view)
-            val adapter : CustomViewAdapter  = CustomViewAdapter(this, R.layout.list_item, rowItemHobby)
+            val adapter = CustomViewAdapter(this, R.layout.list_item, rowItemHobby)
             listView?.adapter = adapter
             listView?.choiceMode = ListView.CHOICE_MODE_MULTIPLE
             listView?.onItemClickListener = this
-
-            /*arrayAdapter = ArrayAdapter(
-                applicationContext,
-                android.R.layout.simple_list_item_multiple_choice,
-                resources.getStringArray(R.array.hobbies_item)
-            )
-
-            listView?.adapter = arrayAdapter
-            listView?.choiceMode = ListView.CHOICE_MODE_MULTIPLE
-            listView?.onItemClickListener = this*/
-
 
 
             continueBtn.setOnClickListener {

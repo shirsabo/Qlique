@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/activatedBackgroundIndicator">
+
 
     <ImageView
         android:id="@+id/icon"
@@ -12,14 +14,14 @@
         android:layout_height="48dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:contentDescription="TODO"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_id_card" />
+        app:srcCompat="@drawable/ic_id_card"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/hobby"
@@ -30,12 +32,14 @@
         android:layout_toRightOf="@id/icon"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:text="Description"
+        android:text="@string/description"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/icon"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        android:layout_toEndOf="@id/icon"
+        android:layout_alignParentEnd="true" />
 </androidx.constraintlayout.widget.ConstraintLayout>
