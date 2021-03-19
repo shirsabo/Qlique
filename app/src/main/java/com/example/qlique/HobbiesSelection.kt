@@ -18,30 +18,30 @@ class HobbiesSelection : AppCompatActivity() , AdapterView.OnItemClickListener{
     // var arrayAdapter:ArrayAdapter<String> ? = null
     private val hobbies = arrayListOf(
         "Sport", "Initiative", "Business", "Fashion", "Social",
-        "Entertainment", "Study", "Beauty and style", "Comedy", "Drama", "Food", "Animals",
+        "Entertainment", "Study", "Beauty and style", "Comedy", "Food", "Animals",
         "Talent", "Cars", "Love and dating", "Fitness and health",
-        "Dance", "Outdoor activities", "Home and garden"
+        "Dance", "Outdoor activities", "Home and garden", "Gaming"
     )
     private val images = intArrayOf(
-        R.drawable.ic_facebook,
-        R.drawable.ic_instagram,
-        R.drawable.ic_like,
-        R.drawable.ic_google_plus,
-        R.drawable.ic_id_card,
-        R.drawable.ic_facebook,
-        R.drawable.ic_instagram,
-        R.drawable.ic_like,
-        R.drawable.ic_google_plus,
-        R.drawable.ic_id_card,
-        R.drawable.ic_facebook,
-        R.drawable.ic_instagram,
-        R.drawable.ic_like,
-        R.drawable.ic_google_plus,
-        R.drawable.ic_id_card,
-        R.drawable.ic_facebook,
-        R.drawable.ic_instagram,
-        R.drawable.ic_like,
-        R.drawable.ic_google_plus
+        R.drawable.ic_sports,
+        R.drawable.ic_initiative,
+        R.drawable.ic_business,
+        R.drawable.ic_fashion,
+        R.drawable.ic_social,
+        R.drawable.ic_entertainment,
+        R.drawable.ic_study,
+        R.drawable.ic_beauty_and_style,
+        R.drawable.ic_comedy,
+        R.drawable.ic_food,
+        R.drawable.ic_animals,
+        R.drawable.ic_talent,
+        R.drawable.ic_car,
+        R.drawable.ic_love_and_dating,
+        R.drawable.ic_fitness_and_health,
+        R.drawable.ic_dance,
+        R.drawable.ic_outdoor_activities,
+        R.drawable.ic_home_and_garden,
+        R.drawable.ic_gaming
     )
 
 

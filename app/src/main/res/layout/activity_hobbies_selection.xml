@@ -15,6 +15,7 @@
         android:text="@string/recommendations"
         android:textColor="@color/bg_meta_container"
         android:textSize="18sp"
+        android:paddingLeft="2dp"
         app:layout_constraintBottom_toTopOf="@+id/multiple_list_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,6 +58,7 @@
         android:textColor="@color/bg_meta_container"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:paddingLeft="5dp"
         app:layout_constraintBottom_toTopOf="@+id/multiple_list_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/scrollView2" />
