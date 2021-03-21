@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var updatePass: Button
     private lateinit var chatBtn :Button
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()

@@ -14,8 +14,8 @@
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
+    <string name="continu">Continue</string>
     <string name="previous">Previous</string>
-
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
@@ -23,6 +23,7 @@
     <string name="choose">Choose profile photo</string>
     <string name="upload">upload</string>
     <string name="interests">What are your interests?</string>
+    <string name="recommendations">Get better event recommendations</string>
     <string name="first_name">first name</string>
     <string name="last_name">last name</string>
     <string name="email">email</string>
@@ -39,6 +40,20 @@
         <item>Business</item>
         <item>Fashion</item>
         <item>Social</item>
+        <item>Entertainment</item>
+        <item>Study</item>
+        <item>Beauty and style</item>
+        <item>Comedy</item>
+        <item>Drama</item>
+        <item>Food</item>
+        <item>Animals</item>
+        <item>Talent</item>
+        <item>Cars</item>
+        <item>Love and dating</item>
+        <item>Fitness and health</item>
+        <item>Dance</item>
+        <item>Outdoor activities</item>
+        <item>Home and garden</item>
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -64,4 +79,5 @@
     <string name="dialog_permission_title">Grant Permissions</string>
     <string name="dialog_permission_message">This app needs permission to use this feature. You can grant them in app settings.</string>
     <string name="go_to_settings">GOTO SETTINGS</string>
+    <string name="description">Description</string>
 </resources>
