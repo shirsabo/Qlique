@@ -1,5 +1,6 @@
 package com.example.qlique
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -26,7 +27,9 @@ class ChatListActivity: AppCompatActivity()  {
         var currentUser:User?=null
     }
     val adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
+
     @Override
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_list)
@@ -39,6 +42,11 @@ class ChatListActivity: AppCompatActivity()  {
             startActivity(intent)
 
         }
+        newMessageBtn.setOnClickListener{
+            val intent = Intent(this,NewMessageActivity::class.java)
+            startActivity(intent)
+        }
+
         listenForLatestMessages()
         //setupDummyRows()
         fetchCurrentUser()
@@ -134,10 +142,7 @@ class ChatListActivity: AppCompatActivity()  {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item?.itemId){
-            R.id.menu_new_message->{
-                val intent = Intent(this,NewMessageActivity::class.java)
-                startActivity(intent)
-            }R.id.menu_sign_out->{
+           R.id.menu_sign_out->{
                 FirebaseAuth.getInstance().signOut()
                 val intent = Intent(this,LoginActivity::class.java)
                 intent.flags=Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)

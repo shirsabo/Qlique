@@ -37,7 +37,11 @@
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".SignupActivity" android:windowSoftInputMode="adjustPan" />
         <activity android:name=".UpdatePassword" />
-        <activity android:name=".ChatListActivity" />
+        <activity android:name=".ChatListActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".MainActivity" />
+        </activity>
     </application>
 
 </manifest>
