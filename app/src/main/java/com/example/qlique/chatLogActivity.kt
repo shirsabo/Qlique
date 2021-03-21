@@ -2,6 +2,7 @@ package com.example.qlique
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
@@ -12,6 +13,7 @@ import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
+import kotlinx.android.synthetic.main.activity_chat_list.*
 import kotlinx.android.synthetic.main.activity_chat_log.*
 import kotlinx.android.synthetic.main.chat_from_row.view.*
 import kotlinx.android.synthetic.main.chat_to_row.view.*
@@ -29,7 +31,6 @@ class chatLogActivity : AppCompatActivity() {
         //dummySetUP()
         sendBtn.setOnClickListener{
             performSendMessage()
-            text_message_chat.text.clear()
         }
         listenForMessages()
     }
@@ -41,15 +42,30 @@ class chatLogActivity : AppCompatActivity() {
     }
     fun performSendMessage(){
         val textInput = text_message_chat.text.toString()
+        if(textInput.length == 0){
+            return
+        }
         val user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
         val fromId =  FirebaseAuth.getInstance().uid
         val toId = user.uid
-        val ref = FirebaseDatabase.getInstance().getReference("/messages").push()
+        if (fromId==null)return
+        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId").push()
+        val toRef=FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId").push()
         val chatMsg = chatMessage(ref.key!!,textInput,fromId!!,toId,System.currentTimeMillis()/1000)
-        ref.setValue(chatMsg)
+        ref.setValue(chatMsg).addOnSuccessListener {
+            text_message_chat.text.clear()
+            recyclerView_chat.scrollToPosition(adapter.itemCount-1) }
+        toRef.setValue(chatMsg)
+        val latestMessageRef= FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
+        latestMessageRef.setValue(chatMsg)
+        val latestMessageRefTo= FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
+        latestMessageRefTo.setValue(chatMsg)
+
     }
     fun listenForMessages(){
-        val ref = FirebaseDatabase.getInstance().getReference("/messages")
+        val fromId= FirebaseAuth.getInstance().uid
+        val toId =intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY).uid
+        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId")
         ref.addChildEventListener(object :ChildEventListener{
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val msg = snapshot.getValue(chatMessage::class.java)
@@ -61,6 +77,7 @@ class chatLogActivity : AppCompatActivity() {
                     }else if (msg.fromId==toUser!!.uid && msg.toId==FirebaseAuth.getInstance().uid){
                             adapter.add(ChatToItem(msg.text,toUser!!))
                     }
+                    recyclerView_chat.scrollToPosition(adapter.itemCount-1)
                 }
             }
             override fun onCancelled(error: DatabaseError) {

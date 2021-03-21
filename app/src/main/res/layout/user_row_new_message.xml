@@ -71,7 +71,7 @@
         android:layout_marginStart="104dp"
         android:layout_marginLeft="104dp"
         android:background="@drawable/rounded"
-        android:text="user_name"
+        android:text="user_name_latest"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         android:textStyle="bold"
