@@ -10,15 +10,33 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class ChatListActivity: AppCompatActivity()  {
+    companion object{
+        var currentUser:User?=null
+    }
     @Override
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_list)
+        fetchCurrentUser()
         verifyUserIsLoggedIn()
-
-
+    }
+    private fun fetchCurrentUser(){
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+        ref.addListenerForSingleValueEvent(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                currentUser=snapshot.getValue(User::class.java)
+            }
+            override fun onCancelled(po: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
     private fun verifyUserIsLoggedIn(){
         val uid = FirebaseAuth.getInstance().uid

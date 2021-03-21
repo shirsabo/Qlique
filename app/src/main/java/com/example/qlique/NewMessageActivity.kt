@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_new_message.*
 import kotlinx.android.synthetic.main.user_row_new_message.view.*
 
 public var adapter=GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
+public val friendsAdded = arrayListOf<String>()
 
 class NewMessageActivity : AppCompatActivity() {
     companion object {
@@ -59,15 +60,16 @@ private fun fetchFriends(){
                             val newUser =Firebase.database.reference.child("users").child(friendKey).addValueEventListener(object :ValueEventListener{
                                 override fun onDataChange(dataSnapshot: DataSnapshot){
                                     val user1=dataSnapshot.getValue(User::class.java)
-                                    if (user1!=null){
+                                    if (user1!=null&& !friendsAdded.contains(friendKey)){
                                         adapter.add(UserItem(user1))
+                                        friendsAdded.add(friendKey)
                                     }
                                 }
                                 override fun onCancelled(error: DatabaseError){
                                     //Failed to read value
                                 }
                             })
-                            if(newUser!=null){
+                            if(newUser!=null ){
                                 Log.d("tag","hello")
                                 val res =newUser
                             }

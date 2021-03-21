@@ -12,11 +12,11 @@
         android:id="@+id/chatLayout"
         android:layout_width="241dp"
         android:layout_height="52dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginLeft="60dp"
         android:layout_marginTop="4dp"
         android:background="@drawable/incomming_message_background"
         android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.411"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
@@ -27,20 +27,14 @@
             android:layout_width="166dp"
             android:layout_height="57dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="42dp"
-            android:layout_marginRight="42dp"
-            android:layout_marginBottom="9dp"
+            android:layout_marginTop="4dp"
             android:text="hi :)"
             android:textSize="14sp" />
 
     </RelativeLayout>
 
     <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/circularImageView"
+        android:id="@+id/circularImageViewFrom"
         android:layout_width="45dp"
         android:layout_height="61dp"
         android:layout_marginStart="16dp"
