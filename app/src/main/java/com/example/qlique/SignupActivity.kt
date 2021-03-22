@@ -172,7 +172,10 @@ import java.util.*
         url: String,
     ) {
         val uid: String? = FirebaseAuth.getInstance().uid
-        val instagram = ""
+        var instagram = ""
+        if (mApp.userName != null){
+            instagram = mApp.userName
+        }
         val user = User(fName, lName, city, email, gender, uid, url, instagram)
 
         // Creating a new user and saving it in the real time database.
