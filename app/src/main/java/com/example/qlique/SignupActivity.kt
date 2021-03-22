@@ -46,6 +46,7 @@ import java.util.*
     private lateinit var profilPicture : com.mikhaellopez.circularimageview.CircularImageView
     private lateinit var mApp : InstagramApp
     private lateinit var userInfoHashMap: HashMap<String, String>
+    private var instagranUserName : String = ""
     private var handler = object : Handler(){
         override fun handleMessage(message: Message) {
             if (message.what == InstagramApp.WHAT_FINALIZE){
@@ -171,9 +172,9 @@ import java.util.*
         url: String,
     ) {
         val uid: String? = FirebaseAuth.getInstance().uid
-        // var instagram : String? = userInfoHashMap[InstagramApp.TAG_USERNAME]
         val instagram = ""
         val user = User(fName, lName, city, email, gender, uid, url, instagram)
+
         // Creating a new user and saving it in the real time database.
         database.child("users").child(userId).setValue(user)
 

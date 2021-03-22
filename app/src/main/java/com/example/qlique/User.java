@@ -15,10 +15,11 @@ public class User implements Parcelable{
     public List<String> friends;
     public List<String> hobbies;
 
+    public void setInstagramUserName(String instagramUserName) {
+        this.instagramUserName = instagramUserName;
+    }
 
-
-
-    public User(String firstName, String lastName, String city, String email, String gender,String uid,String url, String instagramUserName)
+    public User(String firstName, String lastName, String city, String email, String gender, String uid, String url, String instagramUserName)
     {
         this.firstName = firstName;
         this.lastName = lastName;

@@ -114,7 +114,7 @@ public class InstagramApp {
                     urlConnection.setRequestMethod("POST");
                     urlConnection.setDoInput(true);
                     urlConnection.setDoOutput(true);
-                    // urlConnection.connect();
+                    //urlConnection.connect();
                     OutputStreamWriter writer = new OutputStreamWriter(
                             urlConnection.getOutputStream());
                     writer.write("client_id=" + mClientId + "&client_secret="

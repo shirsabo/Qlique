@@ -19,7 +19,8 @@
         app:layout_constraintBottom_toTopOf="@+id/multiple_list_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtview" />
+        app:layout_constraintTop_toBottomOf="@+id/txtview"
+        android:paddingStart="2dp" />
 
 
     <ListView
@@ -61,7 +62,8 @@
         android:paddingLeft="5dp"
         app:layout_constraintBottom_toTopOf="@+id/multiple_list_view"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/scrollView2" />
+        app:layout_constraintTop_toTopOf="@+id/scrollView2"
+        android:paddingStart="5dp" />
 
     <ScrollView
         android:id="@+id/scrollView2"

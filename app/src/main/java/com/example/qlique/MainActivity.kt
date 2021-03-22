@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var logoutBtn: Button
     private lateinit var updatePass: Button
     private lateinit var chatBtn :Button
-
+    private lateinit var profileBtn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Already logged in", Toast.LENGTH_LONG).show()
         }
         setContentView(R.layout.activity_main)
-
+        profileBtn = findViewById(R.id.profile)
         logoutBtn = findViewById(R.id.logout_btn)
         updatePass = findViewById(R.id.update_pass_btn)
         chatBtn = findViewById(R.id.btn_chat_feed)
@@ -58,6 +58,10 @@ class MainActivity : AppCompatActivity() {
         // when clicking the change password we will enter the change password activity.
         updatePass.setOnClickListener{
             val intent = Intent(this, UpdatePassword::class.java)
+            startActivity(intent)
+        }
+        profileBtn.setOnClickListener{
+            val intent = Intent(this, ProfilePage::class.java)
             startActivity(intent)
         }
     }

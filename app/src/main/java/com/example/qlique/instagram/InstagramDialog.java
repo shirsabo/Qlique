@@ -100,7 +100,7 @@ public class InstagramDialog extends Dialog {
             Log.d(TAG, "Redirecting URL " + url);
 
             if (url.startsWith(InstagramApp.mCallbackUrl)) {
-                String urls[] = url.split("=");
+                String[] urls = url.split("=");
                 mListener.onComplete(urls[1]);
                 InstagramDialog.this.dismiss();
                 return true;
