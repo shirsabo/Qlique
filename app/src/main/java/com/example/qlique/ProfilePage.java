@@ -26,7 +26,7 @@ import java.util.Objects;
 
 public class ProfilePage extends AppCompatActivity{
     private Button instagram, chat;
-    private TextView name, city, profileName, eventsNumber;
+    private TextView name, city, profileName, eventsNumber, gender;
     private ListView hobbies;
     private User user;
     private Context context;
@@ -43,10 +43,14 @@ public class ProfilePage extends AppCompatActivity{
         instagram =  findViewById(R.id.instagram);
         profileName =findViewById(R.id.profile_name);
         eventsNumber = findViewById(R.id.events_number);
+        gender = findViewById(R.id.gender);
         chat = findViewById(R.id.envelop);
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         userIdProfile = getIntent().getStringExtra("EXTRA_SESSION_ID");
         assert userIdProfile != null;
+        if (!userIdProfile.equals(FirebaseAuth.getInstance().getUid())){
+            chat.setVisibility(View.VISIBLE);
+        }
         mDatabase.child("users").child(userIdProfile).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -66,6 +70,7 @@ public class ProfilePage extends AppCompatActivity{
                     hobbies.setAdapter(adapter);
                     profileName.setText(nameCombine);
                     eventsNumber.setText("0");
+                    gender.setText(user.gender);
                 }
             }
         });
