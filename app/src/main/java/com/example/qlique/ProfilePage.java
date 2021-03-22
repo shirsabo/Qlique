@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -22,18 +21,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.ktx.Firebase;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.ktx.Firebase;
 
 import java.util.Objects;
 
 public class ProfilePage extends AppCompatActivity{
-    private Button instagram;
+    private Button instagram, chat;
     private TextView name, city, profileName, eventsNumber;
     private ListView hobbies;
     private User user;
     private Context context;
+    private String userIdProfile;
     ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +43,11 @@ public class ProfilePage extends AppCompatActivity{
         instagram =  findViewById(R.id.instagram);
         profileName =findViewById(R.id.profile_name);
         eventsNumber = findViewById(R.id.events_number);
+        chat = findViewById(R.id.envelop);
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        String currentUser = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-        mDatabase.child("users").child(currentUser).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        userIdProfile = getIntent().getStringExtra("EXTRA_SESSION_ID");
+        assert userIdProfile != null;
+        mDatabase.child("users").child(userIdProfile).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
@@ -76,15 +75,30 @@ public class ProfilePage extends AppCompatActivity{
                 if (user.instagramUserName == null || user.instagramUserName.length() == 0){
                     return;
                 }
-                Uri uri = Uri.parse("http://instagram.com/_u/" + user.instagramUserName);
+                String inst = "http://instagram.com/_u/" + user.instagramUserName;
+                Uri uri = Uri.parse(inst);
                 Intent likeIng = new Intent(Intent.ACTION_VIEW, uri);
                 likeIng.setPackage("com.instagram.android");
                 try {
                     startActivity(likeIng);
                 } catch (ActivityNotFoundException e) {
                     startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("http://instagram.com/xxx")));
+                            Uri.parse(inst)));
                 }
+            }
+        });
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (userIdProfile.equals(FirebaseAuth.getInstance().getUid())){
+                    // We view our own profile.
+                    return;
+                }
+                // We view other user's profile so we will add him to our friends list and start
+                // a conversation with him.
+                String ourUid = FirebaseAuth.getInstance().getUid();
+                String otherUserUid = userIdProfile;
+
             }
         });
     }

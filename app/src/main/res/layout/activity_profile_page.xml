@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,24 +11,22 @@
         android:id="@+id/textView5"
         android:layout_width="139dp"
         android:layout_height="26dp"
-        android:layout_marginTop="292dp"
         android:layout_marginBottom="128dp"
+        android:fontFamily="sans-serif-condensed"
         android:text="Hobbies"
-        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.294"
-        app:layout_constraintStart_toStartOf="parent"
-         />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ListView
         android:id="@+id/multiple_list_view"
         android:layout_width="179dp"
         android:layout_height="97dp"
         android:gravity="center"
-        android:listSelector="@drawable/custom_selector"
         android:textColor="@color/bg_meta_container"
-        android:textSize="5dp"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,8 +44,10 @@
         android:layout_marginStart="54dp"
         android:layout_marginLeft="54dp"
         android:layout_marginTop="57dp"
+        android:fontFamily="sans-serif-condensed"
         android:text="City"
-        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="@+id/textView4" />
 
@@ -56,6 +56,9 @@
         android:layout_width="139dp"
         android:layout_height="26dp"
         android:layout_marginTop="29dp"
+        android:fontFamily="sans-serif-condensed"
+        android:textColor="#000000"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.294"
@@ -94,6 +97,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="41dp"
+        android:fontFamily="sans-serif-condensed"
+        android:textColor="#000000"
         android:textSize="25dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView9"
@@ -109,8 +114,10 @@
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif-condensed"
         android:text="Name"
-        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
@@ -119,6 +126,9 @@
         android:layout_width="139dp"
         android:layout_height="26dp"
         android:layout_marginTop="24dp"
+        android:fontFamily="sans-serif-condensed"
+        android:textColor="#000000"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/textView7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -130,7 +140,9 @@
         android:id="@+id/textView9"
         android:layout_width="300dp"
         android:layout_height="60dp"
+        android:fontFamily="sans-serif-condensed"
         android:text="Account Info"
+        android:textColor="#000000"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -182,8 +194,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="62dp"
         android:layout_marginBottom="59dp"
+        android:fontFamily="sans-serif-condensed"
         android:text="Events"
-        android:textStyle="bold"
+        android:textColor="#000000"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/textView9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.478"
@@ -196,14 +210,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-condensed"
         android:text="0"
+        android:textColor="#000000"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView13" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/envelop"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="43dp"
         android:layout_height="45dp"
@@ -233,6 +250,8 @@
         android:id="@+id/facebook"
         android:layout_width="27dp"
         android:layout_height="29dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:layout_marginTop="220dp"
         android:layout_marginBottom="14dp"
         android:background="@drawable/ic_facebook"
@@ -242,6 +261,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/view3"
         app:layout_constraintVertical_bias="0.0" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

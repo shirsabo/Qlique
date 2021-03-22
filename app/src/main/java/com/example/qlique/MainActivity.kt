@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         }
         profileBtn.setOnClickListener{
             val intent = Intent(this, ProfilePage::class.java)
+            intent.putExtra("EXTRA_SESSION_ID", FirebaseAuth.getInstance().uid);
             startActivity(intent)
         }
     }
