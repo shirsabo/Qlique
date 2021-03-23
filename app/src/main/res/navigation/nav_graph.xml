@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.example.qlique.SignupActivity"
+        android:name="com.example.qlique.LoginAndSignUp.SignupActivity"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 

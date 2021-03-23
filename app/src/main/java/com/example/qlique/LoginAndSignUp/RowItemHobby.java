@@ -1,4 +1,4 @@
-package com.example.qlique;
+package com.example.qlique.LoginAndSignUp;
 
 public class RowItemHobby {
     private int imageId;

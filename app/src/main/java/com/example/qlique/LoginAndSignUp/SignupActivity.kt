@@ -1,4 +1,4 @@
-package com.example.qlique
+package com.example.qlique.LoginAndSignUp
 
 import android.app.Activity
 import android.content.Intent
@@ -15,6 +15,9 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.qlique.AppConfig
+import com.example.qlique.R
+import com.example.qlique.User
 import com.example.qlique.instagram.InstagramApp
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth

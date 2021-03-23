@@ -1,10 +1,12 @@
-package com.example.qlique
+package com.example.qlique.LoginAndSignUp
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.qlique.MainActivity
+import com.example.qlique.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -54,11 +56,18 @@ class HobbiesSelection : AppCompatActivity() , AdapterView.OnItemClickListener{
             rowItemHobby = ArrayList<RowItemHobby>()
             for (i in 0 until hobbies.size){
                 val item  =
-                    RowItemHobby(images[i] as Int, hobbies[i])
+                    RowItemHobby(
+                        images[i] as Int,
+                        hobbies[i]
+                    )
                 rowItemHobby.add(item)
             }
             listView = findViewById(R.id.multiple_list_view)
-            val adapter = CustomViewAdapter(this, R.layout.list_item, rowItemHobby)
+            val adapter = CustomViewAdapter(
+                this,
+                R.layout.list_item,
+                rowItemHobby
+            )
             listView?.adapter = adapter
             listView?.choiceMode = ListView.CHOICE_MODE_MULTIPLE
             listView?.onItemClickListener = this

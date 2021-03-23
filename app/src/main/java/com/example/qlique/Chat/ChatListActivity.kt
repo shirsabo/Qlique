@@ -1,30 +1,27 @@
-package com.example.qlique
+package com.example.qlique.Chat
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.Toast
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
+import com.example.qlique.LoginAndSignUp.LoginActivity
+import com.example.qlique.NewMessageActivity
+import com.example.qlique.R
+import com.example.qlique.User
+import com.example.qlique.chatLogActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.activity_chat_list.*
-import kotlinx.android.synthetic.main.activity_chat_log.*
 import kotlinx.android.synthetic.main.latest_message_row.view.*
 
 class ChatListActivity: AppCompatActivity()  {
     companion object{
-        var currentUser:User?=null
+        var currentUser: User?=null
     }
     val adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
 
@@ -36,14 +33,14 @@ class ChatListActivity: AppCompatActivity()  {
         recycleView_latestMessages.adapter=adapter
         recycleView_latestMessages.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
         adapter.setOnItemClickListener{item, view ->
-            val intent = Intent(this,chatLogActivity::class.java)
+            val intent = Intent(this, chatLogActivity::class.java)
             val row = item as LatestMessageRow
             intent.putExtra(NewMessageActivity.USER_KEY,row.chatPartnerUser)
             startActivity(intent)
 
         }
         newMessageBtn.setOnClickListener{
-            val intent = Intent(this,NewMessageActivity::class.java)
+            val intent = Intent(this, NewMessageActivity::class.java)
             startActivity(intent)
         }
 
@@ -53,8 +50,8 @@ class ChatListActivity: AppCompatActivity()  {
         verifyUserIsLoggedIn()
     }
 
-    class LatestMessageRow(val chatMessage:chatLogActivity.chatMessage): com.xwray.groupie.Item<GroupieViewHolder>() {
-        var chatPartnerUser :User?=null
+    class LatestMessageRow(val chatMessage: chatLogActivity.chatMessage): com.xwray.groupie.Item<GroupieViewHolder>() {
+        var chatPartnerUser : User?=null
         override fun bind(viewHolder: GroupieViewHolder, position: Int) {
             viewHolder.itemView.latest_msg_latest_message.text=chatMessage.text
             var chatPartnerId:String
@@ -123,7 +120,7 @@ class ChatListActivity: AppCompatActivity()  {
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
         ref.addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                currentUser=snapshot.getValue(User::class.java)
+                currentUser =snapshot.getValue(User::class.java)
             }
             override fun onCancelled(po: DatabaseError) {
                 TODO("Not yet implemented")
@@ -133,7 +130,7 @@ class ChatListActivity: AppCompatActivity()  {
     private fun verifyUserIsLoggedIn(){
         val uid = FirebaseAuth.getInstance().uid
         if (uid == null){
-            val intent = Intent(this,LoginActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
 
@@ -142,9 +139,9 @@ class ChatListActivity: AppCompatActivity()  {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item?.itemId){
-           R.id.menu_sign_out->{
+           R.id.menu_sign_out ->{
                 FirebaseAuth.getInstance().signOut()
-                val intent = Intent(this,LoginActivity::class.java)
+                val intent = Intent(this, LoginActivity::class.java)
                 intent.flags=Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }

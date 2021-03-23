@@ -1,4 +1,4 @@
-package com.example.qlique;
+package com.example.qlique.LoginAndSignUp;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.example.qlique.LoginAndSignUp.RowItemHobby;
+import com.example.qlique.R;
+
 import java.util.List;
 
 public class CustomViewAdapter extends ArrayAdapter<RowItemHobby> {
