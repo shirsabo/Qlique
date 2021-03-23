@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
       >
-        <activity android:name=".LoginAndSignUp.HobbiesSelection"></activity>
+        <activity android:name=".LoginAndSignUp.HobbiesSelection" />
         <activity android:name=".chatLogActivity" android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
