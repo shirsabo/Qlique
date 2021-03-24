@@ -11,6 +11,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qlique.Chat.ChatListActivity
 import com.example.qlique.LoginAndSignUp.LoginActivity
 import com.example.qlique.LoginAndSignUp.SignupActivity
@@ -24,6 +25,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 
 
@@ -81,27 +83,14 @@ class MainActivity : AppCompatActivity() {
 
             return@setNavigationItemSelectedListener true
         }
-
-        // Picasso.get().load(SignupActivity?.currentUser?.url).into(profilePic)
-        val curUser =
-            FirebaseDatabase.getInstance()!!.getReference("users/${FirebaseAuth.getInstance().uid}")
-        if (curUser != null) {
-            val newUser =
-                Firebase.database.reference.child("users").child(FirebaseAuth.getInstance().uid!!)
-                    .addValueEventListener(object :
-                        ValueEventListener {
-                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            val user1 = dataSnapshot.getValue(User::class.java)
-                            if (user1 != null) {
-                                //Picasso.get().load(user1?.url).into(profilePic)
-                            }
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            //Failed to read value
-                        }
-                    })
+        val events : ArrayList<Event> = ArrayList()
+        for(i in 0..100){
+            events.add(Event())
         }
+
+        feed.layoutManager = LinearLayoutManager(this)
+        feed.adapter= postAdapter(events)
+
     }
 
 
@@ -148,6 +137,29 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, ProfilePage::class.java)
         intent.putExtra("EXTRA_SESSION_ID", FirebaseAuth.getInstance().uid);
         startActivity(intent)
+    }
+    private fun fetchCurUser(){
+
+        // Picasso.get().load(SignupActivity?.currentUser?.url).into(profilePic)
+        val curUser =
+            FirebaseDatabase.getInstance()!!.getReference("users/${FirebaseAuth.getInstance().uid}")
+        if (curUser != null) {
+            val newUser =
+                Firebase.database.reference.child("users").child(FirebaseAuth.getInstance().uid!!)
+                    .addValueEventListener(object :
+                        ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            val user1 = dataSnapshot.getValue(User::class.java)
+                            if (user1 != null) {
+                                //Picasso.get().load(user1?.url).into(profilePic)
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            //Failed to read value
+                        }
+                    })
+        }
     }
 
 

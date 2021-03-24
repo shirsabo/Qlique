@@ -48,17 +48,17 @@
 
         </LinearLayout>
 
+
         <ImageView
             android:id="@+id/post_image_home"
             android:layout_width="match_parent"
-            android:layout_height="379dp"
+            android:layout_height="355dp"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/ic_user" />
 
-
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="69dp"
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp">
 
@@ -66,16 +66,23 @@
                 android:id="@+id/post_image_like_btn"
                 android:layout_width="54dp"
                 android:layout_height="44dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="8dp"
                 android:src="@drawable/ic_plus"
                 app:srcCompat="@drawable/ic_team" />
 
             <ImageView
                 android:id="@+id/post_image_comment_btn"
-                android:layout_width="53dp"
-                android:layout_height="41dp"
+                android:layout_width="105dp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="6dp"
                 android:layout_marginLeft="6dp"
-                android:layout_marginTop="3dp"
                 android:layout_toEndOf="@+id/post_image_like_btn"
                 android:layout_toRightOf="@+id/post_image_like_btn"
                 app:srcCompat="@drawable/ic_chat" />
@@ -83,7 +90,7 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/user_name_post"
             android:layout_width="356dp"
             android:layout_height="23dp"
             android:text="user name" />
