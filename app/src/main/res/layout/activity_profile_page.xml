@@ -50,7 +50,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/circularImageView"
+        android:id="@+id/ProfileCircularImage"
         android:layout_width="124dp"
         android:layout_height="123dp"
         app:civ_border_color="#ffffff"
@@ -77,7 +77,7 @@
         app:layout_constraintBottom_toTopOf="@+id/textView9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/circularImageView"
+        app:layout_constraintTop_toBottomOf="@+id/ProfileCircularImage"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView

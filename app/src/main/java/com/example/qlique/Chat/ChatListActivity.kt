@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.qlique.LoginAndSignUp.LoginActivity
+import com.example.qlique.LoginAndSignUp.SignupActivity
 import com.example.qlique.NewMessageActivity
 import com.example.qlique.R
 import com.example.qlique.User
@@ -20,9 +21,6 @@ import kotlinx.android.synthetic.main.activity_chat_list.*
 import kotlinx.android.synthetic.main.latest_message_row.view.*
 
 class ChatListActivity: AppCompatActivity()  {
-    companion object{
-        var currentUser: User?=null
-    }
     val adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
 
     @Override
@@ -120,7 +118,7 @@ class ChatListActivity: AppCompatActivity()  {
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
         ref.addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                currentUser =snapshot.getValue(User::class.java)
+                SignupActivity.currentUser =snapshot.getValue(User::class.java)
             }
             override fun onCancelled(po: DatabaseError) {
                 TODO("Not yet implemented")

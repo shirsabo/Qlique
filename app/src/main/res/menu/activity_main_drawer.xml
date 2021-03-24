@@ -1,21 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <group>
-        <item android:id="@+id/nav_item_one"
-            android:icon="@drawable/ic_id_card"
-            android:title="Profile" />
-        <item android:id="@+id/nav_item_two"
-            android:icon="@drawable/ic_network"
+        <item
+            android:id="@+id/Profile"
+            android:icon="@drawable/ic_user"
+            android:title="Profile"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/Chat"
+            android:icon="@drawable/ic_chat"
             android:title="Chat" />
      <!--   <item android:id="@+id/nav_item_three"
             android:icon="@drawable/ic_like"
             android:title="Item 3" />-->
+        <item
+            android:id="@+id/Map"
+            android:icon="@drawable/ic_map"
+            android:title="Map"
+            app:showAsAction="never" />
     </group>
 
     <group android:id="@+id/group_menu">
-        <item android:id="@+id/nav_item_four"
+        <item
+            android:id="@+id/nav_item_four"
+            android:icon="@drawable/ic_password"
             android:title="Change password" />
-        <item android:id="@+id/nav_item_five"
+        <item
+            android:id="@+id/nav_item_five"
+            android:icon="@drawable/ic_logout"
             android:title="Logout" />
     </group>
 

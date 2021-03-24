@@ -16,8 +16,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.qlique.AppConfig
+import com.example.qlique.Chat.ChatListActivity
 import com.example.qlique.R
 import com.example.qlique.User
+import com.example.qlique.chatLogActivity
 import com.example.qlique.instagram.InstagramApp
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
@@ -50,6 +52,9 @@ import java.util.*
     private lateinit var mApp : InstagramApp
     private lateinit var userInfoHashMap: HashMap<String, String>
     private var instagranUserName : String = ""
+    companion object{
+        var currentUser: User?=null
+    }
     private var handler = object : Handler(){
         override fun handleMessage(message: Message) {
             if (message.what == InstagramApp.WHAT_FINALIZE){
@@ -73,6 +78,19 @@ import java.util.*
             val bitmapDrawble= BitmapDrawable(bitmap)
             profilPicture.setImageBitmap(bitmap)
         }
+    }
+
+    private fun fetchCurrentUser(){
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+        ref.addListenerForSingleValueEvent(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                currentUser =snapshot.getValue(User::class.java)
+            }
+            override fun onCancelled(po: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -222,6 +240,7 @@ import java.util.*
                                 val user1 = dataSnapshot.getValue(User::class.java)
                                 if (user1 != null) {
                                     user1.url = url
+                                    currentUser = user1
                                     ref.setValue(user1)
                                     Log.d("finish", url)
                                 }

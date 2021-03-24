@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -17,7 +16,6 @@ import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
-import kotlinx.android.synthetic.main.activity_chat_log.*
 import kotlinx.android.synthetic.main.activity_new_message.*
 import kotlinx.android.synthetic.main.user_row_new_message.view.*
 
@@ -105,7 +103,7 @@ class UserItem(val user: User): Item<com.xwray.groupie.GroupieViewHolder>(){
        viewHolder.itemView.user_name.text= user.firstName+" "+user.lastName
         val ur = user.url
         val mStorageRef = FirebaseStorage.getInstance().getReference();
-       Picasso.get().load(ur).into(viewHolder.itemView.circularImageView)
+       Picasso.get().load(ur).into(viewHolder.itemView.ProfileCircularImage)
     }
     override fun getLayout(): Int {
 

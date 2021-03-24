@@ -3,6 +3,7 @@ package com.example.qlique
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.qlique.Chat.ChatListActivity
+import com.example.qlique.LoginAndSignUp.SignupActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -70,7 +71,7 @@ class chatLogActivity : AppCompatActivity() {
                 val toUser = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
                 if (msg!=null){
                     if(msg.fromId==FirebaseAuth.getInstance().uid && msg.toId==toUser!!.uid ){
-                        val curUser = ChatListActivity.currentUser
+                        val curUser = SignupActivity.currentUser
                         adapter.add(ChatFromItem(msg.text,curUser!!))
                     }else if (msg.fromId==toUser!!.uid && msg.toId==FirebaseAuth.getInstance().uid){
                             adapter.add(ChatToItem(msg.text,toUser!!))

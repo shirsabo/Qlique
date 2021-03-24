@@ -5,7 +5,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -13,9 +13,18 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.qlique.Chat.ChatListActivity
 import com.example.qlique.LoginAndSignUp.LoginActivity
+import com.example.qlique.LoginAndSignUp.SignupActivity
 import com.example.qlique.LoginAndSignUp.UpdatePassword
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.nav_header_main.view.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -23,14 +32,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var navigationView: NavigationView
+    private lateinit var  profile:ImageView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val lay : View = findViewById(R.id.app_bar_main_layout)
+        val lay: View = findViewById(R.id.app_bar_main_layout)
         val toolbar: Toolbar = lay.findViewById(R.id.toolbar_main)
+        val profilePic = lay.nav_ProfileCircularImage
         setSupportActionBar(toolbar)
-
         drawer = findViewById(R.id.drawer_layout)
 
         toggle = ActionBarDrawerToggle(
@@ -48,26 +59,51 @@ class MainActivity : AppCompatActivity() {
 
 
         auth = FirebaseAuth.getInstance()
-        if(auth.currentUser == null){
+        if (auth.currentUser == null) {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
-        }else{
+        } else {
             Toast.makeText(this, "Already logged in", Toast.LENGTH_LONG).show()
         }
 
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.nav_item_one -> profileClicked()
-                R.id.nav_item_two -> chatClicked()
+                R.id.Profile -> profileClicked()
+                R.id.Chat -> chatClicked()
                 //R.id.nav_item_three -> Toast.makeText(this, "Clicked item three", Toast.LENGTH_SHORT)
                 //  .show()
                 R.id.nav_item_four -> changePasswordClicked()
                 R.id.nav_item_five -> logoutClicked()
+
             }
+
+
             return@setNavigationItemSelectedListener true
         }
+
+        // Picasso.get().load(SignupActivity?.currentUser?.url).into(profilePic)
+        val curUser =
+            FirebaseDatabase.getInstance()!!.getReference("users/${FirebaseAuth.getInstance().uid}")
+        if (curUser != null) {
+            val newUser =
+                Firebase.database.reference.child("users").child(FirebaseAuth.getInstance().uid!!)
+                    .addValueEventListener(object :
+                        ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            val user1 = dataSnapshot.getValue(User::class.java)
+                            if (user1 != null) {
+                                //Picasso.get().load(user1?.url).into(profilePic)
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            //Failed to read value
+                        }
+                    })
+        }
     }
+
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)

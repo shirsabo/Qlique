@@ -15,12 +15,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.qlique.LoginAndSignUp.SignupActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
@@ -31,6 +33,8 @@ public class ProfilePage extends AppCompatActivity{
     private User user;
     private Context context;
     private String userIdProfile;
+    private com.mikhaellopez.circularimageview.CircularImageView profilePic;
+    private User curUser;
     ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,11 @@ public class ProfilePage extends AppCompatActivity{
         eventsNumber = findViewById(R.id.events_number);
         gender = findViewById(R.id.gender);
         chat = findViewById(R.id.envelop);
+        profilePic= findViewById(R.id.ProfileCircularImage);
+        curUser = SignupActivity.Companion.getCurrentUser();
+        if (curUser!=null&& curUser.url!=null){
+            Picasso.get().load(curUser.url).into(profilePic);
+        }
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         userIdProfile = getIntent().getStringExtra("EXTRA_SESSION_ID");
         assert userIdProfile != null;
@@ -73,6 +82,7 @@ public class ProfilePage extends AppCompatActivity{
                     gender.setText(user.gender);
                 }
             }
+
         });
         instagram.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +117,7 @@ public class ProfilePage extends AppCompatActivity{
             }
         });
     }
+
 
 
 }

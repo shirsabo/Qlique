@@ -8,5 +8,6 @@ public class Event {
     private Integer minAge, numOfParticipants;
     private Timestamp startTime, endTime;
     private List<String> hobbiesRelated;
+    private User author;
 
 }
