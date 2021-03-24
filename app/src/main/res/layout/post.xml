@@ -74,7 +74,6 @@
                 android:layout_marginLeft="0dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="8dp"
-                android:src="@drawable/ic_plus"
                 app:srcCompat="@drawable/ic_team" />
 
             <ImageView
