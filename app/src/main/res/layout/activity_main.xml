@@ -11,16 +11,30 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/feed"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="40dp" />
 
     <include
         android:id="@+id/app_bar_main_layout"
         layout="@layout/app_bar_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
+    <!-- Main content -->
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floating_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:paddingLeft="40dp"
+            app:srcCompat="@drawable/ic_add_button" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
