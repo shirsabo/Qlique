@@ -82,4 +82,5 @@
     <string name="description">Description</string>
     <string name="navigation_drawer_open" />
     <string name="navigation_drawer_close" />
+    <string name="enter_a_new_password">Enter a new password here</string>
 </resources>
