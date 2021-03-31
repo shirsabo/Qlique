@@ -3,20 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.qlique">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-      >
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAEYg3k2hcWMyjGlv4PuUcgtKuZ2-syFHM"/>
+        <activity android:name=".MapActivity" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
         <activity android:name=".LoginAndSignUp.HobbiesSelection" />
-        <activity android:name=".chatLogActivity" android:windowSoftInputMode="adjustPan">
+        <activity
+            android:name=".chatLogActivity"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".chatLogActivity"
-               />
+                android:value=".chatLogActivity" />
         </activity>
         <activity android:name=".NewMessageActivity">
             <meta-data
@@ -33,14 +44,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginAndSignUp.LoginActivity" android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".LoginAndSignUp.LoginActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".LoginAndSignUp.ForgotPasswordActivity" />
-        <activity android:name=".LoginAndSignUp.SignupActivity" android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".LoginAndSignUp.SignupActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".LoginAndSignUp.UpdatePassword" />
         <activity android:name=".Chat.ChatListActivity">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".MainActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
     </application>
 

@@ -83,4 +83,5 @@
     <string name="navigation_drawer_open" />
     <string name="navigation_drawer_close" />
     <string name="enter_a_new_password">Enter a new password here</string>
+    <string name="goole_maps_API_key">AIzaSyAEYg3k2hcWMyjGlv4PuUcgtKuZ2-syFHM</string>
 </resources>
