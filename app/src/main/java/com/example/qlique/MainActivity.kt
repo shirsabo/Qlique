@@ -1,8 +1,11 @@
 package com.example.qlique
 
+import android.app.Dialog
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
@@ -14,8 +17,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qlique.Chat.ChatListActivity
 import com.example.qlique.LoginAndSignUp.LoginActivity
-import com.example.qlique.LoginAndSignUp.SignupActivity
 import com.example.qlique.LoginAndSignUp.UpdatePassword
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -24,7 +28,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 
@@ -35,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var navigationView: NavigationView
     private lateinit var  profile:ImageView
+    private val ERROR_DIALOG_REQUEST = 9001
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,7 +84,6 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-
             return@setNavigationItemSelectedListener true
         }
         val events : ArrayList<Event> = ArrayList()
@@ -91,6 +94,28 @@ class MainActivity : AppCompatActivity() {
         feed.layoutManager = LinearLayoutManager(this)
         feed.adapter= postAdapter(events)
 
+        if(!isServicesOK()){
+            Toast.makeText(this, "can't open map", Toast.LENGTH_LONG)
+                .show()
+        }
+
+    }
+    private fun isServicesOK(): Boolean {
+        Log.d(TAG, "isServicesOK: checking google services version")
+        val available =
+            GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this@MainActivity)
+        if (available == ConnectionResult.SUCCESS) {
+            //everything is fine and the user can make map requests
+            return true
+        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
+            //an error occured but we can resolve it
+            val dialog: Dialog? = GoogleApiAvailability.getInstance()
+                .getErrorDialog(this@MainActivity, available, ERROR_DIALOG_REQUEST)
+            dialog?.show()
+        } else {
+            Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show()
+        }
+        return false
     }
 
 
@@ -126,9 +151,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun chatClicked() {
         val intent = Intent(this, ChatListActivity::class.java)
-        Toast.makeText(this, "chat", Toast.LENGTH_LONG)
-            .show()
-
         startActivity(intent)
         finish()
     }
@@ -142,24 +164,22 @@ class MainActivity : AppCompatActivity() {
 
         // Picasso.get().load(SignupActivity?.currentUser?.url).into(profilePic)
         val curUser =
-            FirebaseDatabase.getInstance()!!.getReference("users/${FirebaseAuth.getInstance().uid}")
-        if (curUser != null) {
-            val newUser =
-                Firebase.database.reference.child("users").child(FirebaseAuth.getInstance().uid!!)
-                    .addValueEventListener(object :
-                        ValueEventListener {
-                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            val user1 = dataSnapshot.getValue(User::class.java)
-                            if (user1 != null) {
-                                //Picasso.get().load(user1?.url).into(profilePic)
-                            }
+            FirebaseDatabase.getInstance().getReference("users/${FirebaseAuth.getInstance().uid}")
+        val newUser =
+            Firebase.database.reference.child("users").child(FirebaseAuth.getInstance().uid!!)
+                .addValueEventListener(object :
+                    ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val user1 = dataSnapshot.getValue(User::class.java)
+                        if (user1 != null) {
+                            //Picasso.get().load(user1?.url).into(profilePic)
                         }
+                    }
 
-                        override fun onCancelled(error: DatabaseError) {
-                            //Failed to read value
-                        }
-                    })
-        }
+                    override fun onCancelled(error: DatabaseError) {
+                        //Failed to read value
+                    }
+                })
     }
 
 
