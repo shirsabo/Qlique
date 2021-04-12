@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.common.api.internal.BackgroundDetector.initialize
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.places.Places
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.IOException
 import java.util.*
 
@@ -52,6 +54,7 @@ GoogleApiClient.OnConnectionFailedListener{
         LatLng(-40.0 , -168.0),
         LatLng(71.0, 136.0)
     )
+
     override fun onConnectionFailed(p0: ConnectionResult) {
         TODO("Not yet implemented")
     }
@@ -80,6 +83,7 @@ GoogleApiClient.OnConnectionFailedListener{
         setContentView(R.layout.activity_map)
         mSearchText = findViewById(R.id.input_search);
         mGps = findViewById(R.id.ic_gps)
+
         getLocationPermission()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
@@ -263,6 +267,7 @@ GoogleApiClient.OnConnectionFailedListener{
             Log.d(TAG, "onClick: clicked gps icon")
             getDeviceLocation()
         }
+
     }
     private fun geoLocate() {
         Log.d(TAG, "geoLocate: geolocating")
