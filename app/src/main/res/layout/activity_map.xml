@@ -40,7 +40,7 @@
             android:layout_marginLeft="10dp"
             app:srcCompat="@drawable/ic_magnify" />
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/input_search"
             android:layout_width="337dp"
             android:layout_height="27dp"

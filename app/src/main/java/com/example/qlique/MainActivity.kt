@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_map.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 
 
@@ -81,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                 //  .show()
                 R.id.nav_item_four -> changePasswordClicked()
                 R.id.nav_item_five -> logoutClicked()
-
+                R.id.Map->mapClicked()
             }
 
             return@setNavigationItemSelectedListener true
@@ -151,6 +152,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun chatClicked() {
         val intent = Intent(this, ChatListActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+    private fun mapClicked(){
+        val intent = Intent(this, MapActivity::class.java)
         startActivity(intent)
         finish()
     }
