@@ -131,5 +131,9 @@ dependencies {
     implementation "com.google.android.gms:play-services-base:17.6.0"
     implementation "com.google.android.gms:play-services-auth:19.0.0"
     implementation "com.google.android.gms:play-services-games:21.0.0"
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+    implementation 'com.google.android.gms:play-services-places:17.0.0'
+    implementation 'com.google.android.libraries.places:places:2.4.0'
 
 }
