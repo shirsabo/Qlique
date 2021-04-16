@@ -13,12 +13,12 @@ class NewEvent : AppCompatActivity() {
         createEvent()
     }
     private fun createEvent(){
-        var curUser =  FirebaseAuth.getInstance().currentUser.uid
+        var curUser =  "FTNv4hPQYgMz4ScpvBhUasCjm6B3"
         var mDatabase = FirebaseDatabase.getInstance().reference
         var photo = "https://the18.com/sites/default/files/styles/feature_image_with_focal/public/feature-images/20200313-The18-Image-Coronavirus-Soccer.jpg?itok=nHsVIAhh"
         var hobbies = ArrayList<String>(2)
         hobbies.add("Soccer")
-        var event:Event =Event(photo,curUser,"hey",hobbies)
+        var event:Event =Event(photo,curUser,"Soccer play tonight at 7:00 PM",hobbies)
         mDatabase.child("/posts").push().setValue(event)
     }
 }

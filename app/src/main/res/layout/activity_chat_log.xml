@@ -6,6 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".chatLogActivity">
 
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/other_side_photo"
+        android:layout_width="70dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="524dp"
+        app:civ_border_color="#000000"
+        app:civ_border_width="2dp"
+        app:civ_shadow="false"
+        app:civ_shadow_color="#000000"
+        app:civ_shadow_radius="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView_chat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/text_message_chat"
@@ -41,11 +58,25 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_chat"
-        android:layout_width="407dp"
-        android:layout_height="496dp"
+        android:layout_width="461dp"
+        android:layout_height="527dp"
+        android:layout_marginTop="24dp"
+        android:background="#e5e5e5"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/other_side_user" />
+
+    <TextView
+        android:id="@+id/other_side_user"
+        android:layout_width="177dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="54dp"
+        android:layout_marginLeft="54dp"
+        android:layout_marginTop="16dp"
+        android:text=""
+        app:layout_constraintStart_toStartOf="@+id/other_side_photo"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

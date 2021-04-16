@@ -1,5 +1,6 @@
 package com.example.qlique
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +42,11 @@ class postAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<postAdapte
                  targetName.text=user?.firstName+" "+user?.lastName
                  val description = holder.itemView.description_post
                  description.text = events[position].description
+                 holder.itemView.post_image_chat_btn.setOnClickListener {
+                     val intent = Intent (holder.itemView.context,chatLogActivity::class.java)
+                     intent.putExtra(NewMessageActivity.USER_KEY,user)
+                     holder.itemView.context.startActivity(intent)
+                 }
 
              }
              override fun onCancelled(po: DatabaseError) {
@@ -54,6 +60,7 @@ class postAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<postAdapte
         val targetImageView = holder.itemView.post_image_home
         Picasso.get().load(uri).into(targetImageView)
         fetchAuthor(events[position].uid,holder,position)
+
 
     }
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {

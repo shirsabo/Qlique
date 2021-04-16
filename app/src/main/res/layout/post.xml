@@ -71,12 +71,14 @@
                 app:srcCompat="@drawable/ic_team" />
 
             <ImageView
-                android:id="@+id/post_image_comment_btn"
+                android:id="@+id/post_image_chat_btn"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
+                android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="18dp"
                 android:layout_toEndOf="@+id/post_image_like_btn"
                 android:layout_toRightOf="@+id/post_image_like_btn"
@@ -84,17 +86,18 @@
 
             <ImageView
                 android:id="@+id/post_image_comment_btn2"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="243dp"
-                android:layout_marginLeft="243dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="26dp"
+                android:layout_width="53dp"
+                android:layout_height="41dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="249dp"
+                android:layout_marginLeft="249dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="9dp"
+                android:layout_marginRight="9dp"
                 android:layout_toEndOf="@+id/post_image_comment_btn"
                 android:layout_toRightOf="@+id/post_image_comment_btn"
-                app:srcCompat="@drawable/ic_mapcolor" />
+                app:srcCompat="@drawable/ic_mapcolor"  />
 
         </RelativeLayout>
 
