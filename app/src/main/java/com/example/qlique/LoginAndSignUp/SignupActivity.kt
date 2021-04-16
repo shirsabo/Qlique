@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment
 import com.example.qlique.AppConfig
 import com.example.qlique.R
 import com.example.qlique.Profile.User
-import com.example.qlique.Instagram.InstagramApp
+import com.example.qlique.Instagram.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*

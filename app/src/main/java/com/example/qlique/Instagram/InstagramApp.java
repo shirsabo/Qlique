@@ -17,8 +17,8 @@ import java.util.HashMap;
 
 public class InstagramApp {
 
-    private InstagramSession mSession;
-    private InstagramDialog mDialog;
+    private com.example.qlique.Instagram.InstagramSession mSession;
+    private com.example.qlique.Instagram.InstagramDialog mDialog;
     private OAuthAuthenticationListener mListener;
     private ProgressDialog mProgress;
     private HashMap<String, String> userInfo = new HashMap<String, String>();
@@ -66,7 +66,7 @@ public class InstagramApp {
         mClientId = clientId;
         mClientSecret = clientSecret;
         mCtx = context;
-        mSession = new InstagramSession(context);
+        mSession = new com.example.qlique.Instagram.InstagramSession(context);
         mAccessToken = mSession.getAccessToken();
         mCallbackUrl = callbackUrl;
         mTokenUrl = TOKEN_URL + "?client_id=" + clientId + "&client_secret="
@@ -79,7 +79,7 @@ public class InstagramApp {
                 + mCallbackUrl
                 + "&response_type=code&display=touch&scope=likes+comments+relationships";
 
-        InstagramDialog.OAuthDialogListener listener = new InstagramDialog.OAuthDialogListener() {
+        com.example.qlique.Instagram.InstagramDialog.OAuthDialogListener listener = new com.example.qlique.Instagram.InstagramDialog.OAuthDialogListener() {
             @Override
             public void onComplete(String code) {
                 getAccessToken(code);
@@ -91,7 +91,7 @@ public class InstagramApp {
             }
         };
 
-        mDialog = new InstagramDialog(context, mAuthUrl, listener);
+        mDialog = new com.example.qlique.Instagram.InstagramDialog(context, mAuthUrl, listener);
         mProgress = new ProgressDialog(context);
         mProgress.setCancelable(false);
     }
@@ -121,7 +121,7 @@ public class InstagramApp {
                             + mClientSecret + "&grant_type=authorization_code"
                             + "&redirect_uri=" + mCallbackUrl + "&code=" + code);
                     writer.flush();
-                    String response = Utils.streamToString(urlConnection
+                    String response = com.example.qlique.Instagram.Utils.streamToString(urlConnection
                             .getInputStream());
                     Log.i(TAG, "response " + response);
                     JSONObject jsonObj = (JSONObject) new JSONTokener(response)
@@ -168,7 +168,7 @@ public class InstagramApp {
                     urlConnection.setRequestMethod("GET");
                     urlConnection.setDoInput(true);
                     urlConnection.connect();
-                    String response = Utils.streamToString(urlConnection
+                    String response = com.example.qlique.Instagram.Utils.streamToString(urlConnection
                             .getInputStream());
                     System.out.println(response);
                     JSONObject jsonObj = (JSONObject) new JSONTokener(response)

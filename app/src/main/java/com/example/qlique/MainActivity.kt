@@ -23,6 +23,7 @@ import com.example.qlique.Profile.ProfilePage
 import com.example.qlique.Profile.User
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navigationView: NavigationView
     private lateinit var  profile:ImageView
     private val ERROR_DIALOG_REQUEST = 9001
-
+    private var floatingBtn: FloatingActionButton? =null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,6 +91,7 @@ class MainActivity : AppCompatActivity() {
 
             return@setNavigationItemSelectedListener true
         }
+        /*
         val events : ArrayList<Event> = ArrayList()
         for(i in 0..100){
             events.add(Event())
@@ -97,10 +99,15 @@ class MainActivity : AppCompatActivity() {
 
         feed.layoutManager = LinearLayoutManager(this)
         feed.adapter= postAdapter(events)
-
+         */
+        fetchPosts()
         if(!isServicesOK()){
             Toast.makeText(this, "can't open map", Toast.LENGTH_LONG)
                 .show()
+        }
+        floatingBtn = findViewById(R.id.floating_action_button)
+        floatingBtn!!.setOnClickListener{
+            newEventClicked()
         }
 
     }
@@ -169,6 +176,10 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("EXTRA_SESSION_ID", FirebaseAuth.getInstance().uid);
         startActivity(intent)
     }
+    private fun newEventClicked() {
+        val intent = Intent(this, NewEvent::class.java)
+        startActivity(intent)
+    }
     private fun fetchCurUser(){
 
         // Picasso.get().load(SignupActivity?.currentUser?.url).into(profilePic)
@@ -189,6 +200,35 @@ class MainActivity : AppCompatActivity() {
                         //Failed to read value
                     }
                 })
+    }
+    private fun  fetchPosts(){
+        val events : ArrayList<Event> = ArrayList()
+        var mDatabase = FirebaseDatabase.getInstance().reference
+        feed.layoutManager = LinearLayoutManager(this)
+        mDatabase.child("/posts").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (snapshot in dataSnapshot.children) {
+                    val event =
+                        snapshot.getValue(Event::class.java)
+                    event?.uid = snapshot.child("uid").value.toString()
+                    event?.description = snapshot.child("description").value.toString()
+                    if (event != null) {
+                        events.add(event)
+                    }
+
+                }
+                feed.adapter= postAdapter(events)
+
+            }})
+        /*
+        for(i in 0..100){
+            events.add(Event(null,null,null,null))
+        }
+*/
+
     }
 
 

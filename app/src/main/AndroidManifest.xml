@@ -17,6 +17,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity android:name=".NewEvent" >
+        </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAEYg3k2hcWMyjGlv4PuUcgtKuZ2-syFHM"/>
