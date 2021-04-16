@@ -129,6 +129,7 @@ class ChatListActivity: AppCompatActivity()  {
                 TODO("Not yet implemented")
             }
         })
+
     }
     private fun verifyUserIsLoggedIn(){
         val uid = FirebaseAuth.getInstance().uid
