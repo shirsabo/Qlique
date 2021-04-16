@@ -117,12 +117,19 @@ dependencies {
     implementation 'androidx.webkit:webkit:1.4.0' //androidx webview
     implementation 'com.google.android.material:material:1.4.0-alpha02'
     //compile 'com.google.android.gms:play-services:12.0.1'
-    //implementation "com.google.android.gms:play-services-location:18.0.0"
-    implementation  'com.google.android.gms:play-services-location:15.0.1'
-    implementation 'com.google.android.gms:play-services-places:15.0.1'
-    //implementation "com.google.android.gms:play-services-location:18.0.0"
-    //implementation 'com.google.android.gms:play-services-places:9.2.0'
-
-
+    implementation "com.google.android.gms:play-services-location:18.0.0"
+    compile "com.google.android.gms:play-services-location:18.0.0"
+    implementation 'com.google.android.libraries.places:places:2.4.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+    compile 'com.google.android.gms:play-services-places:17.0.0'
+    //implementation 'com.google.android.libraries.places:places-compat:2.4.0'
+    implementation 'com.google.android.gms:play-services-places:17.0.0'
+    //implementation 'com.google.android.libraries.places:places:2.4.0'
+    implementation ("com.google.android.libraries.places:places:2.4.0") {
+        exclude group: "com.github.bumptech.glide"
+    }
+    implementation "com.google.android.gms:play-services-base:17.6.0"
+    implementation "com.google.android.gms:play-services-auth:19.0.0"
+    implementation "com.google.android.gms:play-services-games:21.0.0"
 
 }

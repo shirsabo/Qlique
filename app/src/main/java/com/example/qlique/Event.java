@@ -1,5 +1,7 @@
 package com.example.qlique;
 
+import com.example.qlique.Profile.User;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;

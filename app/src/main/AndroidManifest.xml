@@ -1,33 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.qlique">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".NewEvent"></activity>
-
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAEYg3k2hcWMyjGlv4PuUcgtKuZ2-syFHM" />
-
-        <activity android:name=".MapActivity" />
-
+            android:value="AIzaSyAEYg3k2hcWMyjGlv4PuUcgtKuZ2-syFHM"/>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
+        <activity android:name=".Map.MapActivity"
+            android:windowSoftInputMode="stateUnchanged"
+            tools:replace="android:windowSoftInputMode"/>
         <activity android:name=".LoginAndSignUp.HobbiesSelection" />
         <activity
             android:name=".chatLogActivity"
@@ -41,10 +39,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Chat.ChatListActivity" />
         </activity>
-        <activity android:name=".ProfilePage" />
+        <activity android:name=".Profile.ProfilePage" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="stateUnchanged"
+            tools:replace="android:windowSoftInputMode">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

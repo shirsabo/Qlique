@@ -1,4 +1,4 @@
-package com.example.qlique;
+package com.example.qlique.Profile;
 
 import android.os.Parcel;
 import android.os.Parcelable;

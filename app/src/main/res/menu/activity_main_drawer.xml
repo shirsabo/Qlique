@@ -17,17 +17,17 @@
         <item
             android:id="@+id/Map"
             android:icon="@drawable/ic_map"
-            android:title="Map"
+            android:title="@string/map"
             app:showAsAction="never" />
     </group>
 
     <group android:id="@+id/group_menu">
         <item
-            android:id="@+id/nav_item_four"
+            android:id="@+id/ChangePassword"
             android:icon="@drawable/ic_password"
             android:title="Change password" />
         <item
-            android:id="@+id/nav_item_five"
+            android:id="@+id/Logout"
             android:icon="@drawable/ic_logout"
             android:title="Logout" />
     </group>

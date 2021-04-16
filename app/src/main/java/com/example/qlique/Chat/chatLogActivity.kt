@@ -2,8 +2,8 @@ package com.example.qlique
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.qlique.Chat.ChatListActivity
 import com.example.qlique.LoginAndSignUp.SignupActivity
+import com.example.qlique.Profile.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -99,7 +99,7 @@ class chatLogActivity : AppCompatActivity() {
 
     }
 }
-class ChatFromItem(val string: String,val user:User): Item<com.xwray.groupie.GroupieViewHolder>(){
+class ChatFromItem(val string: String,val user: User): Item<com.xwray.groupie.GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder,position:Int){
         viewHolder.itemView.messageFrom.text= string
         //load user image
@@ -113,7 +113,7 @@ class ChatFromItem(val string: String,val user:User): Item<com.xwray.groupie.Gro
     }
 
 }
-class ChatToItem(val string: String,val user:User): Item<com.xwray.groupie.GroupieViewHolder>(){
+class ChatToItem(val string: String,val user: User): Item<com.xwray.groupie.GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder,position:Int){
         viewHolder.itemView.messageTo.text = string
         val uri = user.url

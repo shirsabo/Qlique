@@ -1,4 +1,4 @@
-package com.example.qlique;
+package com.example.qlique.Profile;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.qlique.LoginAndSignUp.SignupActivity;
+import com.example.qlique.Profile.User;
+import com.example.qlique.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,31 +29,27 @@ import com.squareup.picasso.Picasso;
 import java.util.Objects;
 
 public class ProfilePage extends AppCompatActivity{
-    private Button instagram, chat;
     private TextView name, city, profileName, eventsNumber, gender;
     private ListView hobbies;
     private User user;
-    private Context context;
     private String userIdProfile;
-    private com.mikhaellopez.circularimageview.CircularImageView profilePic;
-    private User curUser;
     ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_page);
-        context = this;
+        Context context = this;
         name = findViewById(R.id.name);
         city = findViewById(R.id.city);
-        hobbies = findViewById(R.id.multiple_list_view);
-        instagram =  findViewById(R.id.instagram);
+        //hobbies = findViewById(R.id.multiple_list_view);
+        Button instagram = findViewById(R.id.instagram);
         profileName =findViewById(R.id.profile_name);
         eventsNumber = findViewById(R.id.events_number);
         gender = findViewById(R.id.gender);
-        chat = findViewById(R.id.envelop);
-        profilePic= findViewById(R.id.ProfileCircularImage);
-        curUser = SignupActivity.Companion.getCurrentUser();
-        if (curUser!=null&& curUser.url!=null){
+        Button chat = findViewById(R.id.envelop);
+        com.mikhaellopez.circularimageview.CircularImageView profilePic = findViewById(R.id.ProfileCircularImage);
+        User curUser = SignupActivity.Companion.getCurrentUser();
+        if (curUser !=null&& curUser.url!=null){
             Picasso.get().load(curUser.url).into(profilePic);
         }
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -73,10 +71,11 @@ public class ProfilePage extends AppCompatActivity{
                     String nameCombine = user.firstName + " " + user.lastName;
                     name.setText(nameCombine);
                     city.setText(user.city);
-                    adapter=new ArrayAdapter<String>(context,
+                /*    adapter=new ArrayAdapter<String>(context,
                             android.R.layout.simple_list_item_1,
                             user.hobbies);
-                    hobbies.setAdapter(adapter);
+               //     hobbies.setAdapter(adapter);
+                 */
                     profileName.setText(nameCombine);
                     eventsNumber.setText("0");
                     gender.setText(user.gender);
@@ -84,40 +83,34 @@ public class ProfilePage extends AppCompatActivity{
             }
 
         });
-        instagram.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (user.instagramUserName == null || user.instagramUserName.length() == 0){
-                    return;
-                }
-                String inst = "http://instagram.com/_u/" + user.instagramUserName;
-                Uri uri = Uri.parse(inst);
-                Intent likeIng = new Intent(Intent.ACTION_VIEW, uri);
-                likeIng.setPackage("com.instagram.android");
-                try {
-                    startActivity(likeIng);
-                } catch (ActivityNotFoundException e) {
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(inst)));
-                }
+        instagram.setOnClickListener(view -> {
+            if (user.instagramUserName == null || user.instagramUserName.length() == 0){
+                return;
+            }
+            String inst = "http://instagram.com/_u/" + user.instagramUserName;
+            Uri uri = Uri.parse(inst);
+            Intent likeIng = new Intent(Intent.ACTION_VIEW, uri);
+            likeIng.setPackage("com.instagram.android");
+            try {
+                startActivity(likeIng);
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(inst)));
             }
         });
-        chat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (userIdProfile.equals(FirebaseAuth.getInstance().getUid())){
-                    // We view our own profile.
-                    return;
-                }
-                // We view other user's profile so we will add him to our friends list and start
-                // a conversation with him.
-                String ourUid = FirebaseAuth.getInstance().getUid();
-                String otherUserUid = userIdProfile;
+        chat.setOnClickListener(view -> {
+            if (userIdProfile.equals(FirebaseAuth.getInstance().getUid())){
+                // We view our own profile.
+                return;
+            }
+            // We view other user's profile so we will add him to our friends list and start
+            // a conversation with him.
+            String ourUid = FirebaseAuth.getInstance().getUid();
+            String otherUserUid = userIdProfile;
 
-            }
         });
+        Button back = findViewById(R.id.back_button);
+        back.setOnClickListener(view -> finish());
     }
-
-
 
 }

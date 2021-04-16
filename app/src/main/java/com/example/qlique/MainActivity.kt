@@ -18,9 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qlique.Chat.ChatListActivity
 import com.example.qlique.LoginAndSignUp.LoginActivity
 import com.example.qlique.LoginAndSignUp.UpdatePassword
+import com.example.qlique.Map.MapActivity
+import com.example.qlique.Profile.ProfilePage
+import com.example.qlique.Profile.User
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -39,7 +41,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var navigationView: NavigationView
     private lateinit var  profile:ImageView
-    private var floatingBtn: FloatingActionButton? =null
     private val ERROR_DIALOG_REQUEST = 9001
 
 
@@ -81,24 +82,30 @@ class MainActivity : AppCompatActivity() {
                 R.id.Chat -> chatClicked()
                 //R.id.nav_item_three -> Toast.makeText(this, "Clicked item three", Toast.LENGTH_SHORT)
                 //  .show()
-                R.id.nav_item_four -> changePasswordClicked()
-                R.id.nav_item_five -> logoutClicked()
-                R.id.Map->mapClicked()
+                R.id.ChangePassword -> changePasswordClicked()
+                R.id.Logout -> logoutClicked()
+                R.id.Map -> mapClicked()
+
             }
 
             return@setNavigationItemSelectedListener true
         }
-        fetchPosts()
+        val events : ArrayList<Event> = ArrayList()
+        for(i in 0..100){
+            events.add(Event())
+        }
+
+        feed.layoutManager = LinearLayoutManager(this)
+        feed.adapter= postAdapter(events)
+
         if(!isServicesOK()){
             Toast.makeText(this, "can't open map", Toast.LENGTH_LONG)
                 .show()
         }
-        floatingBtn = findViewById(R.id.floating_action_button)
-        floatingBtn!!.setOnClickListener{
-            newEventClicked()
-        }
 
     }
+
+
     private fun isServicesOK(): Boolean {
         Log.d(TAG, "isServicesOK: checking google services version")
         val available =
@@ -135,16 +142,16 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun mapClicked() {
+        val intent = Intent(this, MapActivity::class.java)
+        startActivity(intent)
+    }
 
     private fun logoutClicked() {
         FirebaseAuth.getInstance().signOut()
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
-    }
-    private fun newEventClicked() {
-        val intent = Intent(this, NewEvent::class.java)
-        startActivity(intent)
     }
 
     private fun changePasswordClicked() {
@@ -155,12 +162,6 @@ class MainActivity : AppCompatActivity() {
     private fun chatClicked() {
         val intent = Intent(this, ChatListActivity::class.java)
         startActivity(intent)
-        finish()
-    }
-    private fun mapClicked(){
-        val intent = Intent(this, MapActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 
     private fun profileClicked() {
@@ -189,29 +190,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 })
     }
-    private fun  fetchPosts(){
-        val events : ArrayList<Event> = ArrayList()
-        feed.layoutManager = LinearLayoutManager(this)
-        var mDatabase = FirebaseDatabase.getInstance().reference
-        mDatabase.child("/posts").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (snapshot in dataSnapshot.children) {
-                    val event =
-                        snapshot.getValue(Event::class.java)
-                    event?.uid = snapshot.child("uid").value.toString()
-                    event?.description = snapshot.child("description").value.toString()
-                    if (event != null) {
-                        events.add(event)
-                    }
-                }
-                feed.adapter= postAdapter(events)
 
-            }})
-
-    }
 
 
 }

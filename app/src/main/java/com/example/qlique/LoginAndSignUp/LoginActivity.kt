@@ -8,7 +8,6 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.example.qlique.MainActivity
-import com.example.qlique.MapActivity
 import com.example.qlique.R
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth

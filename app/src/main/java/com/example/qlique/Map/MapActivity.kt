@@ -1,4 +1,4 @@
-package com.example.qlique
+package com.example.qlique.Map
 
 import android.Manifest
 import android.content.ContentValues.TAG
@@ -6,24 +6,25 @@ import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.AutoCompleteTextView
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.qlique.R
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.internal.BackgroundDetector.initialize
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.places.Places
+import com.google.android.gms.location.places.Places.GEO_DATA_API
+import com.google.android.gms.location.places.Places.PLACE_DETECTION_API
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -32,13 +33,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.IOException
 import java.util.*
 
-private lateinit var fusedLocationClient: FusedLocationProviderClient
-class MapActivity : AppCompatActivity() , OnMapReadyCallback,
-GoogleApiClient.OnConnectionFailedListener{
+class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.OnConnectionFailedListener{
     private val FINE_LOCATION: String = Manifest.permission.ACCESS_FINE_LOCATION
     private val COURSE_LOCATION: String = Manifest.permission.ACCESS_COARSE_LOCATION
     private val LOCATION_PERMISSION_REQUEST_CODE = 1234
@@ -48,16 +46,15 @@ GoogleApiClient.OnConnectionFailedListener{
     private val DEFAULT_ZOOM = 15f
     private var mSearchText: AutoCompleteTextView? = null
     private var mGps: ImageView? = null
-    private var mPlaceAutoCompleteAdapter: PlaceAutocompleteAdapter? = null
-    private var mGoogleApiClient: GoogleApiClient?=null
-    private val LAT_LNG_BOUNDS = LatLngBounds(
-        LatLng(-40.0 , -168.0),
+    private lateinit var back: Button
+
+    private var mPlaceAutocompleteAdapter: PlaceAutocompleteAdapter? = null
+    private var mGoogleApiClient: GoogleApiClient? = null
+    private val LAT_LNG_BOUNDS: LatLngBounds = LatLngBounds(
+        LatLng(-40.0, -168.0),
         LatLng(71.0, 136.0)
     )
 
-    override fun onConnectionFailed(p0: ConnectionResult) {
-        TODO("Not yet implemented")
-    }
 
     override fun onMapReady(googleMap: GoogleMap) {
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show()
@@ -83,26 +80,10 @@ GoogleApiClient.OnConnectionFailedListener{
         setContentView(R.layout.activity_map)
         mSearchText = findViewById(R.id.input_search);
         mGps = findViewById(R.id.ic_gps)
-
         getLocationPermission()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
-            if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
-                mFusedLocationProviderClient?.lastLocation?.addOnSuccessListener { location : Location? ->
-                    if (location != null) {
-                        moveCamera(
-                            LatLng(
-                                location.latitude
-                                ,location.longitude
-                            ),
-                            DEFAULT_ZOOM, "My Location"
-                        )
-                    }
-                }
-
-            }else{
-               getLocationPermission()
-            }
+        back = findViewById(R.id.back_button)
+        back.setOnClickListener {
+            finish()
         }
     }
 
@@ -181,19 +162,6 @@ GoogleApiClient.OnConnectionFailedListener{
                                 Log.d(TAG, "onComplete: found location!")
                                 val currentLocation: Location? = task.result as Location?
                                 if (currentLocation != null) {
-                                    fusedLocationClient.lastLocation
-                                        .addOnSuccessListener { location : Location? ->
-                                            if (location != null) {
-                                                moveCamera(
-                                                    LatLng(
-                                                        location.latitude
-                                                        ,location.longitude
-                                                    ),
-                                                    DEFAULT_ZOOM, "My Location"
-                                                )
-                                            }
-                                        }
-                                    /*
                                     moveCamera(
                                         LatLng(
                                             currentLocation.latitude,
@@ -201,7 +169,6 @@ GoogleApiClient.OnConnectionFailedListener{
                                         ),
                                         DEFAULT_ZOOM, "My Location"
                                     )
-                                    */
                                 }
                             } else {
                                 Log.d(TAG, "onComplete: current location is null")
@@ -238,12 +205,6 @@ GoogleApiClient.OnConnectionFailedListener{
     }
     private fun initMap() {
         Log.d(TAG, "initMap: initializing map")
-        mGoogleApiClient = GoogleApiClient.Builder(this)
-            .addApi(Places.GEO_DATA_API)
-            .addApi(Places.PLACE_DETECTION_API)
-            .enableAutoManage(this, this)
-            .build()
-
         val mapFragment : SupportMapFragment=
             supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this@MapActivity)
@@ -251,8 +212,19 @@ GoogleApiClient.OnConnectionFailedListener{
 
     private fun init() {
         Log.d(TAG, "init: initializing")
-        mPlaceAutoCompleteAdapter = PlaceAutocompleteAdapter(this,mGoogleApiClient,LAT_LNG_BOUNDS,null)
-        mSearchText?.setAdapter(mPlaceAutoCompleteAdapter)
+
+        mGoogleApiClient = GoogleApiClient.Builder(this)
+            .addApi(GEO_DATA_API)
+            .addApi(PLACE_DETECTION_API)
+            .enableAutoManage(this, this)
+            .build()
+
+        mPlaceAutocompleteAdapter = PlaceAutocompleteAdapter(
+            this, mGoogleApiClient,
+            LAT_LNG_BOUNDS, null
+        )
+
+        mSearchText!!.setAdapter(mPlaceAutocompleteAdapter)
         mSearchText!!.setOnEditorActionListener { _, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
                 || keyEvent.action == KeyEvent.ACTION_DOWN
@@ -267,7 +239,6 @@ GoogleApiClient.OnConnectionFailedListener{
             Log.d(TAG, "onClick: clicked gps icon")
             getDeviceLocation()
         }
-
     }
     private fun geoLocate() {
         Log.d(TAG, "geoLocate: geolocating")
@@ -293,5 +264,7 @@ GoogleApiClient.OnConnectionFailedListener{
         }
     }
 
-
+    override fun onConnectionFailed(p0: ConnectionResult) {
+        TODO("Not yet implemented")
+    }
 }
