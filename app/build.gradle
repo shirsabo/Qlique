@@ -128,5 +128,8 @@ dependencies {
     implementation ("com.google.android.libraries.places:places:2.4.0") {
         exclude group: "com.github.bumptech.glide"
     }
+    implementation "com.google.android.gms:play-services-base:17.6.0"
+    implementation "com.google.android.gms:play-services-auth:19.0.0"
+    implementation "com.google.android.gms:play-services-games:21.0.0"
 
 }
