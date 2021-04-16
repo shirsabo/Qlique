@@ -1,4 +1,4 @@
-package com.example.qlique.instagram;
+package com.example.qlique.Instagram;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Handler;

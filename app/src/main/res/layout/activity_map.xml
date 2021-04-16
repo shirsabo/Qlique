@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MapActivity">
+    tools:context=".Map.MapActivity">
 
     <fragment
         android:id="@+id/map"
@@ -23,6 +23,7 @@
         android:id="@+id/relLayout1"
         android:layout_width="387dp"
         android:layout_height="52dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="633dp"
         android:background="@drawable/white_border"
         app:layout_constraintBottom_toBottomOf="@+id/map"
@@ -40,7 +41,7 @@
             android:layout_marginLeft="10dp"
             app:srcCompat="@drawable/ic_magnify" />
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/input_search"
             android:layout_width="337dp"
             android:layout_height="27dp"
@@ -73,9 +74,22 @@
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="@+id/map"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.967"
+        app:layout_constraintHorizontal_bias="0.956"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relLayout1"
-        app:layout_constraintVertical_bias="0.012"
+        app:layout_constraintVertical_bias="0.016"
         app:srcCompat="@drawable/ic_gps" />
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded"
+        android:text="back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.049"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.95" />
 </androidx.constraintlayout.widget.ConstraintLayout>

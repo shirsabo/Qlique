@@ -18,6 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qlique.Chat.ChatListActivity
 import com.example.qlique.LoginAndSignUp.LoginActivity
 import com.example.qlique.LoginAndSignUp.UpdatePassword
+import com.example.qlique.Map.MapActivity
+import com.example.qlique.Profile.ProfilePage
+import com.example.qlique.Profile.User
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.navigation.NavigationView
@@ -79,8 +82,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.Chat -> chatClicked()
                 //R.id.nav_item_three -> Toast.makeText(this, "Clicked item three", Toast.LENGTH_SHORT)
                 //  .show()
-                R.id.nav_item_four -> changePasswordClicked()
-                R.id.nav_item_five -> logoutClicked()
+                R.id.ChangePassword -> changePasswordClicked()
+                R.id.Logout -> logoutClicked()
+                R.id.Map -> mapClicked()
 
             }
 
@@ -100,6 +104,8 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+
     private fun isServicesOK(): Boolean {
         Log.d(TAG, "isServicesOK: checking google services version")
         val available =
@@ -136,6 +142,10 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun mapClicked() {
+        val intent = Intent(this, MapActivity::class.java)
+        startActivity(intent)
+    }
 
     private fun logoutClicked() {
         FirebaseAuth.getInstance().signOut()
@@ -152,7 +162,6 @@ class MainActivity : AppCompatActivity() {
     private fun chatClicked() {
         val intent = Intent(this, ChatListActivity::class.java)
         startActivity(intent)
-        finish()
     }
 
     private fun profileClicked() {

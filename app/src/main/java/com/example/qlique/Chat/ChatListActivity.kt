@@ -4,13 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.qlique.LoginAndSignUp.LoginActivity
 import com.example.qlique.LoginAndSignUp.SignupActivity
 import com.example.qlique.NewMessageActivity
 import com.example.qlique.R
-import com.example.qlique.User
+import com.example.qlique.Profile.User
 import com.example.qlique.chatLogActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -22,7 +23,7 @@ import kotlinx.android.synthetic.main.latest_message_row.view.*
 
 class ChatListActivity: AppCompatActivity()  {
     val adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
-
+    private lateinit var back: Button
     @Override
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +47,10 @@ class ChatListActivity: AppCompatActivity()  {
         //setupDummyRows()
         fetchCurrentUser()
         verifyUserIsLoggedIn()
+        back = findViewById(R.id.back_button)
+        back.setOnClickListener {
+            finish()
+        }
     }
 
     class LatestMessageRow(val chatMessage: chatLogActivity.chatMessage): com.xwray.groupie.Item<GroupieViewHolder>() {
@@ -136,7 +141,7 @@ class ChatListActivity: AppCompatActivity()  {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item?.itemId){
+        when(item.itemId){
            R.id.menu_sign_out ->{
                 FirebaseAuth.getInstance().signOut()
                 val intent = Intent(this, LoginActivity::class.java)

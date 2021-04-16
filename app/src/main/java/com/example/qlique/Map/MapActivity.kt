@@ -1,8 +1,7 @@
-package com.example.qlique
+package com.example.qlique.Map
 
 import android.Manifest
 import android.content.ContentValues.TAG
-import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -10,28 +9,34 @@ import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
-import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
+import android.widget.AutoCompleteTextView
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.qlique.R
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.places.Places.GEO_DATA_API
+import com.google.android.gms.location.places.Places.PLACE_DETECTION_API
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
 import java.io.IOException
 import java.util.*
 
-class MapActivity : AppCompatActivity() , OnMapReadyCallback {
+class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.OnConnectionFailedListener{
     private val FINE_LOCATION: String = Manifest.permission.ACCESS_FINE_LOCATION
     private val COURSE_LOCATION: String = Manifest.permission.ACCESS_COARSE_LOCATION
     private val LOCATION_PERMISSION_REQUEST_CODE = 1234
@@ -39,8 +44,16 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback {
     private var mMap: GoogleMap? = null
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     private val DEFAULT_ZOOM = 15f
-    private var mSearchText: EditText? = null
+    private var mSearchText: AutoCompleteTextView? = null
     private var mGps: ImageView? = null
+    private lateinit var back: Button
+
+    private var mPlaceAutocompleteAdapter: PlaceAutocompleteAdapter? = null
+    private var mGoogleApiClient: GoogleApiClient? = null
+    private val LAT_LNG_BOUNDS: LatLngBounds = LatLngBounds(
+        LatLng(-40.0, -168.0),
+        LatLng(71.0, 136.0)
+    )
 
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -68,6 +81,10 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback {
         mSearchText = findViewById(R.id.input_search);
         mGps = findViewById(R.id.ic_gps)
         getLocationPermission()
+        back = findViewById(R.id.back_button)
+        back.setOnClickListener {
+            finish()
+        }
     }
 
     private fun getLocationPermission() {
@@ -195,6 +212,19 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback {
 
     private fun init() {
         Log.d(TAG, "init: initializing")
+
+        mGoogleApiClient = GoogleApiClient.Builder(this)
+            .addApi(GEO_DATA_API)
+            .addApi(PLACE_DETECTION_API)
+            .enableAutoManage(this, this)
+            .build()
+
+        mPlaceAutocompleteAdapter = PlaceAutocompleteAdapter(
+            this, mGoogleApiClient,
+            LAT_LNG_BOUNDS, null
+        )
+
+        mSearchText!!.setAdapter(mPlaceAutocompleteAdapter)
         mSearchText!!.setOnEditorActionListener { _, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
                 || keyEvent.action == KeyEvent.ACTION_DOWN
@@ -232,5 +262,9 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback {
                 address.getAddressLine(0)
             )
         }
+    }
+
+    override fun onConnectionFailed(p0: ConnectionResult) {
+        TODO("Not yet implemented")
     }
 }

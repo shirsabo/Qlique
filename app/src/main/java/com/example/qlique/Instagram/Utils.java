@@ -1,4 +1,4 @@
-package com.example.qlique.instagram;
+package com.example.qlique.Instagram;
 
 import java.io.BufferedReader;
 import java.io.IOException;

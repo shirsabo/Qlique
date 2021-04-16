@@ -16,11 +16,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.qlique.AppConfig
-import com.example.qlique.Chat.ChatListActivity
 import com.example.qlique.R
-import com.example.qlique.User
-import com.example.qlique.chatLogActivity
-import com.example.qlique.instagram.InstagramApp
+import com.example.qlique.Profile.User
+import com.example.qlique.Instagram.InstagramApp
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -197,7 +195,16 @@ import java.util.*
         if (mApp.userName != null){
             instagram = mApp.userName
         }
-        val user = User(fName, lName, city, email, gender, uid, url, instagram)
+        val user = User(
+            fName,
+            lName,
+            city,
+            email,
+            gender,
+            uid,
+            url,
+            instagram
+        )
 
         // Creating a new user and saving it in the real time database.
         database.child("users").child(userId).setValue(user)

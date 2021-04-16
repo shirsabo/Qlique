@@ -85,4 +85,5 @@
     <string name="enter_a_new_password">Enter a new password here</string>
     <string name="goole_maps_API_key">AIzaSyAEYg3k2hcWMyjGlv4PuUcgtKuZ2-syFHM</string>
     <string name="enter_address_city_or_zip_code">Enter Address, City or Zip Code</string>
+    <string name="map">Map</string>
 </resources>
