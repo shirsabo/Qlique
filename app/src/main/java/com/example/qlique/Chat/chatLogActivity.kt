@@ -40,6 +40,7 @@ class chatLogActivity : AppCompatActivity() {
                     listenForMessages(curUser)
                 }
 
+
             }
             override fun onCancelled(po: DatabaseError) {
             }

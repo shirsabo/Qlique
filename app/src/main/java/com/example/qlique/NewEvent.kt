@@ -11,6 +11,7 @@ class NewEvent : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_event)
         createEvent()
+
     }
     private fun createEvent(){
         var curUser =  "FTNv4hPQYgMz4ScpvBhUasCjm6B3"

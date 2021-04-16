@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
     private val ERROR_DIALOG_REQUEST = 9001
     private var floatingBtn: FloatingActionButton? =null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

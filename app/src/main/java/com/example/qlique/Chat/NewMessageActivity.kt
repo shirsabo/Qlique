@@ -34,6 +34,8 @@ class NewMessageActivity : AppCompatActivity() {
         //adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
 
         fetchFriends()
+
+
         newMessageRecycle.adapter= adapter
         /*
         newMessageRecycle.addItemDecoration(

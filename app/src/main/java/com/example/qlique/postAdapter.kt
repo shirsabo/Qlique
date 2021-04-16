@@ -32,6 +32,7 @@ class postAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<postAdapte
 
     }
      fun fetchAuthor(uid:String,holder: postAdapter.ViewHolder,position: Int){
+
          val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
          ref.addListenerForSingleValueEvent(object: ValueEventListener {
              override fun onDataChange(snapshot: DataSnapshot) {
