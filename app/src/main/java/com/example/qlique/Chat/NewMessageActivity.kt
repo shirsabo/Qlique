@@ -36,6 +36,7 @@ class NewMessageActivity : AppCompatActivity() {
         fetchFriends()
 
 
+
         newMessageRecycle.adapter= adapter
         /*
         newMessageRecycle.addItemDecoration(

@@ -117,6 +117,7 @@ class ChatListActivity: AppCompatActivity()  {
 
         })
 
+
     }
     private fun fetchCurrentUser(){
         val uid = FirebaseAuth.getInstance().uid

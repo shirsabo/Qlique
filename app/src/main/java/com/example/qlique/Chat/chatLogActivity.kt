@@ -41,6 +41,7 @@ class chatLogActivity : AppCompatActivity() {
                 }
 
 
+
             }
             override fun onCancelled(po: DatabaseError) {
             }

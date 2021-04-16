@@ -97,7 +97,8 @@
                 android:layout_marginRight="9dp"
                 android:layout_toEndOf="@+id/post_image_comment_btn"
                 android:layout_toRightOf="@+id/post_image_comment_btn"
-                app:srcCompat="@drawable/ic_mapcolor"  />
+                app:srcCompat="@drawable/ic_mapcolor"
+                tools:ignore="UnknownId" />
 
         </RelativeLayout>
 

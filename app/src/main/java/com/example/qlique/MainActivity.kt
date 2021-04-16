@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
     private val ERROR_DIALOG_REQUEST = 9001
     private var floatingBtn: FloatingActionButton? =null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -85,6 +84,7 @@ class MainActivity : AppCompatActivity() {
                 //R.id.nav_item_three -> Toast.makeText(this, "Clicked item three", Toast.LENGTH_SHORT)
                 //  .show()
                 R.id.ChangePassword -> changePasswordClicked()
+                R.id.EventsManager->eventsManagerClicked()
                 R.id.Logout -> logoutClicked()
                 R.id.Map -> mapClicked()
 
@@ -152,6 +152,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun mapClicked() {
         val intent = Intent(this, MapActivity::class.java)
+        startActivity(intent)
+    }
+    private fun eventsManagerClicked() {
+        val intent = Intent(this, EventsManager::class.java)
         startActivity(intent)
     }
 

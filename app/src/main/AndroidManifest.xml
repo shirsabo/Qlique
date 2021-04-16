@@ -5,9 +5,10 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,17 +18,20 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".NewEvent" >
-        </activity>
+        <activity android:name=".EventsManager"></activity>
+        <activity android:name=".NewEvent"></activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAEYg3k2hcWMyjGlv4PuUcgtKuZ2-syFHM"/>
+            android:value="AIzaSyAEYg3k2hcWMyjGlv4PuUcgtKuZ2-syFHM" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <activity android:name=".Map.MapActivity"
+
+        <activity
+            android:name=".Map.MapActivity"
             android:windowSoftInputMode="stateUnchanged"
-            tools:replace="android:windowSoftInputMode"/>
+            tools:replace="android:windowSoftInputMode" />
         <activity android:name=".LoginAndSignUp.HobbiesSelection" />
         <activity
             android:name=".chatLogActivity"

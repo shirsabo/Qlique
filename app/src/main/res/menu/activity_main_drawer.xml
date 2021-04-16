@@ -27,6 +27,10 @@
             android:icon="@drawable/ic_password"
             android:title="Change password" />
         <item
+            android:id="@+id/EventsManager"
+            android:icon="@drawable/ic_event"
+            android:title="Events" />
+        <item
             android:id="@+id/Logout"
             android:icon="@drawable/ic_logout"
             android:title="Logout" />
