@@ -26,10 +26,10 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
         for (int i=0;i<10;i++){
             events = Arrays.copyOf(events, events.length+1);
             String curUser =  "FTNv4hPQYgMz4ScpvBhUasCjm6B3";
-            String photo = "https://www.soltlv.com/wp-content/uploads/2019/12/Sol_tlv-Yoga_Sculpt.jpg";
+            String photo = "https://mk0australianspkxqy0.kinstacdn.com/wp-content/uploads/2017/05/How-To-Play-Basketball-Like-Kobe-Bryant.jpg";
             ArrayList<String> hobbies = new ArrayList<String>();
             hobbies.add("Soccer");
-            Event event =  new Event(photo,curUser,"Yoga tonight at 7:00 PM",hobbies);
+            Event event =  new Event(photo,curUser,"Basketball game tonight at 7:00 PM",hobbies);
             event.addMember("FTNv4hPQYgMz4ScpvBhUasCjm6B3");
             events[events.length - 1]=event;
         }
