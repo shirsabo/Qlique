@@ -20,6 +20,8 @@ class NewEvent : AppCompatActivity() {
         var hobbies = ArrayList<String>(2)
         hobbies.add("Soccer")
         var event:Event =Event(photo,curUser,"Yoga tonight at 7:00 PM",hobbies)
+        event.addMember( "FTNv4hPQYgMz4ScpvBhUasCjm6B3")
+        event.addMember("VNFoQjNlV6NpncVKDczygbfxyGR2")
         mDatabase.child("/posts").push().setValue(event)
     }
 }

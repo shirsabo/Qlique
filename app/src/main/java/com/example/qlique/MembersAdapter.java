@@ -5,8 +5,6 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,21 +20,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-public class EventsManagerAdapter extends RecyclerView.Adapter<EventsManagerAdapter.ViewHolder> {
-
+public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHolder> {
     private LayoutInflater inflater;
-    private Event[] events;
-
-    EventsManagerAdapter(Context context,Event[] events){
+    private String[] members;
+    MembersAdapter(Context context,String[] events){
         this.inflater = LayoutInflater.from(context);
-        this.events = events;
+        this.members = events;
     }
-
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = inflater.inflate(R.layout.event_custom,viewGroup,false);
+        View view = inflater.inflate(R.layout.member_row_event,viewGroup,false);
         return new ViewHolder(view);
     }
 
@@ -44,22 +39,17 @@ public class EventsManagerAdapter extends RecyclerView.Adapter<EventsManagerAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("users/"+events[i].uid);
+        DatabaseReference ref = database.getReference("users/"+members[i]);
 // Attach a listener to read the data at our posts reference
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                String  uri = events[i].photoUrl;
-                ImageView targetImageView = viewHolder.itemView.findViewById(R.id.cardImage);
+                String  url_profile = user.url;
                 ImageView targetAuthorImageView = viewHolder.itemView.findViewById(R.id.member_photo);
-                TextView targetTextView = viewHolder.itemView.findViewById(R.id.desc_card);
-                Picasso.get().load(uri).into(targetImageView);
-                Picasso.get().load(user.url).into(targetAuthorImageView);
-                targetImageView.setColorFilter(Color.argb(155, 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
-                TextView targetAuthor =viewHolder.itemView.findViewById(R.id.member_username);
+                TextView targetAuthor = viewHolder.itemView.findViewById(R.id.member_username);
+                Picasso.get().load(url_profile).into(targetAuthorImageView);
                 targetAuthor.setText(user.firstName+" "+user.lastName);
-                targetTextView.setText(events[i].description);
             }
 
             @Override
@@ -73,7 +63,7 @@ public class EventsManagerAdapter extends RecyclerView.Adapter<EventsManagerAdap
 
     @Override
     public int getItemCount() {
-        return events.length;
+        return members.length;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -84,12 +74,13 @@ public class EventsManagerAdapter extends RecyclerView.Adapter<EventsManagerAdap
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    /*
                     Intent i = new Intent(v.getContext(),EventInfo.class);
                     // send story title and contents through recyclerview to detail activity
                     Event event =events[getAdapterPosition()];
                     i.putExtra("event", (Parcelable) events[getAdapterPosition()]);
                     v.getContext().startActivity(i);
+                    */
                 }
             });
         }

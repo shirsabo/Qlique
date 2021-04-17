@@ -18,8 +18,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".EventsManager"></activity>
-        <activity android:name=".NewEvent"></activity>
+        <activity android:name=".EventMembers"></activity>
+        <activity android:name=".EventInfo" />
+        <activity android:name=".EventsManager" />
+        <activity android:name=".NewEvent" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

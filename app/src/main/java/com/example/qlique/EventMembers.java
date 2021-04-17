@@ -2,6 +2,8 @@ package com.example.qlique;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -17,33 +19,28 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class EventsManager extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class EventMembers extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView recyclerView;
-    EventsManagerAdapter adapter;
-    Event[] events={};
-    void fetchEvents(){
-        for (int i=0;i<10;i++){
-            events = Arrays.copyOf(events, events.length+1);
-            String curUser =  "FTNv4hPQYgMz4ScpvBhUasCjm6B3";
-            String photo = "https://www.soltlv.com/wp-content/uploads/2019/12/Sol_tlv-Yoga_Sculpt.jpg";
-            ArrayList<String> hobbies = new ArrayList<String>();
-            hobbies.add("Soccer");
-            Event event =  new Event(photo,curUser,"Yoga tonight at 7:00 PM",hobbies);
-            event.addMember("FTNv4hPQYgMz4ScpvBhUasCjm6B3");
-            events[events.length - 1]=event;
+    MembersAdapter adapter;
+    String[] members={};
+    void fetchMembers(Event event){
+        for (int i=0;i<event.members.size();i++){
+            members = Arrays.copyOf(members, members.length+1);
+            members[i]= event.members.get(i);
         }
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_events_manager);
-        recyclerView = findViewById(R.id.manager_rec);
+        setContentView(R.layout.activity_event_members);
+        Intent i = getIntent();
+        Event event = i.getParcelableExtra("eventobj");
+        recyclerView = findViewById(R.id.members_rec);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        fetchEvents();
-        adapter = new EventsManagerAdapter(this,events); // our adapter takes two string array
+        fetchMembers(event);
+        adapter = new MembersAdapter(this,members); // our adapter takes two string array
         recyclerView.setAdapter(adapter);
     }
 

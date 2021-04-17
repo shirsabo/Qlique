@@ -6,15 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.qlique.LoginAndSignUp.SignupActivity
 import com.example.qlique.Profile.User
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.chat_from_row.view.*
 import kotlinx.android.synthetic.main.post.view.*
 
 
@@ -37,7 +34,7 @@ class postAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<postAdapte
          ref.addListenerForSingleValueEvent(object: ValueEventListener {
              override fun onDataChange(snapshot: DataSnapshot) {
                  val user :User? = snapshot.getValue(User::class.java)
-                 val targetImageView = holder.itemView.user_profile_image_search
+                 val targetImageView = holder.itemView.member_photo
                  Picasso.get().load( user?.url).into(targetImageView)
                  val targetName = holder.itemView.user_name_post
                  targetName.text=user?.firstName+" "+user?.lastName
