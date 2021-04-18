@@ -69,7 +69,9 @@ class ChatListActivity: AppCompatActivity()  {
                    chatPartnerUser = snapshot.getValue(User::class.java)
                     viewHolder.itemView.user_name_latest.text= chatPartnerUser?.firstName +" " + chatPartnerUser?.lastName
                     val targetImageView = viewHolder.itemView.circularImageViewLatestMsg
-                    Picasso.get().load(chatPartnerUser?.url).into(targetImageView)
+                    if(chatPartnerUser?.url!=null&&chatPartnerUser?.url!=""){
+                        Picasso.get().load(chatPartnerUser?.url).into(targetImageView)
+                    }
                 }
                 override fun onCancelled(error: DatabaseError) {
                 }
