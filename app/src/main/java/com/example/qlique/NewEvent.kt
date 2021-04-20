@@ -1,5 +1,6 @@
 package com.example.qlique
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -23,5 +24,12 @@ class NewEvent : AppCompatActivity() {
         event.addMember( "FTNv4hPQYgMz4ScpvBhUasCjm6B3")
         event.addMember("VNFoQjNlV6NpncVKDczygbfxyGR2")
         mDatabase.child("/posts").push().setValue(event)
+    }
+    fun showTimePickerDialog(v: View) {
+        TimePickerFragment().show(supportFragmentManager, "timePicker")
+    }
+    fun showDatePickerDialog(v: View) {
+        val newFragment = DatePickerFragment()
+        newFragment.show(supportFragmentManager, "datePicker")
     }
 }
