@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Map.MapActivity">
+    tools:context="com.example.qlique.Map.MapActivity">
 
     <fragment
         android:id="@+id/map"
@@ -41,27 +41,55 @@
             android:layout_marginLeft="10dp"
             app:srcCompat="@drawable/ic_magnify" />
 
-        <fragment android:id="@+id/autocomplete_fragment"
-            android:layout_width="337dp"
-            android:layout_height="27dp"
+      <!--  <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/autoCompleteEditText1"
+            android:layout_width="292dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginBottom="12dp"
-            android:layout_toEndOf="@+id/ic_magnify"
-            android:layout_toRightOf="@+id/ic_magnify"
-            android:background="@null"
-            android:hint="@string/enter_address_city_or_zip_code"
-            android:imeOptions="actionSearch"
-            android:textColor="#000"
-            android:textSize="15sp"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-            />
-       <!-- <AutoCompleteTextView
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="60dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="35dp"
+            android:layout_marginRight="35dp"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="0.9"
+            android:gravity="start"
+            android:hint="Enter Location or Drag map to select location"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/quantum_black_text"
+            android:textColorHint="@color/quantum_grey"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/mapLocation"
+            app:layout_constraintStart_toStartOf="@+id/mapLocation" /> -->
+        <!--  <fragment android:id="@+id/autocomplete_fragment"
+              android:layout_width="337dp"
+              android:layout_height="27dp"
+              android:layout_alignParentEnd="true"
+              android:layout_alignParentRight="true"
+              android:layout_centerVertical="true"
+              android:layout_marginStart="15dp"
+              android:layout_marginLeft="15dp"
+              android:layout_marginEnd="30dp"
+              android:layout_marginRight="30dp"
+              android:layout_marginBottom="12dp"
+              android:layout_toEndOf="@+id/ic_magnify"
+              android:layout_toRightOf="@+id/ic_magnify"
+              android:background="@null"
+              android:hint="@string/enter_address_city_or_zip_code"
+              android:imeOptions="actionSearch"
+              android:textColor="#000"
+              android:textSize="15sp"
+              android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+              /> -->
+        <AutoCompleteTextView
             android:id="@+id/input_search"
             android:layout_width="337dp"
             android:layout_height="27dp"
@@ -79,7 +107,8 @@
             android:hint="@string/enter_address_city_or_zip_code"
             android:imeOptions="actionSearch"
             android:textColor="#000"
-            android:textSize="15sp" /> -->
+            android:textSize="15sp"
+            android:singleLine="true"/>
 
 
     </RelativeLayout>

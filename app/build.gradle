@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.qlique"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -135,5 +135,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.google.android.gms:play-services-places:17.0.0'
     implementation 'com.google.android.libraries.places:places:2.4.0'
-
+    implementation 'org.jetbrains.anko:anko-support-v4-commons:0.10.8'
 }

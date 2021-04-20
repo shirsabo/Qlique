@@ -18,7 +18,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".EventMembers"></activity>
+        <activity android:name=".Map.MapActivity2"></activity>
+        <activity android:name=".EventMembers" />
         <activity android:name=".EventInfo" />
         <activity android:name=".EventsManager" />
         <activity android:name=".NewEvent" />

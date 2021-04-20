@@ -10,17 +10,17 @@ import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.Toast
+import android.view.inputmethod.EditorInfo
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.qlique.R
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.places.Places.GEO_DATA_API
@@ -34,11 +34,8 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import java.io.IOException
 import java.util.*
 
@@ -53,7 +50,11 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
     private var mSearchText: AutocompleteSupportFragment? = null
     private var mGps: ImageView? = null
     private lateinit var back: Button
-    private lateinit var placesClient: PlacesClient
+
+    private var placeAdapter: PlaceArrayAdapter? = null
+    private lateinit var mPlacesClient: PlacesClient
+    //private lateinit var autoCompleteEditText1 : AppCompatAutoCompleteTextView
+    private lateinit var mPlaceSearch: EditText
 
     //Broadcast receiver to know the sync status
     private var broadcastReceiver: BroadcastReceiver? = null
@@ -87,15 +88,15 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
-        mSearchText = supportFragmentManager.findFragmentById(R.id.autocomplete_fragment)
-                as AutocompleteSupportFragment
+        /*mSearchText = supportFragmentManager.findFragmentById(R.id.autocomplete_fragment)
+                as AutocompleteSupportFragment*/
         mGps = findViewById(R.id.ic_gps)
         getLocationPermission()
         back = findViewById(R.id.back_button)
         back.setOnClickListener {
             finish()
         }
-        //broadcastReceiver = BroadcastReceiver()
+       /* //broadcastReceiver = BroadcastReceiver()
         // Initialize place API
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, resources.getString(R.string.google_maps_API_key));
@@ -117,7 +118,35 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
                 // TODO: Handle the error.
                 Log.i(TAG, "PLACES An error occurred: $status")
             }
-        })
+        })*/
+        Places.initialize(this, resources.getString(R.string.google_maps_API_key))
+        mPlacesClient = Places.createClient(this)
+
+        /*val mapFragment: SupportMapFragment? = supportFragmentManager.findFragmentById(R.id.mapLocation) as? SupportMapFragment
+        mapFragment?.getMapAsync(this)*/
+
+        placeAdapter = PlaceArrayAdapter(this, R.layout.layout_item_places, mPlacesClient)
+       // autoCompleteEditText1 = findViewById(R.id.autoCompleteEditText1)
+       // autoCompleteEditText1.setAdapter(placeAdapter)
+
+        mPlaceSearch = findViewById(R.id.input_search)
+        mPlaceSearch.setOnEditorActionListener { _, actionId, keyEvent ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
+                || keyEvent.action == KeyEvent.ACTION_DOWN
+                || keyEvent.action == KeyEvent.KEYCODE_ENTER
+            ) {
+                //execute our method for searching
+                geoLocate()
+            }
+            false
+        }
+       /* autoCompleteEditText1.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+            val place = parent.getItemAtPosition(position) as PlaceDataModel
+            autoCompleteEditText1.apply {
+                setText(place.fullText)
+                setSelection(autoCompleteEditText1.length())
+            }
+        }*/
 
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -280,7 +309,7 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
     }
     private fun geoLocate() {
         Log.d(TAG, "geoLocate: geolocating")
-        val searchString = mSearchText!!.toString()
+        val searchString = mPlaceSearch.text.toString()
         val geocoder = Geocoder(this@MapActivity)
         var list: List<Address> = ArrayList()
         try {
@@ -304,11 +333,5 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
 
     override fun onConnectionFailed(p0: ConnectionResult) {
         TODO("Not yet implemented")
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        if (broadcastReceiver != null) {
-            unregisterReceiver(broadcastReceiver)
-        }
     }
 }
