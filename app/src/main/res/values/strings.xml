@@ -88,4 +88,5 @@
     <string name="map">Map</string>
     <string name="pick_time">time</string>
     <string name="pick_date">date</string>
+    <string name="info_btn">Search a location or click on a location in the map</string>
 </resources>

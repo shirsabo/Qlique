@@ -9,13 +9,14 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.KeyEvent
+import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.qlique.R
@@ -27,17 +28,18 @@ import com.google.android.gms.location.places.Places.GEO_DATA_API
 import com.google.android.gms.location.places.Places.PLACE_DETECTION_API
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import kotlinx.android.synthetic.main.activity_map.*
 import java.io.IOException
 import java.util.*
+import kotlin.properties.Delegates
 
 class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.OnConnectionFailedListener{
     private val FINE_LOCATION: String = Manifest.permission.ACCESS_FINE_LOCATION
@@ -50,6 +52,9 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
     private var mSearchText: AutocompleteSupportFragment? = null
     private var mGps: ImageView? = null
     private lateinit var back: Button
+    private var prevMarker : Marker? = null
+    private var mInfo : ImageView? = null
+    private var mInfoTxt : TextView? = null
 
     private var placeAdapter: PlaceArrayAdapter? = null
     private lateinit var mPlacesClient: PlacesClient
@@ -57,13 +62,14 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
     private lateinit var mPlaceSearch: EditText
 
     //Broadcast receiver to know the sync status
-    private var broadcastReceiver: BroadcastReceiver? = null
     private var mPlaceAutocompleteAdapter: PlaceAutocompleteAdapter? = null
     private var mGoogleApiClient: GoogleApiClient? = null
     private val LAT_LNG_BOUNDS: LatLngBounds = LatLngBounds(
         LatLng(-40.0, -168.0),
         LatLng(71.0, 136.0)
     )
+    private var chosenLat by Delegates.notNull<Double>()
+    private var chosenLon by Delegates.notNull<Double>()
 
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -83,6 +89,29 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
 
             init()
         }
+        mMap?.setOnMarkerClickListener { marker ->
+            prevMarker?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+            //leave Marker default color if re-click current Marker
+            if (marker != prevMarker) {
+                marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                prevMarker = marker
+            } else {
+                prevMarker = null
+                mMap?.clear()
+            }
+            false
+        }
+        mMap?.setOnMapClickListener { latlng -> // Clears the previously touched position
+            prevMarker = null
+            mMap?.clear()
+            // Animating to the touched position
+            mMap?.animateCamera(CameraUpdateFactory.newLatLng(latlng))
+            // Save the chosen location.
+            chosenLat = latlng.latitude
+            chosenLon = latlng.longitude
+            val location = LatLng(latlng.latitude,latlng.longitude)
+            mMap?.addMarker(MarkerOptions().position(location))
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,6 +120,8 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
         /*mSearchText = supportFragmentManager.findFragmentById(R.id.autocomplete_fragment)
                 as AutocompleteSupportFragment*/
         mGps = findViewById(R.id.ic_gps)
+        mInfo = findViewById(R.id.ic_information)
+        mInfoTxt = findViewById(R.id.info_text)
         getLocationPermission()
         back = findViewById(R.id.back_button)
         back.setOnClickListener {
@@ -148,6 +179,19 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
             }
         }*/
 
+
+
+    }
+    fun startTimeCounter(view: View) {
+        val countTime: TextView = findViewById(R.id.info_text)
+        object : CountDownTimer(5000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                countTime.visibility = View.VISIBLE
+            }
+            override fun onFinish() {
+                countTime.visibility = View.GONE
+            }
+        }.start()
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -307,7 +351,14 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
             getDeviceLocation()
         }
     }
+
+    /*
+    finds the location the user typed in the search input, saves the location and moves
+    the map so the center will be in this location.
+     */
     private fun geoLocate() {
+        prevMarker = null
+        mMap?.clear()
         Log.d(TAG, "geoLocate: geolocating")
         val searchString = mPlaceSearch.text.toString()
         val geocoder = Geocoder(this@MapActivity)
@@ -320,7 +371,9 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
         if (list.isNotEmpty()) {
             val address: Address = list[0]
             Log.d(TAG, "geoLocate: found a location: $address")
-            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
+            // Save the chosen location.
+            chosenLat = address.latitude
+            chosenLon = address.longitude
             moveCamera(
                 LatLng(
                     address.latitude,
@@ -334,4 +387,5 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
     override fun onConnectionFailed(p0: ConnectionResult) {
         TODO("Not yet implemented")
     }
+
 }

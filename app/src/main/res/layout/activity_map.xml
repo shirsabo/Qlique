@@ -13,10 +13,10 @@
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="1.0"
         tools:context=".MapsActivity" />
 
     <RelativeLayout
@@ -128,6 +128,42 @@
         app:layout_constraintTop_toBottomOf="@+id/relLayout1"
         app:layout_constraintVertical_bias="0.016"
         app:srcCompat="@drawable/ic_gps" />
+
+    <ImageView
+        android:id="@+id/ic_information"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/relLayout1"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:scaleType="centerCrop"
+        android:onClick="startTimeCounter"
+        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.956"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relLayout1"
+        app:layout_constraintVertical_bias="0.101"
+        android:tooltipText="Enter a location or click on a location from the map"
+        app:srcCompat="@drawable/ic_information" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/info_text"
+        android:layout_width="258dp"
+        android:layout_height="68dp"
+        android:background="@drawable/rounded"
+        android:gravity="center"
+        android:text="@string/info_btn"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ic_information"
+        app:layout_constraintHorizontal_bias="0.741"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relLayout1"
+        app:layout_constraintVertical_bias="0.334"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/back_button"
