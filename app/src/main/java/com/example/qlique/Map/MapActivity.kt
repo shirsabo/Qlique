@@ -96,14 +96,12 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
                 marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                 prevMarker = marker
             } else {
-                prevMarker = null
-                mMap?.clear()
+                clearMap()
             }
             false
         }
         mMap?.setOnMapClickListener { latlng -> // Clears the previously touched position
-            prevMarker = null
-            mMap?.clear()
+            clearMap()
             // Animating to the touched position
             mMap?.animateCamera(CameraUpdateFactory.newLatLng(latlng))
             // Save the chosen location.
@@ -357,8 +355,7 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
     the map so the center will be in this location.
      */
     private fun geoLocate() {
-        prevMarker = null
-        mMap?.clear()
+        clearMap()
         Log.d(TAG, "geoLocate: geolocating")
         val searchString = mPlaceSearch.text.toString()
         val geocoder = Geocoder(this@MapActivity)
@@ -386,6 +383,10 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
 
     override fun onConnectionFailed(p0: ConnectionResult) {
         TODO("Not yet implemented")
+    }
+    private fun clearMap(){
+        prevMarker = null
+        mMap?.clear()
     }
 
 }
