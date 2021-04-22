@@ -6,28 +6,90 @@
     android:layout_height="match_parent"
     tools:context=".NewEvent">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="showTimePickerDialog"
-        android:text="@string/pick_time"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.095"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/member_photo"
+        android:layout_width="134dp"
+        android:layout_height="108dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="36dp"
+        android:padding="2dp"
+        app:civ_border_color="@color/quantum_black_100"
+        app:civ_border_width="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/textInputLayoutheader"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.353" />
+        app:srcCompat="@drawable/ic_image_file" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/hourButton"
+        android:layout_width="46dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="38dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="18dp"
+        android:background="@drawable/ic_24_hours"
+        android:onClick="showTimePickerDialog"
+        app:layout_constraintEnd_toStartOf="@+id/dateButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputDesc" />
+
+    <Button
+        android:id="@+id/dateButton"
+        android:layout_width="44dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/ic_calendar"
         android:onClick="showDatePickerDialog"
-        android:text="@string/pick_date"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView5"
+        app:layout_constraintTop_toBottomOf="@+id/textInputDesc" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="49dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="211dp"
+        app:layout_constraintStart_toEndOf="@+id/dateButton"
+        app:layout_constraintTop_toBottomOf="@+id/member_photo"
+        app:srcCompat="@drawable/ic_mapcolor" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutheader"
+        android:layout_width="249dp"
+        android:layout_height="99dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.112"
-        app:layout_constraintStart_toEndOf="@+id/button"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.351" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/headerNewEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|left"
+            android:hint="Enter event's header.."
+            android:inputType="textMultiLine"
+            android:lines="8"
+            android:minLines="6"
+            android:scrollbars="vertical" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputDesc"
+        android:layout_width="371dp"
+        android:layout_height="195dp"
+        android:layout_marginTop="8dp"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutheader">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="92dp"
+            android:hint="Enter Description.." />
+    </com.google.android.material.textfield.TextInputLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
