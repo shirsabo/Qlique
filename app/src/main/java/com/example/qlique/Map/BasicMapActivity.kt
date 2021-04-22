@@ -38,31 +38,29 @@ import java.io.IOException
 import java.util.*
 import kotlin.properties.Delegates
 
-class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.OnConnectionFailedListener{
+abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.OnConnectionFailedListener{
     private val FINE_LOCATION: String = Manifest.permission.ACCESS_FINE_LOCATION
     private val COURSE_LOCATION: String = Manifest.permission.ACCESS_COARSE_LOCATION
     private val LOCATION_PERMISSION_REQUEST_CODE = 1234
     private var mLocationPermissionsGranted = false
-    private var mMap: GoogleMap? = null
+    protected var mMap: GoogleMap? = null
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     private val DEFAULT_ZOOM = 15f
     private var mSearchText: AutocompleteSupportFragment? = null
     private var mGps: ImageView? = null
     private lateinit var back: Button
-    private var prevMarker : Marker? = null
+    protected var prevMarker : Marker? = null
     private var mInfo : ImageView? = null
     private var mInfoTxt : TextView? = null
-
     private lateinit var mPlacesClient: PlacesClient
     private lateinit var mPlaceSearch: EditText
-
     private var mGoogleApiClient: GoogleApiClient? = null
     private val LAT_LNG_BOUNDS: LatLngBounds = LatLngBounds(
         LatLng(-40.0, -168.0),
         LatLng(71.0, 136.0)
     )
-    private var chosenLat by Delegates.notNull<Double>()
-    private var chosenLon by Delegates.notNull<Double>()
+    protected var chosenLat by Delegates.notNull<Double>()
+    protected var chosenLon by Delegates.notNull<Double>()
 
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -82,27 +80,6 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
 
             init()
         }
-        mMap?.setOnMarkerClickListener { marker ->
-            prevMarker?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-            //leave Marker default color if re-click current Marker
-            if (marker != prevMarker) {
-                marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-                prevMarker = marker
-            } else {
-                clearMap()
-            }
-            false
-        }
-        mMap?.setOnMapClickListener { latlng -> // Clears the previously touched position
-            clearMap()
-            // Animating to the touched position
-            mMap?.animateCamera(CameraUpdateFactory.newLatLng(latlng))
-            // Save the chosen location.
-            chosenLat = latlng.latitude
-            chosenLon = latlng.longitude
-            val location = LatLng(latlng.latitude,latlng.longitude)
-            mMap?.addMarker(MarkerOptions().position(location))
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,38 +95,8 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
         back.setOnClickListener {
             finish()
         }
-       /* //broadcastReceiver = BroadcastReceiver()
-        // Initialize place API
-        if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, resources.getString(R.string.google_maps_API_key));
-        }
-        placesClient = Places.createClient(this)
-
-        // Specify the types of place data to return.
-        mSearchText!!.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG))
-
-        // Set up a PlaceSelectionListener to handle the response.
-        mSearchText!!.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-
-            override fun onPlaceSelected(place: Place) {
-                // TODO: Get info about the selected place.
-                Log.i(TAG, "PLACES Place: ${place.name}, ${place.id}")
-            }
-
-            override fun onError(status: Status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "PLACES An error occurred: $status")
-            }
-        })*/
         Places.initialize(this, resources.getString(R.string.google_maps_API_key))
         mPlacesClient = Places.createClient(this)
-
-        /*val mapFragment: SupportMapFragment? = supportFragmentManager.findFragmentById(R.id.mapLocation) as? SupportMapFragment
-        mapFragment?.getMapAsync(this)*/
-
-        //placeAdapter = PlaceArrayAdapter(this, R.layout.layout_item_places, mPlacesClient)
-       // autoCompleteEditText1 = findViewById(R.id.autoCompleteEditText1)
-       // autoCompleteEditText1.setAdapter(placeAdapter)
 
         mPlaceSearch = findViewById(R.id.input_search)
         mPlaceSearch.setOnEditorActionListener { _, actionId, keyEvent ->
@@ -162,16 +109,6 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
             }
             false
         }
-       /* autoCompleteEditText1.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-            val place = parent.getItemAtPosition(position) as PlaceDataModel
-            autoCompleteEditText1.apply {
-                setText(place.fullText)
-                setSelection(autoCompleteEditText1.length())
-            }
-        }*/
-
-
-
     }
     fun startTimeCounter(view: View) {
         val countTime: TextView = findViewById(R.id.info_text)
@@ -257,59 +194,52 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         try {
             if (mLocationPermissionsGranted) {
-                    val location: Task<*> =
-                        mFusedLocationProviderClient!!.lastLocation
-                    location.addOnCompleteListener(this) { task ->
-                            if (task.isSuccessful) {
-                                Log.d(TAG, "onComplete: found location!")
-                                val currentLocation: Location? = task.result as Location?
-                                if (currentLocation != null) {
-                                    moveCamera(
-                                        LatLng(
-                                            currentLocation.latitude,
-                                            currentLocation.longitude
-                                        ),
-                                        DEFAULT_ZOOM, "My Location"
-                                    )
-                                }
-                            } else {
-                                Log.d(TAG, "onComplete: current location is null")
-                                Toast.makeText(
-                                    this@MapActivity,
-                                    "unable to get current location",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                val location: Task<*> =
+                    mFusedLocationProviderClient!!.lastLocation
+                location.addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "onComplete: found location!")
+                        val currentLocation: Location? = task.result as Location?
+                        if (currentLocation != null) {
+                            moveCamera(
+                                LatLng(
+                                    currentLocation.latitude,
+                                    currentLocation.longitude
+                                ),
+                                DEFAULT_ZOOM, "My Location"
+                            )
+                        }
+                    } else {
+                        Log.d(TAG, "onComplete: current location is null")
+                        Toast.makeText(
+                            this@BasicMapActivity,
+                            "unable to get current location",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
+                }
             }
         } catch (e: SecurityException) {
             Log.e(TAG, "getDeviceLocation: SecurityException: " + e.message)
         }
     }
 
-    private fun moveCamera(latLng: LatLng, zoom: Float, title: String) {
+    open fun moveCamera(latLng: LatLng, zoom: Float, title: String){
         Log.d(
             TAG,
             "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude
         )
         mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
-        if (title != "My Location") {
-            val options: MarkerOptions = MarkerOptions()
-                .position(latLng)
-                .title(title)
-            mMap!!.addMarker(options)
-        }
-
         hideSoftKeyboard()
     }
-    private fun hideSoftKeyboard() {
+    protected fun hideSoftKeyboard() {
         this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
     private fun initMap() {
         Log.d(TAG, "initMap: initializing map")
         val mapFragment : SupportMapFragment=
             supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this@MapActivity)
+        mapFragment.getMapAsync(this@BasicMapActivity)
     }
 
     private fun init() {
@@ -321,18 +251,6 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
             .enableAutoManage(this, this)
             .build()
 
-
-    /*    mSearchText!!.setAdapter(maPlaceAutocompleteAdapter)
-        mSearchText!!.setOnEditorActionListener { _, actionId, keyEvent ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
-                || keyEvent.action == KeyEvent.ACTION_DOWN
-                || keyEvent.action == KeyEvent.KEYCODE_ENTER
-            ) {
-                //execute our method for searching
-                geoLocate()
-            }
-            false
-        }*/
         mGps!!.setOnClickListener {
             Log.d(TAG, "onClick: clicked gps icon")
             getDeviceLocation()
@@ -343,11 +261,11 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
     finds the location the user typed in the search input, saves the location and moves
     the map so the center will be in this location.
      */
-    private fun geoLocate() {
+    protected fun geoLocate() {
         clearMap()
         Log.d(TAG, "geoLocate: geolocating")
         val searchString = mPlaceSearch.text.toString()
-        val geocoder = Geocoder(this@MapActivity)
+        val geocoder = Geocoder(this@BasicMapActivity)
         var list: List<Address> = ArrayList()
         try {
             list = geocoder.getFromLocationName(searchString, 1)
@@ -373,7 +291,7 @@ class MapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.O
     override fun onConnectionFailed(p0: ConnectionResult) {
         TODO("Not yet implemented")
     }
-    private fun clearMap(){
+    protected fun clearMap(){
         prevMarker = null
         mMap?.clear()
     }

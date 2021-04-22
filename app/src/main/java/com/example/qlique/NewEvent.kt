@@ -1,7 +1,9 @@
 package com.example.qlique
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.example.qlique.Map.CreateEventMapActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.util.*
@@ -31,5 +33,9 @@ class NewEvent : AppCompatActivity() {
     fun showDatePickerDialog(v: View) {
         val newFragment = DatePickerFragment()
         newFragment.show(supportFragmentManager, "datePicker")
+    }
+    fun openCreateEventMapActivity(v: View){
+        val intent = Intent(this, CreateEventMapActivity::class.java)
+        startActivity(intent)
     }
 }
