@@ -23,7 +23,7 @@
             android:orientation="horizontal">
 
             <com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/member_photo"
+                android:id="@+id/photo_event_new"
                 android:layout_width="90dp"
                 android:layout_height="69dp"
                 android:padding="2dp"

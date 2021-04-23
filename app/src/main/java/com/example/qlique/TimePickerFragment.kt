@@ -1,14 +1,19 @@
 package com.example.qlique
 
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
+import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
+import kotlinx.android.synthetic.main.activity_new_event.*
 import java.util.*
 
 class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
+
+    var time:String=""
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Use the current time as the default values for the picker
@@ -21,6 +26,9 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
     }
 
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
-        // Do something with the time chosen by the user
+        if ( NewEvent.savedtime!=null){
+            NewEvent.savedtime!!.text  = hourOfDay.toString()+":"+minute.toString()
+        }
+
     }
 }

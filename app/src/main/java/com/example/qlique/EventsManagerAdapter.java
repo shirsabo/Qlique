@@ -52,7 +52,7 @@ public class EventsManagerAdapter extends RecyclerView.Adapter<EventsManagerAdap
                 User user = dataSnapshot.getValue(User.class);
                 String  uri = events[i].photoUrl;
                 ImageView targetImageView = viewHolder.itemView.findViewById(R.id.cardImage);
-                ImageView targetAuthorImageView = viewHolder.itemView.findViewById(R.id.member_photo);
+                ImageView targetAuthorImageView = viewHolder.itemView.findViewById(R.id.photo_event_new);
                 TextView targetTextView = viewHolder.itemView.findViewById(R.id.desc_card);
                 Picasso.get().load(uri).into(targetImageView);
                 Picasso.get().load(user.url).into(targetAuthorImageView);

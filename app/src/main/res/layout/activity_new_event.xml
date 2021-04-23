@@ -7,7 +7,7 @@
     tools:context=".NewEvent">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/member_photo"
+        android:id="@+id/photo_event_new"
         android:layout_width="134dp"
         android:layout_height="108dp"
         android:layout_marginStart="8dp"
@@ -16,44 +16,50 @@
         app:civ_border_color="@color/quantum_black_100"
         app:civ_border_width="5dp"
         app:layout_constraintEnd_toStartOf="@+id/textInputLayoutheader"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_image_file" />
+        app:srcCompat="@drawable/ic_uploadimg" />
 
     <Button
         android:id="@+id/hourButton"
         android:layout_width="46dp"
         android:layout_height="40dp"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="18dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="264dp"
         android:background="@drawable/ic_24_hours"
         android:onClick="showTimePickerDialog"
-        app:layout_constraintEnd_toStartOf="@+id/dateButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputDesc" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        tools:text="0.0.0" />
 
     <Button
         android:id="@+id/dateButton"
         android:layout_width="44dp"
         android:layout_height="35dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="220dp"
         android:background="@drawable/ic_calendar"
         android:onClick="showDatePickerDialog"
-        app:layout_constraintEnd_toStartOf="@+id/imageView5"
-        app:layout_constraintTop_toBottomOf="@+id/textInputDesc" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/DateNewEvent"
+        app:layout_constraintTop_toBottomOf="@+id/hourButton" />
 
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="49dp"
         android:layout_height="42dp"
-        android:layout_marginStart="21dp"
-        android:layout_marginTop="211dp"
-        app:layout_constraintStart_toEndOf="@+id/dateButton"
-        app:layout_constraintTop_toBottomOf="@+id/member_photo"
-        app:srcCompat="@drawable/ic_mapcolor"
-        android:onClick="openCreateEventMapActivity"/>
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="335dp"
+        android:layout_marginBottom="113dp"
+        android:onClick="openCreateEventMapActivity"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11"
+        app:srcCompat="@drawable/ic_mapcolor" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutheader"
@@ -67,7 +73,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/headerNewEvent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="61dp"
             android:gravity="top|left"
             android:hint="Enter event's header.."
             android:inputType="textMultiLine"
@@ -79,7 +85,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputDesc"
         android:layout_width="371dp"
-        android:layout_height="195dp"
+        android:layout_height="104dp"
         android:layout_marginTop="8dp"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,8 +95,109 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="92dp"
+            android:layout_height="77dp"
             android:hint="Enter Description.." />
+
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/categories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginEnd="165dp"
+        android:text="please choose event's catagorries:"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputDesc" />
+
+    <TextView
+        android:id="@+id/hourNewEvent"
+        android:layout_width="63dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="23dp"
+        android:text="0:00"
+        app:layout_constraintEnd_toStartOf="@+id/hourButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        tools:text="0:00" />
+
+    <TextView
+        android:id="@+id/DateNewEvent"
+        android:layout_width="103dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="34dp"
+        android:text="0.0.0000"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/textView11"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10"
+        tools:text="0.0.0000" />
+
+    <ImageView
+        android:id="@+id/next_first_step"
+        android:layout_width="61dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="84dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11"
+        app:srcCompat="@drawable/ic_next_button" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="300dp"
+        android:text="Choose hour:"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categories" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="37dp"
+        android:layout_marginEnd="299dp"
+        android:text="Choose Date:"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hourNewEvent" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="156dp"
+        android:text="Click map  icon to choose loacation:"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateButton" />
+
+    <ImageView
+        android:id="@+id/btnCatergories"
+        android:layout_width="41dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginEnd="110dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/categories"
+        app:layout_constraintTop_toBottomOf="@+id/textInputDesc"
+        app:srcCompat="@drawable/ic_categories" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

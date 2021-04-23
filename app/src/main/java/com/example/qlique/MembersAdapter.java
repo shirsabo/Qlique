@@ -1,11 +1,9 @@
 package com.example.qlique;
 import android.content.Context;
-import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +44,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHold
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 String  url_profile = user.url;
-                ImageView targetAuthorImageView = viewHolder.itemView.findViewById(R.id.member_photo);
+                ImageView targetAuthorImageView = viewHolder.itemView.findViewById(R.id.photo_event_new);
                 TextView targetAuthor = viewHolder.itemView.findViewById(R.id.member_username);
                 Picasso.get().load(url_profile).into(targetAuthorImageView);
                 targetAuthor.setText(user.firstName+" "+user.lastName);

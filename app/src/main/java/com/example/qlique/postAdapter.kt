@@ -34,7 +34,7 @@ class postAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<postAdapte
          ref.addListenerForSingleValueEvent(object: ValueEventListener {
              override fun onDataChange(snapshot: DataSnapshot) {
                  val user :User? = snapshot.getValue(User::class.java)
-                 val targetImageView = holder.itemView.member_photo
+                 val targetImageView = holder.itemView.photo_event_new
                  Picasso.get().load( user?.url).into(targetImageView)
                  val targetName = holder.itemView.user_name_post
                  targetName.text=user?.firstName+" "+user?.lastName
