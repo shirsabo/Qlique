@@ -3,13 +3,10 @@ package com.example.qlique
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.activity_new_event.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
@@ -23,12 +20,19 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         val day = c.get(Calendar.DAY_OF_MONTH)
 
         // Create a new instance of DatePickerDialog and return it
-        return DatePickerDialog(requireActivity(), this, year, month, day)
+        val datePicker =DatePickerDialog(requireActivity(), this, year, month, day)
+        val cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jerusalem"));
+        var dateFormat: SimpleDateFormat? = SimpleDateFormat("yyyy-MM-dd");
+        val date: Date? = dateFormat?.parse(dateFormat?.format(c.getTime()))
+        datePicker.datePicker.minDate= date?.getTime()!!
+
+        return datePicker
     }
 
     override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
         if ( NewEvent.savedDate!=null){
-            NewEvent.savedDate!!.text  = day.toString()+"."+month+"."+year
+            NewEvent.savedDate!!.text  = day.toString()+"."+(month+1)+"."+year
+
         }
     }
 }

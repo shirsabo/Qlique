@@ -10,6 +10,7 @@ import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.activity_new_event.*
 import java.util.*
+import kotlin.math.min
 
 class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
 
@@ -20,7 +21,6 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
         val c = Calendar.getInstance()
         val hour = c.get(Calendar.HOUR_OF_DAY)
         val minute = c.get(Calendar.MINUTE)
-
         // Create a new instance of TimePickerDialog and return it
         return TimePickerDialog(activity, this, hour, minute, is24HourFormat(activity))
     }

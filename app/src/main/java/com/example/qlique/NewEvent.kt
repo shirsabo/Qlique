@@ -3,13 +3,12 @@ package com.example.qlique
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.app.PendingIntent.getActivity
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.DatePicker
 import android.widget.TextView
@@ -17,9 +16,7 @@ import android.widget.TimePicker
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.example.qlique.LoginAndSignUp.SignupActivity
 import com.example.qlique.Map.CreateEventMapActivity
-import com.example.qlique.Profile.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -42,13 +39,13 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
         var savedDate: TextView? = null
     }
 
-    var urLImage: String? = null
+    var urLImage: Uri? = null
     var authorUid: String? = null
     var categories: ArrayList<String> = ArrayList(0)
     private var launchSomeActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                urLImage = result.data?.data.toString()
+                urLImage = result.data?.data
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, result.data?.data)
                 val bitmapDrawble = BitmapDrawable(bitmap)
                 photo_event_new.setImageBitmap(bitmap)
@@ -126,25 +123,33 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
                     .toString() != null
             ) {
                 val event: Event = Event(
-                    urLImage,
+                    urLImage.toString(),
                     authorUid,
                     textInputDesc.getEditText()?.getText().toString(),
                     categories
                 )
                 createEvent(event)
+                finish()
             }
 
         }
         setCurrentTime()
         setCurrentDate()
-        //createEvent()
     }
 
     private fun createEvent(event: Event) {
         //uploadImage(event.photoUrl)
+        val filename = UUID.randomUUID().toString()
         var mDatabase = FirebaseDatabase.getInstance().reference
-        mDatabase.child("/posts").push().setValue(event)
+        val ref = FirebaseStorage.getInstance().getReference("images/$filename")
+        ref.putFile(urLImage!!).addOnSuccessListener {
+            ref.downloadUrl.addOnSuccessListener {
+                event.photoUrl = it.toString()
+                mDatabase.child("/posts").push().setValue(event)
+            }
+        }
     }
+
 
     fun showTimePickerDialog(v: View) {
         val newFragment = TimePickerFragment()
@@ -180,7 +185,7 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
 
     private fun setCurrentDate() {
         val c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jerusalem"));
-        var dateFormat: SimpleDateFormat? = SimpleDateFormat("MM/dd/yyyy");
+        var dateFormat: SimpleDateFormat? = SimpleDateFormat("MMMM dd, yyyy");
         DateNewEvent.text = dateFormat?.format(c.getTime())
     }
 }

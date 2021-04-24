@@ -110,6 +110,7 @@ class MainActivity : AppCompatActivity() {
         floatingBtn = findViewById(R.id.floating_action_button)
         floatingBtn!!.setOnClickListener{
             newEventClicked()
+            fetchPosts()
         }
 
     }

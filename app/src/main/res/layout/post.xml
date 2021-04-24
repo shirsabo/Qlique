@@ -19,7 +19,7 @@
         <LinearLayout
             android:id="@+id/linear1"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="74dp"
             android:orientation="horizontal">
 
             <com.mikhaellopez.circularimageview.CircularImageView
@@ -28,27 +28,23 @@
                 android:layout_height="69dp"
                 android:padding="2dp"
                 app:civ_border_color="@color/quantum_black_100"
-                app:civ_border_width="5dp"
-                app:srcCompat="@drawable/ic_user" />
+                app:civ_border_width="5dp" />
 
             <TextView
                 android:id="@+id/user_name_post"
-                android:layout_width="104dp"
-                android:layout_height="36dp"
+                android:layout_width="152dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginLeft="8dp"
-                android:textStyle="bold"
-                android:text="TextView" />
+                android:layout_marginRight="40dp"
+                android:textStyle="bold" />
 
         </LinearLayout>
-
 
         <ImageView
             android:id="@+id/post_image_home"
             android:layout_width="match_parent"
-            android:layout_height="355dp"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_user" />
+            android:layout_height="317dp"
+            android:scaleType="centerCrop" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -103,52 +99,12 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/likes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="15dp"
-            android:textStyle="bold"
-            android:layout_marginLeft="10dp" />
-
-        <TextView
             android:id="@+id/description_post"
             android:layout_width="match_parent"
             android:layout_height="74dp"
             android:layout_marginLeft="15dp"
+            android:paddingTop="30dp"
             android:text="Description" />
-
-        <TextView
-            android:id="@+id/publisher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="15dp"
-            android:textStyle="bold"
-            android:layout_marginLeft="10dp" />
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="15dp"
-            android:layout_marginLeft="10dp" />
-
-        <TextView
-            android:id="@+id/comments"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:text=""
-            android:textColor="@color/colorPrimary"
-            android:textSize="16dp"
-            android:layout_marginLeft="10dp" />
 
 
     </LinearLayout>
