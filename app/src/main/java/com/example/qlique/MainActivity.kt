@@ -20,6 +20,7 @@ import com.example.qlique.LoginAndSignUp.LoginActivity
 import com.example.qlique.LoginAndSignUp.UpdatePassword
 import com.example.qlique.Map.CreateEventMapActivity
 import com.example.qlique.Map.DisplayEventsMapActivity
+//import com.example.qlique.Map.DisplayEventsMapActivity
 import com.example.qlique.Profile.ProfilePage
 import com.example.qlique.Profile.User
 import com.google.android.gms.common.ConnectionResult

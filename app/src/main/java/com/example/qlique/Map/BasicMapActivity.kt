@@ -18,6 +18,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.qlique.NewEvent
 import com.example.qlique.R
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -63,6 +64,7 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
     protected var chosenLon by Delegates.notNull<Double>()
 
 
+
     override fun onMapReady(googleMap: GoogleMap) {
         Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show()
         Log.d(TAG, "onMapReady: map is ready")
@@ -93,6 +95,7 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
         getLocationPermission()
         back = findViewById(R.id.back_button)
         back.setOnClickListener {
+
             finish()
         }
         Places.initialize(this, resources.getString(R.string.google_maps_API_key))
@@ -276,8 +279,8 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
             val address: Address = list[0]
             Log.d(TAG, "geoLocate: found a location: $address")
             // Save the chosen location.
-            chosenLat = address.latitude
-            chosenLon = address.longitude
+            NewEvent.chosenLat = address.latitude
+            NewEvent.chosenLon = address.longitude
             moveCamera(
                 LatLng(
                     address.latitude,

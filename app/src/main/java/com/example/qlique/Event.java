@@ -2,6 +2,7 @@ package com.example.qlique;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Pair;
 
 import com.example.qlique.Profile.User;
 
@@ -9,6 +10,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicStampedReference;
+
 import kotlinx.android.parcel.Parcelize;
 
 @Parcelize
@@ -17,18 +20,32 @@ import kotlinx.android.parcel.Parcelize;
      public String uid;
      public String description;
      public List<String> hobbiesRelated;
-    public List<String> members;
+     public List<String> members;
+     public Double longitude;
+     public Double latitude;
+     public String  header;
      public Event(String photoUrlIn, String uidIn,String descriptionIn, ArrayList<String> hobbiesRelatedIn){
          uid = uidIn;
          photoUrl = photoUrlIn;
          description = descriptionIn;
          hobbiesRelated =  hobbiesRelatedIn;
          members = new ArrayList<String>();
+         longitude = 0.0;
+         latitude = 0.0;
      }
-     public void addMember(String newMember){
+
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    public void addMember(String newMember){
          if (newMember!=null){
              members.add(newMember);
          }
+     }
+     public void setCoordinate(Double latitude,Double longitude){
+         this.longitude =longitude;
+         this.latitude = latitude;
      }
      public Event() {
      }
@@ -50,6 +67,9 @@ import kotlinx.android.parcel.Parcelize;
         description = in.readString();
         hobbiesRelated = in.createStringArrayList();
         members = in.createStringArrayList();
+        longitude = in.readDouble();
+        latitude = in.readDouble();
+        header =in.readString();
     }
     public static final Creator<Event> CREATOR = new Creator<Event>() {
         @Override
@@ -74,6 +94,9 @@ import kotlinx.android.parcel.Parcelize;
         dest.writeString(description);
         dest.writeStringList(hobbiesRelated);
         dest.writeStringList(members);
+        dest.writeDouble(longitude);
+        dest.writeDouble(latitude);
+        dest.writeString(header);
 
     }
 }

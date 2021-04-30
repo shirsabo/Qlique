@@ -18,18 +18,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.qlique.Map.CreateEventMapActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_new_event.*
+import java.lang.Thread.sleep
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.properties.Delegates
 
 
 class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener {
@@ -37,11 +34,15 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
     companion object {
         var savedtime: TextView? = null
         var savedDate: TextView? = null
+        var chosenLat by Delegates.notNull<Double>()
+        var chosenLon by Delegates.notNull<Double>()
     }
-
     var urLImage: Uri? = null
     var authorUid: String? = null
     var categories: ArrayList<String> = ArrayList(0)
+    var latlng: DoubleArray? = null
+    var firstTime =true
+
     private var launchSomeActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -145,11 +146,16 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
         ref.putFile(urLImage!!).addOnSuccessListener {
             ref.downloadUrl.addOnSuccessListener {
                 event.photoUrl = it.toString()
+                val headerText :TextView =findViewById(R.id.headerNewEvent)
+                event.header = headerText.text.toString()
+                event.latitude = Companion.chosenLat
+                event.longitude = Companion.chosenLon
                 mDatabase.child("/posts").push().setValue(event)
+
+
             }
         }
     }
-
 
     fun showTimePickerDialog(v: View) {
         val newFragment = TimePickerFragment()
@@ -162,10 +168,24 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
         newFragment.show(supportFragmentManager, "datePicker")
         DateNewEvent.text = newFragment.date
     }
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 19) {
+            if (resultCode == RESULT_OK) {
+                //latlng = data?.getDoubleArrayExtra("coordinates")
+            }
+        }
+    }
     fun openCreateEventMapActivity(v: View) {
         val intent = Intent(this, CreateEventMapActivity::class.java)
+        startActivityForResult(intent, 19)
+
+        intent.putExtra("FirstTime", firstTime)
         startActivity(intent)
+        firstTime=false
+        sleep(100)
+        firstTime=true
+
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
