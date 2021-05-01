@@ -17,7 +17,12 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.qlique.Map.CreateEventMapActivity
+import com.firebase.geofire.GeoFire
+import com.firebase.geofire.GeoLocation
+import com.google.firebase.FirebaseError
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_new_event.*
@@ -151,10 +156,30 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
                 event.latitude = Companion.chosenLat
                 event.longitude = Companion.chosenLon
                 mDatabase.child("/posts").push().setValue(event)
-
-
+                WriteEventLocation(event)
             }
         }
+    }
+    private fun WriteEventLocation(event: Event){
+        val firebaseDatabase = FirebaseDatabase.getInstance()
+        val ref: DatabaseReference = firebaseDatabase.getReference("geoFire")
+        val geoFire = GeoFire(ref)
+        geoFire.setLocation(
+            "firebase-hq",
+            GeoLocation(37.7853889, -122.4056973),
+            object : GeoFire.CompletionListener {
+                fun onComplete(key: String?, error: FirebaseError?) {
+                    if (error != null) {
+                        System.err.println("There was an error saving the location to GeoFire: $error")
+                    } else {
+                        println("Location saved on server successfully!")
+                    }
+                }
+
+                override fun onComplete(key: String?, error: DatabaseError?) {
+                    TODO("Not yet implemented")
+                }
+            })
     }
 
     fun showTimePickerDialog(v: View) {
