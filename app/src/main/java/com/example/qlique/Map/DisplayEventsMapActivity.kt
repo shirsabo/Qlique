@@ -30,7 +30,7 @@ class DisplayEventsMapActivity :BasicMapActivity() {
                         .anchor(0.5f, 0.5f)
                         .title(event.header)
             )
-            mMap?.moveCamera(CameraUpdateFactory.newLatLng(LatLng(event.latitude, event.longitude)));
+            //mMap?.moveCamera(CameraUpdateFactory.newLatLng(LatLng(event.latitude, event.longitude)));
         }
     }
    /* private fun createMarker(
