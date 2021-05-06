@@ -1,16 +1,15 @@
 package com.example.qlique.Map
 
-import android.widget.Toast
 import com.example.qlique.Event
-import com.firebase.geofire.GeoFire
-import com.firebase.geofire.GeoLocation
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.activity_main.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 
 class DisplayEventsMapActivity :BasicMapActivity() {
@@ -24,25 +23,33 @@ class DisplayEventsMapActivity :BasicMapActivity() {
 
     private fun displayEventsNearby(events: ArrayList<Event>) {
         // get the locations of the events nearby and add markers in their locations.
-
-        for (event in events) {
-            var latLng = LatLng(event.latitude, event.longitude)
-            mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM))
-            mMap?.animateCamera(
-                CameraUpdateFactory.newLatLng(
-                    LatLng(
-                        latLng.latitude,
-                        latLng.longitude
-                    )
-                )
+        for (event in events){
+                mMap?.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(event.latitude, event.longitude))
+                        .anchor(0.5f, 0.5f)
+                        .title(event.header)
             )
-            // Save the chosen location.
-            chosenLat = latLng.latitude
-            chosenLon = latLng.longitude
-            val location = LatLng(latLng.latitude, latLng.longitude)
-            mMap?.addMarker(MarkerOptions().position(location))
+            //mMap?.moveCamera(CameraUpdateFactory.newLatLng(LatLng(event.latitude, event.longitude)));
         }
     }
+   /* private fun createMarker(
+        latitude: Double,
+        longitude: Double,
+        title: String?
+        //,
+        //snippet: String?,
+        //iconResID: Int
+    ): Marker? {
+        return mMap?.addMarker(
+            MarkerOptions()
+                .position(LatLng(latitude, longitude))
+                .anchor(0.5f, 0.5f)
+                .title(title)
+                //.snippet(snippet)
+                //.icon(BitmapDescriptorFactory.fromResource(iconResID))
+        )
+    } */
 
     private fun fetchEvents() {
         var events: ArrayList<Event> = ArrayList()
@@ -63,12 +70,9 @@ class DisplayEventsMapActivity :BasicMapActivity() {
                     event?.latitude = snapshot.child("latitude").getValue(Double::class.java)
                     event?.longitude = snapshot.child("longitude").getValue(Double::class.java)
                 }
-                //displayEventsNearby(events)
+                displayEventsNearby(events)
             }
         })
     }
 
-    private fun fetchNearbyEvents() {
-
-    }
 }

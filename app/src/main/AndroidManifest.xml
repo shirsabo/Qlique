@@ -18,10 +18,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".Map.DisplayEventsMapActivity"></activity>
+        <activity android:name=".Map.DisplayEventsMapActivity" />
         <activity android:name=".Map.CreateEventMapActivity" />
         <activity android:name=".Map.BasicMapActivity" />
-        <activity android:name=".Map.MapActivity2" />
         <activity android:name=".EventMembers" />
         <activity android:name=".EventInfo" />
         <activity android:name=".EventsManager" />
@@ -34,10 +33,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity
-            android:name=".Map.MapActivity"
-            android:windowSoftInputMode="stateUnchanged"
-            tools:replace="android:windowSoftInputMode" />
+
         <activity android:name=".LoginAndSignUp.HobbiesSelection" />
         <activity
             android:name=".chatLogActivity"
