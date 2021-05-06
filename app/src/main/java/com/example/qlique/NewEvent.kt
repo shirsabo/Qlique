@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.qlique.Map.CreateEventMapActivity
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
+import com.firebase.geofire.GeoQuery
+import com.firebase.geofire.GeoQueryEventListener
 import com.google.firebase.FirebaseError
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseError
@@ -42,11 +44,12 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
         var chosenLat by Delegates.notNull<Double>()
         var chosenLon by Delegates.notNull<Double>()
     }
+
     var urLImage: Uri? = null
     var authorUid: String? = null
     var categories: ArrayList<String> = ArrayList(0)
     var latlng: DoubleArray? = null
-    var firstTime =true
+    var firstTime = true
 
     private var launchSomeActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -151,22 +154,26 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
         ref.putFile(urLImage!!).addOnSuccessListener {
             ref.downloadUrl.addOnSuccessListener {
                 event.photoUrl = it.toString()
-                val headerText :TextView =findViewById(R.id.headerNewEvent)
+                val headerText: TextView = findViewById(R.id.headerNewEvent)
                 event.header = headerText.text.toString()
                 event.latitude = Companion.chosenLat
                 event.longitude = Companion.chosenLon
-                mDatabase.child("/posts").push().setValue(event)
-                WriteEventLocation(event)
+                val db_ref: DatabaseReference =
+                    mDatabase.child("/posts").push() //creates blank record in db
+                val postKey = db_ref.key.toString() //the UniqueID/key you seek
+                db_ref.setValue(event)
+                WriteEventLocation(event, postKey)
             }
         }
     }
-    private fun WriteEventLocation(event: Event){
+
+    private fun WriteEventLocation(event: Event, postKey: String) {
         val firebaseDatabase = FirebaseDatabase.getInstance()
         val ref: DatabaseReference = firebaseDatabase.getReference("geoFire")
         val geoFire = GeoFire(ref)
         geoFire.setLocation(
-            "firebase-hq",
-            GeoLocation(37.7853889, -122.4056973),
+            "$postKey",
+            GeoLocation(event.latitude, event.longitude),
             object : GeoFire.CompletionListener {
                 fun onComplete(key: String?, error: FirebaseError?) {
                     if (error != null) {
@@ -193,6 +200,7 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
         newFragment.show(supportFragmentManager, "datePicker")
         DateNewEvent.text = newFragment.date
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 19) {
@@ -201,15 +209,16 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
             }
         }
     }
+
     fun openCreateEventMapActivity(v: View) {
         val intent = Intent(this, CreateEventMapActivity::class.java)
         startActivityForResult(intent, 19)
 
         intent.putExtra("FirstTime", firstTime)
         startActivity(intent)
-        firstTime=false
+        firstTime = false
         sleep(100)
-        firstTime=true
+        firstTime = true
 
     }
 
