@@ -89,4 +89,5 @@
     <string name="pick_time">time</string>
     <string name="pick_date">date</string>
     <string name="info_btn">Search a location or click on a location in the map</string>
+    <string name="please_choose_the_distance_of_the_events_shown_in_the_map">Please choose the distance of the events shown in the map:</string>
 </resources>

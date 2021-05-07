@@ -1,27 +1,32 @@
 package com.example.qlique.Map
 
-import android.widget.Toast
+import android.view.View
 import com.example.qlique.Event
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQuery
 import com.firebase.geofire.GeoQueryEventListener
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.database.*
 
 
-class DisplayEventsMapActivity :BasicMapActivity() {
-    private val DEFAULT_ZOOM = 15f
+class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnCompleteListener {
+    private var radius :Double = 0.0
 
 
     override fun onMapReady(googleMap: GoogleMap) {
         super.onMapReady(googleMap)
-        mMap?.setInfoWindowAdapter(CustomInfoWindowAdapter(this));
-        fetchNearbyEvents()
+        mMap?.setInfoWindowAdapter(CustomInfoWindowAdapter(this))
+        requestRadiusFromUserAndDisplayEvents()
+
+    }
+    private fun requestRadiusFromUserAndDisplayEvents(){
+        RequestRadiusDialog().show(supportFragmentManager, "MyCustomFragment")
+    }
+    private fun radiusButtonClicked(view: View?){
+        requestRadiusFromUserAndDisplayEvents()
     }
 
     private fun displayEventsNearby(events: ArrayList<Event>) {
@@ -33,26 +38,9 @@ class DisplayEventsMapActivity :BasicMapActivity() {
                         .anchor(0.5f, 0.5f)
                         .title(event.header)
             )
-            mMap?.moveCamera(CameraUpdateFactory.newLatLng(LatLng(event.latitude, event.longitude)));
+            //mMap?.moveCamera(CameraUpdateFactory.newLatLng(LatLng(event.latitude, event.longitude)));
         }
     }
-   /* private fun createMarker(
-        latitude: Double,
-        longitude: Double,
-        title: String?
-        //,
-        //snippet: String?,
-        //iconResID: Int
-    ): Marker? {
-        return mMap?.addMarker(
-            MarkerOptions()
-                .position(LatLng(latitude, longitude))
-                .anchor(0.5f, 0.5f)
-                .title(title)
-                //.snippet(snippet)
-                //.icon(BitmapDescriptorFactory.fromResource(iconResID))
-        )
-    } */
 
     private fun addEventFromFirebase(uid:String) {
         val events: ArrayList<Event> = ArrayList()
@@ -81,7 +69,7 @@ class DisplayEventsMapActivity :BasicMapActivity() {
             val geoFire = GeoFire(ref)
             val geoQuery: GeoQuery = geoFire.queryAtLocation(
                 GeoLocation(32.04392978395694, 34.81450606137514),
-                40.0
+                radius
             )
             geoQuery.addGeoQueryEventListener(object : GeoQueryEventListener {
                 override fun onKeyEntered(key: String, location: GeoLocation) {
@@ -122,6 +110,14 @@ class DisplayEventsMapActivity :BasicMapActivity() {
                 }
             })
         }
+
+    /*
+    After the dialog fragment completes, it calls this callback.
+     */
+    override fun onComplete(r: String) {
+        radius = r.toDouble()
+        fetchNearbyEvents()
+    }
     }
 
 
