@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "843370455090",
+    "firebase_url": "https://qlique-fbd4b-default-rtdb.firebaseio.com",
     "project_id": "qlique-fbd4b",
     "storage_bucket": "qlique-fbd4b.appspot.com"
   },
@@ -14,13 +15,21 @@
       },
       "oauth_client": [
         {
+          "client_id": "843370455090-e71ticjj2jnor9hrbab8gngnvuetit63.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.qlique",
+            "certificate_hash": "25601dbdd48a90f52b48daab34606c875646da63"
+          }
+        },
+        {
           "client_id": "843370455090-kc9t8j8fb6pbijjs0v1lfoauii2sqtft.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB1JWebV35XHQWXyyiBlh_c9kgG4kROvaY"
+          "current_key": "AIzaSyAEYg3k2hcWMyjGlv4PuUcgtKuZ2-syFHM"
         }
       ],
       "services": {
