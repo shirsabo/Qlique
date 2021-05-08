@@ -121,7 +121,9 @@ class ChatFromItem(val string: String,val user: User): Item<com.xwray.groupie.Gr
         //load user image
         val uri = user.url
         val targetImageView = viewHolder.itemView.circularImageViewFrom
-        Picasso.get().load(uri).into(targetImageView)
+        if (uri != null && uri != "") {
+            Picasso.get().load(uri).into(targetImageView)
+        }
     }
 
     override fun getLayout(): Int {

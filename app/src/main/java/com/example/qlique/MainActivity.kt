@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qlique.Chat.ChatListActivity
+import com.example.qlique.LoginAndSignUp.HobbiesSelection
 import com.example.qlique.LoginAndSignUp.LoginActivity
 import com.example.qlique.LoginAndSignUp.UpdatePassword
 import com.example.qlique.Map.CreateEventMapActivity

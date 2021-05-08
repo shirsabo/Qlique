@@ -6,21 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".Map.DisplayEventsMapActivity">
 
-    <include
-        android:id="@+id/basicMap"
-        layout="@layout/activity_basic_map"
-        android:layout_width="413dp"
-        android:layout_height="310dp" />
+    <!--   <include
+          android:id="@+id/basicMap"
+          layout="@layout/activity_basic_map"
+          android:layout_width="413dp"
+          android:layout_height="310dp" /> -->
 
-  <!--  <ImageView
-        android:id="@+id/ic_radius"
-        android:layout_width="172dp"
-        android:layout_height="166dp"
+ <!--   <ImageView
+        android:id="@+id/radius"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintHorizontal_bias="0.956"
         android:layout_alignParentEnd="true"
         android:contentDescription="@string/please_choose_the_distance_of_the_events_shown_in_the_map"
         android:onClick="radiusButtonClicked"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/ic_gps" /> -->
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.281"
+        app:srcCompat="@drawable/ic_radius"
+        android:visibility="gone"/> -->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

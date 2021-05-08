@@ -53,7 +53,9 @@ public class ProfilePage extends AppCompatActivity{
                     return;
                 }
                 ImageView profile = findViewById(R.id.ProfileCircularImage);
-                Picasso.get().load(user.url).into(profile);
+                if(user.url != null && !user.url.equals("")) {
+                    Picasso.get().load(user.url).into(profile);
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

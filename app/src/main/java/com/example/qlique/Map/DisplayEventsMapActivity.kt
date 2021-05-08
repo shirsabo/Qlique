@@ -5,10 +5,10 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.qlique.Event
-import com.example.qlique.Profile.User
 import com.example.qlique.R
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
@@ -20,13 +20,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_chat_list.*
 
 
 class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnCompleteListener {
@@ -34,6 +30,8 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
 
     override fun onMapReady(googleMap: GoogleMap) {
         super.onMapReady(googleMap)
+        // Change the information presented in the basic map.
+        chanceInfoText()
         mMap!!.setOnMarkerClickListener { marker ->
             Firebase.database.reference.child("posts").child(marker.tag.toString()!!)
                 .addValueEventListener(object :
@@ -54,18 +52,44 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
                 })
             false
         }
-
-        mMap?.setInfoWindowAdapter(CustomInfoWindowAdapter(this))
+        // Request from the user the wanted radius and display all the events in that radius.
         requestRadiusFromUserAndDisplayEvents()
-
+        //addRadiusImageView()
     }
+    private fun addRadiusImageView() {
+        val radiusImage: ImageView = findViewById(R.id.radiusImageView)
+        radiusImage.visibility = View.VISIBLE
+        radiusImage.setOnClickListener {
+            radiusButtonClicked(it)
+        }
+        /*
+        val view = LinearLayout(this)
+        setContentView(view)
+        val radiusImage = ImageView(this)
+        radiusImage.setImageResource(R.drawable.ic_radius)
+        val width = 40
+        val height = 40
+        val params = LinearLayout.LayoutParams(width, height)
+        radiusImage.layoutParams = params
+        view.addView(radiusImage)*/
+    }
+       private fun chanceInfoText(){
+        val infoImageView: TextView = findViewById(R.id.info_text)
+        infoImageView.text = "Move the map or search for a location where you want to see events"
+    }
+    /*
+    Request Radius from the user with the dialog and display the events in this radius.
+     */
     private fun requestRadiusFromUserAndDisplayEvents(){
         RequestRadiusDialog().show(supportFragmentManager, "MyCustomFragment")
     }
-    private fun radiusButtonClicked(view: View?){
+    /*
+    Request Radius from the user with the dialog when clicking the radius button on the map.
+     */
+    fun radiusButtonClicked(view: View){
         requestRadiusFromUserAndDisplayEvents()
     }
-    fun getBitmapDescriptorFromVector(context: Context, vectorDrawableResourceId: Int): BitmapDescriptor? {
+    private fun getBitmapDescriptorFromVector(context: Context, vectorDrawableResourceId: Int): BitmapDescriptor? {
 
         val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
         val bitmap = Bitmap.createBitmap(
@@ -83,21 +107,73 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
     private fun displayEventsNearby(events: ArrayList<Event>, uid: String) {
         // get the locations of the events nearby and add markers in their locations.
         for (event in events){
-               val marker = mMap?.addMarker(
+            val hobby = if (event.hobbiesRelated != null && event.hobbiesRelated.size > 0){
+                event.hobbiesRelated[0]
+            } else {
+                ""
+            }
+            val marker = mMap?.addMarker(
                    MarkerOptions()
                        .position(LatLng(event.latitude, event.longitude))
                        .anchor(0.5f, 0.5f)
-                       .title(event.header).icon(
+                       .icon(
                            getBitmapDescriptorFromVector(
-                               applicationContext, R.drawable.ic_baseline_sports_soccer_24
+                               applicationContext, getImageByHobby(hobby)
                            )
                        )
-               )
-            if (marker != null) {
-                marker.tag = uid
-            }
 
-            //mMap?.moveCamera(CameraUpdateFactory.newLatLng(LatLng(event.latitude, event.longitude)));
+            )
+            marker?.tag = uid
+        }
+    }
+
+    private fun getImageByHobby(hobby: String): Int {
+        /*
+        "Sport", "Initiative", "Business", "Fashion", "Social",
+        "Entertainment", "Study", "Beauty and style", "Comedy", "Food", "Animals",
+        "Talent", "Cars", "Love and dating", "Fitness and health",
+        "Dance", "Outdoor activities", "Home and garden", "Gaming"
+         */
+        if (hobby == "sport"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        } else if (hobby == "Initiative"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Business"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Fashion"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Social"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Entertainment"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Study"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Beauty and style"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Comedy"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Food"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Animals"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Talent"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Cars"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Love and dating"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Fitness and health"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Dance"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Outdoor activities"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Home and garden"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }else if (hobby == "Gaming"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        } else {
+            return R.drawable.ic_baseline_sports_soccer_24
         }
     }
 
@@ -178,7 +254,8 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         radius = r.toDouble()
         fetchNearbyEvents()
     }
-    }
+
+}
 
 
 

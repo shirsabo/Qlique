@@ -93,7 +93,7 @@
               /> -->
         <AutoCompleteTextView
             android:id="@+id/input_search"
-            android:layout_width="337dp"
+            android:layout_width="wrap_content"
             android:layout_height="27dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
@@ -108,9 +108,9 @@
             android:background="@null"
             android:hint="@string/enter_address_city_or_zip_code"
             android:imeOptions="actionSearch"
+            android:singleLine="true"
             android:textColor="#000"
-            android:textSize="15sp"
-            android:singleLine="true"/>
+            android:textSize="15sp" />
 
 
     </RelativeLayout>
@@ -147,7 +147,23 @@
         app:layout_constraintTop_toBottomOf="@+id/relLayout1"
         app:layout_constraintVertical_bias="0.101"
         android:tooltipText="Enter a location or move the map to a wanted location"
-        app:srcCompat="@drawable/ic_information" />
+        app:srcCompat="@drawable/ic_information"
+        android:contentDescription="TODO" />
+
+    <ImageView
+        android:id="@+id/radiusImageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/please_choose_the_distance_of_the_events_shown_in_the_map"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/map"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.956"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relLayout1"
+        app:layout_constraintVertical_bias="0.201"
+        app:srcCompat="@drawable/ic_radius" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/info_text"
