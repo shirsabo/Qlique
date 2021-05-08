@@ -7,9 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.qlique.R
 import androidx.core.content.ContextCompat
 import com.example.qlique.Event
-import com.example.qlique.R
+import com.example.qlique.Profile.User
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQuery
@@ -23,6 +24,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.layout_bottom_sheet_map.*
 
 
 class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnCompleteListener {
@@ -39,10 +42,24 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val event = dataSnapshot.getValue(Event::class.java)
                         if (event != null) {
-                           val bottom_sheet_dialog : BottomSheetDialog =  BottomSheetDialog(this@DisplayEventsMapActivity,R.style.BottomSheetDialogTheme)
-                            val bottom_sheet_view = LayoutInflater.from(this@DisplayEventsMapActivity).inflate(R.layout.layout_bottom_sheet_map,findViewById(R.id.bottomContainer))
-                            bottom_sheet_dialog.setContentView(bottom_sheet_view)
-                            bottom_sheet_dialog.show()
+                            event?.uid = dataSnapshot.child("uid").value.toString()
+                            event?.description = dataSnapshot.child("description").value.toString()
+                            val bottomSheetDialogIn: BottomSheetDialog = BottomSheetDialog(
+                                this@DisplayEventsMapActivity,
+                                R.style.BottomSheetDialogTheme
+                            )
+                            val bottom_sheet_view:View =
+                                LayoutInflater.from(this@DisplayEventsMapActivity).inflate(
+                                    R.layout.layout_bottom_sheet_map, findViewById(
+                                        R.id.bottomContainer
+                                    )
+                                )
+                            updateViewOfBottomDialog(bottom_sheet_view,event)
+                            bottom_sheet_view.findViewById<TextView>(R.id.description_post_info_bottom).setText("hey")
+                            updateViewOfBottomDialog(bottom_sheet_view,event)
+                            bottomSheetDialogIn.setContentView(bottom_sheet_view)
+                            bottomSheetDialogIn.show()
+
                         }
                     }
 
@@ -55,6 +72,40 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         // Request from the user the wanted radius and display all the events in that radius.
         requestRadiusFromUserAndDisplayEvents()
         //addRadiusImageView()
+    }
+    private fun updateViewOfBottomDialog(view: View,event: Event){
+        val textView =view.findViewById<View>(R.id.description_post_info_bottom) as TextView
+        textView.text = event.description
+        val view1:ImageView = view.findViewById(R.id.image_home_info_bottom)
+        if(event.photoUrl!=null){
+
+            Picasso.get().load(event.photoUrl).into(view1)
+            //Picasso.get().load(event.photoUrl).into( view.findViewById<ImageView>(R.id.user_profile_info_bottom))
+
+        }
+        updateAuthor(view, event.uid)
+    }
+    private fun updateAuthor(view:View ,uid: String){
+        FirebaseDatabase.getInstance().getReference("/users/$uid")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val user = dataSnapshot.getValue(
+                        User::class.java
+                    )
+                    if (user!!.url != null) {
+                        val authorImage = view.findViewById<ImageView>(R.id.user_profile_info_bottom)
+                        Picasso.get().load(user.url).into(authorImage)
+                    }
+                    val userName = view.findViewById<TextView>(R.id.user_name_info_bottom)
+                    userName.text =
+                        dataSnapshot.child("firstName").value.toString() + " " + dataSnapshot.child(
+                            "lastName"
+                        ).value.toString()
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
+
     }
     private fun addRadiusImageView() {
         val radiusImage: ImageView = findViewById(R.id.radiusImageView)
@@ -113,14 +164,14 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
                 ""
             }
             val marker = mMap?.addMarker(
-                   MarkerOptions()
-                       .position(LatLng(event.latitude, event.longitude))
-                       .anchor(0.5f, 0.5f)
-                       .icon(
-                           getBitmapDescriptorFromVector(
-                               applicationContext, getImageByHobby(hobby)
-                           )
-                       )
+                MarkerOptions()
+                    .position(LatLng(event.latitude, event.longitude))
+                    .anchor(0.5f, 0.5f)
+                    .icon(
+                        getBitmapDescriptorFromVector(
+                            applicationContext, getImageByHobby(hobby)
+                        )
+                    )
 
             )
             marker?.tag = uid
@@ -134,26 +185,29 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         "Talent", "Cars", "Love and dating", "Fitness and health",
         "Dance", "Outdoor activities", "Home and garden", "Gaming"
          */
+        if(hobby == "Ball Games"){
+            return R.drawable.ic_baseline_sports_soccer_24
+        }
         if (hobby == "sport"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return  R.drawable.ic_sport
         } else if (hobby == "Initiative"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.initiative
         }else if (hobby == "Business"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_buisnessicon
         }else if (hobby == "Fashion"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_fashion
         }else if (hobby == "Social"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_friends
         }else if (hobby == "Entertainment"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_movies
         }else if (hobby == "Study"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_studying
         }else if (hobby == "Beauty and style"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_eye_treatment
         }else if (hobby == "Comedy"){
             return R.drawable.ic_baseline_sports_soccer_24
         }else if (hobby == "Food"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_spaguetti
         }else if (hobby == "Animals"){
             return R.drawable.ic_baseline_sports_soccer_24
         }else if (hobby == "Talent"){
@@ -165,13 +219,13 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         }else if (hobby == "Fitness and health"){
             return R.drawable.ic_baseline_sports_soccer_24
         }else if (hobby == "Dance"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_dancing
         }else if (hobby == "Outdoor activities"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_sport
         }else if (hobby == "Home and garden"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_plant_pot
         }else if (hobby == "Gaming"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_joystick
         } else {
             return R.drawable.ic_baseline_sports_soccer_24
         }

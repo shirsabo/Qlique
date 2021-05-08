@@ -293,11 +293,26 @@
                   <entry key="vectorAssetStep">
                     <value>
                       <PersistentState>
+                        <option name="children">
+                          <map>
+                            <entry key="clipartAsset">
+                              <value>
+                                <PersistentState>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/emoji_objects/baseline_emoji_objects_24.xml" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_radius" />
-                            <entry key="sourceFile" value="C:\Users\ASUS\Downloads\radius-of-circle.svg" />
+                            <entry key="outputName" value="ic_addpost" />
+                            <entry key="sourceFile" value="C:\Users\shirs\Downloads\addpost.svg" />
                           </map>
                         </option>
                       </PersistentState>

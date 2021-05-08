@@ -77,15 +77,15 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
             val builder = AlertDialog.Builder(this@NewEvent)
             // String array for alert dialog multi choice items
             val categoriesArray = arrayOf(
-                "Sport", "Initiative", "Business", "Fashion", "Social",
-                "Entertainment", "Study", "Beauty and style", "Comedy", "Food", "Animals",
+                "Sport","Ball Game" ,"Biking","Initiative", "Business", "Fashion", "Social",
+                "Entertainment","Cooking","Study","Art", "Beauty and style", "Comedy", "Food", "Animals",
                 "Talent", "Cars", "Love and dating", "Fitness and health",
                 "Dance", "Outdoor activities", "Home and garden", "Gaming"
             )
             // Boolean array for initial selected items
             val checkedCategoriesArray = booleanArrayOf(
-                false, false, false, false, false,
-                false, false, false, false, false, false,
+                false,false ,false,false, false,false, false,
+                false,false,false,false, false, false, false, false,
                 false, false, false, false,
                 false, false, false, false
             )
