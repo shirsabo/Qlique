@@ -137,7 +137,7 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
     /*
     Request Radius from the user with the dialog when clicking the radius button on the map.
      */
-    fun radiusButtonClicked(view: View){
+    private fun radiusButtonClicked(view: View){
         requestRadiusFromUserAndDisplayEvents()
     }
     private fun getBitmapDescriptorFromVector(context: Context, vectorDrawableResourceId: Int): BitmapDescriptor? {

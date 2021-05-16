@@ -22,8 +22,6 @@ public class InstagramApp {
     private OAuthAuthenticationListener mListener;
     private ProgressDialog mProgress;
     private HashMap<String, String> userInfo = new HashMap<String, String>();
-    private String mAuthUrl;
-    private String mTokenUrl;
     private String mAccessToken;
     private Context mCtx;
 
@@ -69,10 +67,10 @@ public class InstagramApp {
         mSession = new com.example.qlique.Instagram.InstagramSession(context);
         mAccessToken = mSession.getAccessToken();
         mCallbackUrl = callbackUrl;
-        mTokenUrl = TOKEN_URL + "?client_id=" + clientId + "&client_secret="
+        String mTokenUrl = TOKEN_URL + "?client_id=" + clientId + "&client_secret="
                 + clientSecret + "&redirect_uri=" + mCallbackUrl
                 + "&grant_type=authorization_code";
-        mAuthUrl = AUTH_URL
+        String mAuthUrl = AUTH_URL
                 + "?client_id="
                 + clientId
                 + "&redirect_uri="

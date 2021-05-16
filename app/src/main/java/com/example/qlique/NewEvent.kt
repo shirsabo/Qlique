@@ -66,7 +66,7 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
         setContentView(R.layout.activity_new_event)
         savedDate = DateNewEvent
         savedtime = hourNewEvent
-        authorUid = FirebaseAuth.getInstance().currentUser.uid
+        authorUid = FirebaseAuth.getInstance().currentUser?.uid
         photo_event_new.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"

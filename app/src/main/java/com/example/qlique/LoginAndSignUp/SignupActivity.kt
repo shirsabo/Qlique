@@ -181,30 +181,14 @@ import java.util.*
 
     }
 
-    private fun writeNewUser(
-        userId: String,
-        fName: String,
-        lName: String,
-        city: String,
-        email: String,
-        gender: String,
-        url: String,
-    ) {
+    private fun writeNewUser(userId: String, fName: String, lName: String, city: String,
+        email: String, gender: String, url: String) {
         val uid: String? = FirebaseAuth.getInstance().uid
         var instagram = ""
         if (mApp.userName != null){
             instagram = mApp.userName
         }
-        val user = User(
-            fName,
-            lName,
-            city,
-            email,
-            gender,
-            uid,
-            url,
-            instagram
-        )
+        val user = User(fName, lName, city, email, gender, uid, url, instagram)
 
         // Creating a new user and saving it in the real time database.
         database.child("users").child(userId).setValue(user)
