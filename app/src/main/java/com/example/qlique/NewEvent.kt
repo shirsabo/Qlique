@@ -134,7 +134,7 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
                 val event: Event = Event(
                     urLImage.toString(),
                     authorUid,
-                    textInputDesc.getEditText()?.getText().toString(),
+                    textInputDesc.editText?.text.toString(),
                     categories
                 )
                 createEvent(event)

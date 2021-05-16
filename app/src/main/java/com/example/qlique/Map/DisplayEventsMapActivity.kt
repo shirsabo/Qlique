@@ -188,10 +188,10 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         if(hobby == "Ball Games"){
             return R.drawable.ic_baseline_sports_soccer_24
         }
-        if (hobby == "sport"){
+        if (hobby == "Sport"){
             return  R.drawable.ic_sport
         } else if (hobby == "Initiative"){
-            return R.drawable.initiative
+            return R.drawable.ic_light_bulb
         }else if (hobby == "Business"){
             return R.drawable.ic_buisnessicon
         }else if (hobby == "Fashion"){
@@ -205,19 +205,19 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         }else if (hobby == "Beauty and style"){
             return R.drawable.ic_eye_treatment
         }else if (hobby == "Comedy"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_lol
         }else if (hobby == "Food"){
             return R.drawable.ic_spaguetti
         }else if (hobby == "Animals"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_pets
         }else if (hobby == "Talent"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_talent
         }else if (hobby == "Cars"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_cars1
         }else if (hobby == "Love and dating"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_hearts
         }else if (hobby == "Fitness and health"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_meditation
         }else if (hobby == "Dance"){
             return R.drawable.ic_dancing
         }else if (hobby == "Outdoor activities"){
@@ -227,7 +227,7 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         }else if (hobby == "Gaming"){
             return R.drawable.ic_joystick
         } else {
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_location
         }
     }
 
