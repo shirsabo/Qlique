@@ -1,16 +1,20 @@
 package com.example.qlique.Map
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.example.qlique.R
 import androidx.core.content.ContextCompat
 import com.example.qlique.Event
+import com.example.qlique.NewMessageActivity.Companion.USER_KEY
 import com.example.qlique.Profile.User
+import com.example.qlique.R
+import com.example.qlique.chatLogActivity
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQuery
@@ -25,7 +29,6 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.layout_bottom_sheet_map.*
 
 
 class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnCompleteListener {
@@ -42,8 +45,8 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val event = dataSnapshot.getValue(Event::class.java)
                         if (event != null) {
-                            event?.uid = dataSnapshot.child("uid").value.toString()
-                            event?.description = dataSnapshot.child("description").value.toString()
+                            event.uid = dataSnapshot.child("uid").value.toString()
+                            event.description = dataSnapshot.child("description").value.toString()
                             val bottomSheetDialogIn: BottomSheetDialog = BottomSheetDialog(
                                 this@DisplayEventsMapActivity,
                                 R.style.BottomSheetDialogTheme
@@ -75,7 +78,11 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
     }
     private fun updateViewOfBottomDialog(view: View,event: Event){
         val textView =view.findViewById<View>(R.id.description_post_info_bottom) as TextView
+        val title =view.findViewById<View>(R.id.title) as TextView
         textView.text = event.description
+        title.text = event.header
+        textView.movementMethod = ScrollingMovementMethod()
+        title.movementMethod = ScrollingMovementMethod()
         val view1:ImageView = view.findViewById(R.id.image_home_info_bottom)
         if(event.photoUrl!=null){
 
@@ -101,6 +108,12 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
                         dataSnapshot.child("firstName").value.toString() + " " + dataSnapshot.child(
                             "lastName"
                         ).value.toString()
+                    val chat = view.findViewById<View>(R.id.info_image_chat_btn_bottom) as ImageView
+                    chat.setOnClickListener {
+                        val intent = Intent(view.context, chatLogActivity::class.java)
+                        intent.putExtra(USER_KEY, user)
+                        view.context.startActivity(intent)
+                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {}
