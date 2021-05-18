@@ -2,6 +2,7 @@ package com.example.qlique.LoginAndSignUp
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -16,15 +17,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.qlique.AppConfig
-import com.example.qlique.R
-import com.example.qlique.Profile.User
 import com.example.qlique.Instagram.*
+import com.example.qlique.Profile.User
+import com.example.qlique.R
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.scwang.wave.MultiWaveHeader
+import kotlinx.android.synthetic.main.activity_signup.view.*
 import java.util.*
 
 
@@ -81,10 +84,11 @@ import java.util.*
     private fun fetchCurrentUser(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
-        ref.addListenerForSingleValueEvent(object: ValueEventListener{
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                currentUser =snapshot.getValue(User::class.java)
+                currentUser = snapshot.getValue(User::class.java)
             }
+
             override fun onCancelled(po: DatabaseError) {
                 TODO("Not yet implemented")
             }
@@ -93,7 +97,14 @@ import java.util.*
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
-
+        val waveHeader = findViewById<MultiWaveHeader>(R.id.waveHeader)
+        waveHeader.velocity = 3.0f
+        waveHeader.progress = 1.0F
+        waveHeader.isRunning()
+        waveHeader.gradientAngle = 70
+        waveHeader.waveHeight = 60
+        waveHeader.closeColor = Color.rgb(	47,122,255)
+        waveHeader.startColor = Color.rgb(	47,122,160)
         auth = FirebaseAuth.getInstance()
         database = Firebase.database.reference
         firstNameEt = findViewById(R.id.fName_edt_text)
@@ -157,11 +168,15 @@ import java.util.*
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, OnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            gender = if (maleBtn.isChecked) { "Male" } else { "Female" }
+                            gender = if (maleBtn.isChecked) {
+                                "Male"
+                            } else {
+                                "Female"
+                            }
                             uploadImage()
                             auth.currentUser?.let { it1 ->
                                 if (url != null) {
-                                    writeNewUser( it1.uid, fname, lname, city, email, gender, url!!)
+                                    writeNewUser(it1.uid, fname, lname, city, email, gender, url!!)
                                 }
                             }
                         } else {
@@ -181,8 +196,10 @@ import java.util.*
 
     }
 
-    private fun writeNewUser(userId: String, fName: String, lName: String, city: String,
-        email: String, gender: String, url: String) {
+    private fun writeNewUser(
+        userId: String, fName: String, lName: String, city: String,
+        email: String, gender: String, url: String
+    ) {
         val uid: String? = FirebaseAuth.getInstance().uid
         var instagram = ""
         if (mApp.userName != null){

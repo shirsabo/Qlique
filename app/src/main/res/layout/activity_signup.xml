@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".LoginAndSignUp.SignupActivity">
 
     <!-- <Toolbar
@@ -19,17 +20,21 @@
 
      <include layout="@layout/layout_toolbar_profile" />
      -->
+
+
     <LinearLayout
         android:id="@+id/linearLayout5"
-        android:layout_width="337dp"
-        android:layout_height="485dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_width="370dp"
+        android:layout_height="752dp"
+        android:layout_marginTop="37dp"
+        android:background="@drawable/bck_sign_up"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <!--
             <RelativeLayout
@@ -57,7 +62,6 @@
             -->
 
 
-
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/img_profile"
             android:layout_width="@dimen/toolbar_profile_width"
@@ -70,14 +74,23 @@
             app:civ_border_color="@android:color/white"
             app:civ_border_width="2dp"
             tools:layout_editor_absoluteX="160dp"
-            tools:layout_editor_absoluteY="-4dp" />
+            tools:layout_editor_absoluteY="10dp" />
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/img_plus"
             android:layout_width="@dimen/ic_plus_width"
             android:layout_height="@dimen/ic_plus_width"
             android:layout_gravity="center"
-            android:src="@drawable/ic_plus"
+            app:civ_shadow="true"
+            app:civ_shadow_radius="1dp"
+            tools:layout_editor_absoluteX="221dp"
+            tools:layout_editor_absoluteY="58dp" />
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/imp_instagram"
+            android:layout_width="@dimen/ic_plus_width"
+            android:layout_height="@dimen/ic_plus_width"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_instagram"
             app:civ_shadow="true"
             app:civ_shadow_radius="1dp"
             tools:layout_editor_absoluteX="221dp"
@@ -85,106 +98,88 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp">
+            android:layout_height="56dp"
+            android:orientation="vertical"
+            android:paddingLeft="10dp">
 
             <EditText
                 android:id="@+id/fName_edt_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/rounded"
-                android:hint="@string/first_name" />
-
-            <RelativeLayout
-                android:layout_width="131dp"
-                android:layout_height="15dp">
-
-
-            </RelativeLayout>
+                android:hint="@string/first_name"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:textAlignment="center" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp">
+            android:layout_height="56dp"
+            android:paddingLeft="10dp">
 
             <EditText
                 android:id="@+id/lName_edt_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/rounded"
-                android:hint="@string/last_name" />
+                android:hint="@string/last_name"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:textAlignment="textStart" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp">
+            android:layout_height="56dp"
+            android:paddingLeft="10dp">
 
             <EditText
                 android:id="@+id/email_edt_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/rounded"
-                android:hint="@string/email" />
+                android:hint="@string/email"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp">
+            android:layout_height="56dp"
+            android:paddingLeft="10dp">
 
             <EditText
                 android:id="@+id/pass_edt_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/rounded"
-                android:hint="@string/password" />
+                android:hint="@string/password"
+                android:paddingLeft="10dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp">
+            android:layout_height="56dp"
+            android:paddingLeft="10dp">
 
             <EditText
                 android:id="@+id/city_edt_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/rounded"
-                android:hint="@string/city" />
+                android:hint="@string/city"
+                android:paddingLeft="10dp"
+                android:paddingBottom="10dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <RadioGroup
-            android:id="@+id/Gender"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/radioM"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:layout_weight="1"
-                android:background="@drawable/rounded"
-                android:checked="true"
-                android:text="@string/male"
-                android:textSize="14sp" />
-
-            <RadioButton
-                android:id="@+id/radioF"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:layout_weight="1"
-                android:background="@drawable/rounded"
-                android:checked="false"
-                android:text="@string/female"
-                android:textSize="14sp" />
-        </RadioGroup>
-<!--
+        <!--
         <TextView
             android:id="@+id/txtview"
             android:layout_width="match_parent"
@@ -215,7 +210,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="268dp" />
     -->
-<!--
+        <!--
         <ListView
             android:id="@+id/multiple_list_view"
             android:layout_width="match_parent"
@@ -226,68 +221,77 @@
             android:textSize="25sp"
             android:textStyle="italic" />
 -->
+        <RadioGroup
+            android:id="@+id/Gender"
+            android:layout_width="match_parent"
+            android:layout_height="95dp"
+            android:orientation="horizontal"
+            android:paddingVertical="20dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="20dp"
+
+            android:paddingBottom="20dp">
+
+            <RadioButton
+                android:id="@+id/radioM"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded"
+                android:checked="true"
+                android:includeFontPadding="true"
+                android:paddingStart="10dp"
+                android:paddingTop="20dp"
+                android:paddingRight="40dp"
+                android:paddingBottom="10dp"
+                android:text="@string/male"
+                android:textAlignment="center"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/radioF"
+                android:layout_width="128dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded"
+                android:checked="false"
+                android:includeFontPadding="true"
+                android:paddingStart="10dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="10dp"
+                android:text="@string/female"
+                android:textAlignment="center"
+                android:textSize="14sp" />
+        </RadioGroup>
+
         <Button
             android:id="@+id/signup_btn"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_width="311dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center"
             android:layout_marginTop="0dp"
-            android:background="@drawable/rounded"
+            android:background="@color/colorPrimary"
+            android:drawablePadding="10dp"
+            android:includeFontPadding="true"
+            android:paddingTop="10dp"
             android:text="@string/signup" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp">
-
-            <TextView
-                android:id="@+id/tvText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/rounded"
-                android:text="@string/or"
-                android:textColor="#000000" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_toStartOf="@id/tvText"
-                android:layout_toLeftOf="@id/tvText"
-                android:background="#000000" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_toEndOf="@id/tvText"
-                android:layout_toRightOf="@id/tvText"
-                android:background="#000000" />
-
-        </RelativeLayout>
-
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/login_btn"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_width="309dp"
+            android:layout_height="44dp"
+            app:cornerRadius="20dp"
+            android:layout_gravity="bottom|center"
             android:layout_marginTop="0dp"
-            android:background="@drawable/rounded"
+            android:background="@color/colorPrimary"
+            android:baselineAligned="false"
             android:text="@string/login" />
 
-    </LinearLayout>
+        <ScrollView
+            android:id="@+id/scrollView3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

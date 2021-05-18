@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".LoginAndSignUp.SignupActivity">
 
+    <com.scwang.wave.MultiWaveHeader
+        android:id="@+id/waveHeader"
+        android:layout_width="406dp"
+        android:layout_height="595dp"
+        app:layout_constraintBottom_toTopOf="@+id/nestedScrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <!-- <Toolbar
          android:id="@+id/toolbar"
          android:layout_width="match_parent"
@@ -20,24 +28,29 @@
      <include layout="@layout/layout_toolbar_profile" />
      -->
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/ic_waves"
+        android:layout_alignParentTop="true"
+        android:paddingTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <LinearLayout
             android:id="@+id/linearLayout5"
             android:layout_width="337dp"
             android:layout_height="485dp"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
+            android:background="@drawable/bck_sign_up"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/img_profile"
@@ -47,7 +60,7 @@
                 android:layout_marginTop="@dimen/activity_padding"
                 android:layout_marginBottom="@dimen/activity_padding"
                 android:scaleType="centerInside"
-                android:src="@drawable/baseline_account_circle_black_48"
+                app:srcCompat="@drawable/ic_add_user"
                 app:civ_border_color="@android:color/white"
                 app:civ_border_width="2dp"
                 tools:layout_editor_absoluteX="160dp"
@@ -58,7 +71,7 @@
                 android:layout_width="34dp"
                 android:layout_height="33dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_plus"
+                app:srcCompat="@drawable/ic_plus1"
                 app:civ_shadow="true"
                 app:civ_shadow_radius="1dp"
                 tools:layout_editor_absoluteX="221dp"
@@ -69,21 +82,23 @@
                 android:layout_width="@dimen/ic_plus_width"
                 android:layout_height="@dimen/ic_plus_width"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_instagram"
                 app:civ_shadow="true"
                 app:civ_shadow_radius="1dp"
+                app:srcCompat="@drawable/ic_instagram"
                 tools:layout_editor_absoluteX="221dp"
                 tools:layout_editor_absoluteY="58dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp">
+                android:layout_height="56dp"
+                android:paddingLeft="10dp"
+                android:paddingBottom="10dp">
 
                 <EditText
-                    android:background="@drawable/rounded"
                     android:id="@+id/fName_edt_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/rounded"
                     android:hint="@string/first_name" />
 
                 <RelativeLayout
@@ -97,39 +112,45 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp">
+                android:layout_height="56dp"
+                android:paddingLeft="10dp"
+                android:paddingBottom="10dp">
 
                 <EditText
-                    android:background="@drawable/rounded"
                     android:id="@+id/lName_edt_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/rounded"
                     android:hint="@string/last_name" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp">
+                android:layout_height="56dp"
+                android:paddingLeft="10dp"
+                android:paddingBottom="10dp">
 
                 <EditText
-                    android:background="@drawable/rounded"
                     android:id="@+id/email_edt_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/rounded"
                     android:hint="@string/email" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp">
+                android:layout_height="56dp"
+                android:paddingLeft="10dp"
+                android:paddingBottom="10dp">
 
                 <EditText
-                    android:background="@drawable/rounded"
                     android:id="@+id/pass_edt_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/rounded"
                     android:hint="@string/password" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -137,13 +158,15 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp">
+                android:layout_height="56dp"
+                android:paddingLeft="10dp"
+                android:paddingBottom="10dp">
 
                 <EditText
-                    android:background="@drawable/rounded"
                     android:id="@+id/city_edt_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/rounded"
                     android:hint="@string/city" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -184,11 +207,13 @@
 
 
             <Button
-                android:background="@drawable/rounded"
                 android:id="@+id/signup_btn"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_width="262dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="0dp"
+                android:background="@drawable/rounded"
+                android:gravity="center"
                 android:text="@string/signup" />
 
             <RelativeLayout
@@ -197,15 +222,15 @@
                 android:layout_marginTop="0dp">
 
                 <TextView
-                    android:background="@drawable/rounded"
                     android:id="@+id/tvText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
+                    android:background="@drawable/rounded"
                     android:text="@string/or"
-                    android:textColor="#000000" />
+                    android:textColor="#FAF6F6" />
 
                 <View
                     android:layout_width="match_parent"
@@ -215,7 +240,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_toStartOf="@id/tvText"
                     android:layout_toLeftOf="@id/tvText"
-                    android:background="#000000" />
+                    android:background="#F1ECEC" />
 
                 <View
                     android:layout_width="match_parent"
@@ -225,16 +250,18 @@
                     android:layout_marginRight="16dp"
                     android:layout_toEndOf="@id/tvText"
                     android:layout_toRightOf="@id/tvText"
-                    android:background="#000000" />
+                    android:background="#F6F4F4" />
 
             </RelativeLayout>
 
             <Button
-                android:background="@drawable/rounded"
                 android:id="@+id/login_btn"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_width="168dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="0dp"
+                android:background="@drawable/rounded"
+                android:gravity="center"
                 android:text="@string/login" />
 
         </LinearLayout>

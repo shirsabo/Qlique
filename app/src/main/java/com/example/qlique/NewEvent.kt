@@ -18,6 +18,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.qlique.Map.CreateEventMapActivity
+import com.example.qlique.Map.RequestRadiusDialog
+import com.example.qlique.Profile.RequestCapacityDialog
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQuery
@@ -37,13 +39,14 @@ import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 
-class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener {
+class NewEvent : AppCompatActivity(),RequestCapacityDialog.OnCompleteListener,DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener {
 
     companion object {
         var savedtime: TextView? = null
         var savedDate: TextView? = null
         var chosenLat by Delegates.notNull<Double>()
         var chosenLon by Delegates.notNull<Double>()
+        var capacityMembers by Delegates.notNull<Int>()
     }
 
     var urLImage: Uri? = null
@@ -61,6 +64,12 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
                 photo_event_new.setImageBitmap(bitmap)
             }
         }
+    private fun membersCapacityClicked(){
+        openCapacityDialog()
+    }
+    private fun openCapacityDialog(){
+        RequestCapacityDialog().show(supportFragmentManager, "MyCustomFragment")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +81,9 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             launchSomeActivity.launch(intent)
+        }
+        members_capacity.setOnClickListener {
+            membersCapacityClicked()
         }
         btnCatergories.setOnClickListener {
             categories = ArrayList(0)
@@ -162,6 +174,8 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
                 event.header = headerText.text.toString()
                 event.latitude = Companion.chosenLat
                 event.longitude = Companion.chosenLon
+                event.setMembers_capacity( capacityMembers)
+                event.setDate(savedDate.toString())
                 val db_ref: DatabaseReference =
                     mDatabase.child("/posts").push() //creates blank record in db
                 val postKey = db_ref.key.toString() //the UniqueID/key you seek
@@ -245,5 +259,9 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
         val c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jerusalem"));
         var dateFormat: SimpleDateFormat? = SimpleDateFormat("MMMM dd, yyyy");
         DateNewEvent.text = dateFormat?.format(c.getTime())
+    }
+
+    override fun onComplete(r: String) {
+        TODO("Not yet implemented")
     }
 }
