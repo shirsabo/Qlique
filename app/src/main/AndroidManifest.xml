@@ -21,10 +21,10 @@
         <activity android:name=".Map.DisplayEventsMapActivity" />
         <activity android:name=".Map.CreateEventMapActivity" />
         <activity android:name=".Map.BasicMapActivity" />
-        <activity android:name=".EventMembers" />
-        <activity android:name=".EventInfo" />
-        <activity android:name=".EventsManager" />
-        <activity android:name=".NewEvent" />
+        <activity android:name="CreateEvent.EventMembers" />
+        <activity android:name=".EventsDisplay.EventInfo" />
+        <activity android:name=".EventsDisplay.EventsManager" />
+        <activity android:name="CreateEvent.NewEvent" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -49,7 +49,7 @@
         </activity>
         <activity android:name=".Profile.ProfilePage" />
         <activity
-            android:name=".MainActivity"
+            android:name="Feed.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="stateUnchanged"
             tools:replace="android:windowSoftInputMode">
@@ -70,7 +70,7 @@
         <activity android:name=".Chat.ChatListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="Feed.MainActivity" />
         </activity>
     </application>
 

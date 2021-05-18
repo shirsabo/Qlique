@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.example.qlique.MainActivity
+import Feed.MainActivity
 import com.example.qlique.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database

@@ -13,7 +13,7 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    tools:context=".MainActivity">
+    tools:context="Feed.MainActivity">
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/nav_ProfileCircularImage"

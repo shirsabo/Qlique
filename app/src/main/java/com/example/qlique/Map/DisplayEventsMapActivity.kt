@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import com.example.qlique.Event
+import CreateEvent.Event
 import com.example.qlique.NewMessageActivity.Companion.USER_KEY
 import com.example.qlique.Profile.User
 import com.example.qlique.R

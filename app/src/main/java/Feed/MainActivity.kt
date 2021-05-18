@@ -1,5 +1,7 @@
-package com.example.qlique
+package Feed
 
+import CreateEvent.Event
+import CreateEvent.NewEvent
 import android.app.Dialog
 import android.content.ContentValues.TAG
 import android.content.Intent
@@ -16,14 +18,14 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qlique.Chat.ChatListActivity
-import com.example.qlique.LoginAndSignUp.HobbiesSelection
+import com.example.qlique.EventsDisplay.EventsManager
 import com.example.qlique.LoginAndSignUp.LoginActivity
 import com.example.qlique.LoginAndSignUp.UpdatePassword
-import com.example.qlique.Map.CreateEventMapActivity
 import com.example.qlique.Map.DisplayEventsMapActivity
 //import com.example.qlique.Map.DisplayEventsMapActivity
 import com.example.qlique.Profile.ProfilePage
 import com.example.qlique.Profile.User
+import com.example.qlique.R
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -87,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                 //R.id.nav_item_three -> Toast.makeText(this, "Clicked item three", Toast.LENGTH_SHORT)
                 //  .show()
                 R.id.ChangePassword -> changePasswordClicked()
-                R.id.EventsManager->eventsManagerClicked()
+                R.id.EventsManager ->eventsManagerClicked()
                 R.id.Logout -> logoutClicked()
                 R.id.Map -> mapClicked()
 

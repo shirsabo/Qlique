@@ -1,4 +1,4 @@
-package com.example.qlique.Profile
+package CreateEvent
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +11,6 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.example.qlique.R
 import kotlinx.android.synthetic.main.request_capacity.*
-import kotlinx.android.synthetic.main.request_radius.*
-import kotlinx.android.synthetic.main.request_radius.seekbarVal
 
 
 class RequestCapacityDialog : DialogFragment() {

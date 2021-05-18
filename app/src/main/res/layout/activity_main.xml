@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:openDrawer="start"
     android:id="@+id/drawer_layout"
-    tools:context=".MainActivity">
+    tools:context="Feed.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/feed"

@@ -1,10 +1,9 @@
-package com.example.qlique;
+package com.example.qlique.EventsDisplay;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
@@ -12,11 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.qlique.Profile.User;
+import com.example.qlique.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import CreateEvent.Event;
+import CreateEvent.EventMembers;
 
 public class EventInfo extends AppCompatActivity {
 
@@ -30,7 +33,7 @@ public class EventInfo extends AppCompatActivity {
         membersInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(v.getContext(),EventMembers.class);
+                Intent i = new Intent(v.getContext(), EventMembers.class);
                 i.putExtra("eventobj", (Parcelable) event);
                 v.getContext().startActivity(i);
             }

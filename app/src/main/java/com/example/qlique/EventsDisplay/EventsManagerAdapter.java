@@ -1,4 +1,4 @@
-package com.example.qlique;
+package com.example.qlique.EventsDisplay;
 import android.content.Context;
 import android.content.Intent;
 
@@ -15,12 +15,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.qlique.Profile.User;
+import com.example.qlique.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import CreateEvent.Event;
 
 public class EventsManagerAdapter extends RecyclerView.Adapter<EventsManagerAdapter.ViewHolder> {
 
@@ -85,7 +88,7 @@ public class EventsManagerAdapter extends RecyclerView.Adapter<EventsManagerAdap
                 @Override
                 public void onClick(View v) {
 
-                    Intent i = new Intent(v.getContext(),EventInfo.class);
+                    Intent i = new Intent(v.getContext(), EventInfo.class);
                     // send story title and contents through recyclerview to detail activity
                     Event event =events[getAdapterPosition()];
                     i.putExtra("event", (Parcelable) events[getAdapterPosition()]);

@@ -1,11 +1,11 @@
-package com.example.qlique
+package CreateEvent
 
+import CreateEvent.NewEvent
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.activity_new_event.*
 import java.text.SimpleDateFormat
 import java.util.*
 

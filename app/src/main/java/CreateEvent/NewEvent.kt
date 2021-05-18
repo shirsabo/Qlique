@@ -1,4 +1,4 @@
-package com.example.qlique
+package CreateEvent
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -18,12 +18,9 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.qlique.Map.CreateEventMapActivity
-import com.example.qlique.Map.RequestRadiusDialog
-import com.example.qlique.Profile.RequestCapacityDialog
+import com.example.qlique.R
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
-import com.firebase.geofire.GeoQuery
-import com.firebase.geofire.GeoQueryEventListener
 import com.google.firebase.FirebaseError
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseError
@@ -39,7 +36,7 @@ import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 
-class NewEvent : AppCompatActivity(),RequestCapacityDialog.OnCompleteListener,DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener {
+class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener {
 
     companion object {
         var savedtime: TextView? = null
@@ -145,14 +142,15 @@ class NewEvent : AppCompatActivity(),RequestCapacityDialog.OnCompleteListener,Da
             description.movementMethod = ScrollingMovementMethod()
         }
         next_first_step.setOnClickListener {
-            if (urLImage != null && authorUid != null && textInputDesc.getEditText()?.getText().toString() != null && savedDate!=null&& savedtime!=null&&savedDate?.text!=""&& savedtime?.text!=""
+            if (urLImage != null && authorUid != null && textInputDesc.getEditText()?.getText().toString() != null && savedDate !=null&& savedtime !=null&& savedDate?.text!=""&& savedtime?.text!=""
             ) {
-                val event: Event = Event(
-                    urLImage.toString(),
-                    authorUid,
-                    textInputDesc.editText?.text.toString(),
-                    categories
-                )
+                val event: Event =
+                    Event(
+                        urLImage.toString(),
+                        authorUid,
+                        textInputDesc.editText?.text.toString(),
+                        categories
+                    )
                 createEvent(event)
                 finish()
             }
@@ -172,8 +170,8 @@ class NewEvent : AppCompatActivity(),RequestCapacityDialog.OnCompleteListener,Da
                 event.photoUrl = it.toString()
                 val headerText: TextView = findViewById(R.id.headerNewEvent)
                 event.header = headerText.text.toString()
-                event.latitude = Companion.chosenLat
-                event.longitude = Companion.chosenLon
+                event.latitude = chosenLat
+                event.longitude = chosenLon
                 event.setMembers_capacity( capacityMembers)
                 event.setDate(savedDate?.text.toString())
                 event.setHour(savedtime?.text.toString())

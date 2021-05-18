@@ -1,4 +1,4 @@
-package com.example.qlique;
+package CreateEvent;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.qlique.Profile.User;
+import com.example.qlique.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

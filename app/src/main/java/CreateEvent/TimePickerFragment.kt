@@ -1,16 +1,13 @@
-package com.example.qlique
+package CreateEvent
 
-import android.app.DatePickerDialog
+import CreateEvent.NewEvent
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
-import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.activity_new_event.*
 import java.util.*
-import kotlin.math.min
 
 class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
 

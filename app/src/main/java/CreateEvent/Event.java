@@ -1,16 +1,10 @@
-package com.example.qlique;
+package CreateEvent;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Pair;
 
-import com.example.qlique.Profile.User;
-
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicStampedReference;
 
 import kotlinx.android.parcel.Parcelize;
 
