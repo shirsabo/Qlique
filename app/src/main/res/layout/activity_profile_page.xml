@@ -274,7 +274,8 @@
         android:layout_marginTop="88dp"
         android:background="@drawable/message_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="openChatActivity"/>
 
     <Button
         android:id="@+id/instagram"

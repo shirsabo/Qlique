@@ -102,12 +102,42 @@
 
 
         </RelativeLayout>
-        <TextView
-            android:id="@+id/description_post_info_bottom"
-            android:layout_height="114dp"
-            android:layout_marginLeft="15dp"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:text="Hello" />
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="372dp"
+                android:layout_height="34dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="17dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="14dp"
+                android:text="title"
+                android:scrollbars="vertical"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/description_post_info_bottom"
+                android:layout_width="372dp"
+                android:layout_height="137dp"
+                android:layout_below="@+id/title"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="17dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="32dp"
+                android:scrollbars="vertical"
+                android:text="Hello" />
+        </RelativeLayout>
 
 
     </LinearLayout>

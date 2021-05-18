@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.DatePicker
 import android.widget.TextView
@@ -66,7 +67,7 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
         setContentView(R.layout.activity_new_event)
         savedDate = DateNewEvent
         savedtime = hourNewEvent
-        authorUid = FirebaseAuth.getInstance().currentUser.uid
+        authorUid = FirebaseAuth.getInstance().currentUser?.uid
         photo_event_new.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
@@ -125,7 +126,10 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
             val dialog = builder.create()
             // Display the alert dialog on interface
             dialog.show()
-
+            val headerText: TextView = findViewById(R.id.headerNewEvent)
+            headerText.movementMethod = ScrollingMovementMethod()
+            val description: TextView = findViewById(R.id.descNewEvent)
+            description.movementMethod = ScrollingMovementMethod()
         }
         next_first_step.setOnClickListener {
             if (urLImage != null && authorUid != null && textInputDesc.getEditText()?.getText()
@@ -134,7 +138,7 @@ class NewEvent : AppCompatActivity(),DatePickerDialog.OnDateSetListener,TimePick
                 val event: Event = Event(
                     urLImage.toString(),
                     authorUid,
-                    textInputDesc.getEditText()?.getText().toString(),
+                    textInputDesc.editText?.text.toString(),
                     categories
                 )
                 createEvent(event)

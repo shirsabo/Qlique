@@ -56,34 +56,30 @@ class NewMessageActivity : AppCompatActivity() {
 
 private fun fetchFriends(){
     val mFirebaseInstance= FirebaseDatabase.getInstance()
-    val mFirebaseDatabase=mFirebaseInstance!!.getReference("users")
+    val mFirebaseDatabase= mFirebaseInstance.getReference("users")
     val userId=FirebaseAuth.getInstance().uid
-    mFirebaseDatabase!!.child(userId!!).addValueEventListener(object: ValueEventListener{
+    mFirebaseDatabase.child(userId!!).addValueEventListener(object: ValueEventListener{
         override fun onDataChange(dataSnapshot: DataSnapshot){
             val user=dataSnapshot.getValue(User::class.java)
             if (user!=null){
                 for (friendKey in user.getFriends()){
                     if (friendKey!=null){
-                        val  userFriend=mFirebaseInstance!!.getReference("users/$friendKey")
-                        if(userFriend!=null){
-                            val newUser =Firebase.database.reference.child("users").child(friendKey).addValueEventListener(object :ValueEventListener{
-                                override fun onDataChange(dataSnapshot: DataSnapshot){
-                                    val user1=dataSnapshot.getValue(User::class.java)
-                                    if (user1!=null&& !friendsAdded.contains(friendKey)){
-                                        adapter.add(UserItem(user1))
-                                        friendsAdded.add(friendKey)
-                                    }
+                        val  userFriend= mFirebaseInstance.getReference("users/$friendKey")
+                        val newUser =Firebase.database.reference.child("users").child(friendKey).addValueEventListener(object :ValueEventListener{
+                            override fun onDataChange(dataSnapshot: DataSnapshot){
+                                val user1=dataSnapshot.getValue(User::class.java)
+                                if (user1!=null&& !friendsAdded.contains(friendKey)){
+                                    adapter.add(UserItem(user1))
+                                    friendsAdded.add(friendKey)
                                 }
-                                override fun onCancelled(error: DatabaseError){
-                                    //Failed to read value
-                                }
-                            })
-                            if(newUser!=null ){
-                                Log.d("tag","hello")
-                                val res =newUser
                             }
+                            override fun onCancelled(error: DatabaseError){
+                                //Failed to read value
+                            }
+                        })
+                        Log.d("tag","hello")
+                        val res =newUser
 
-                        }
                     }
 
                 }

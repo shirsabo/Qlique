@@ -1,16 +1,20 @@
 package com.example.qlique.Map
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.example.qlique.R
 import androidx.core.content.ContextCompat
 import com.example.qlique.Event
+import com.example.qlique.NewMessageActivity.Companion.USER_KEY
 import com.example.qlique.Profile.User
+import com.example.qlique.R
+import com.example.qlique.chatLogActivity
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQuery
@@ -25,7 +29,6 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.layout_bottom_sheet_map.*
 
 
 class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnCompleteListener {
@@ -42,8 +45,8 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val event = dataSnapshot.getValue(Event::class.java)
                         if (event != null) {
-                            event?.uid = dataSnapshot.child("uid").value.toString()
-                            event?.description = dataSnapshot.child("description").value.toString()
+                            event.uid = dataSnapshot.child("uid").value.toString()
+                            event.description = dataSnapshot.child("description").value.toString()
                             val bottomSheetDialogIn: BottomSheetDialog = BottomSheetDialog(
                                 this@DisplayEventsMapActivity,
                                 R.style.BottomSheetDialogTheme
@@ -75,7 +78,11 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
     }
     private fun updateViewOfBottomDialog(view: View,event: Event){
         val textView =view.findViewById<View>(R.id.description_post_info_bottom) as TextView
+        val title =view.findViewById<View>(R.id.title) as TextView
         textView.text = event.description
+        title.text = event.header
+        textView.movementMethod = ScrollingMovementMethod()
+        title.movementMethod = ScrollingMovementMethod()
         val view1:ImageView = view.findViewById(R.id.image_home_info_bottom)
         if(event.photoUrl!=null){
 
@@ -101,6 +108,12 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
                         dataSnapshot.child("firstName").value.toString() + " " + dataSnapshot.child(
                             "lastName"
                         ).value.toString()
+                    val chat = view.findViewById<View>(R.id.info_image_chat_btn_bottom) as ImageView
+                    chat.setOnClickListener {
+                        val intent = Intent(view.context, chatLogActivity::class.java)
+                        intent.putExtra(USER_KEY, user)
+                        view.context.startActivity(intent)
+                    }
                 }
                 override fun onCancelled(error: DatabaseError) {}
             })
@@ -135,7 +148,7 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
     /*
     Request Radius from the user with the dialog when clicking the radius button on the map.
      */
-    fun radiusButtonClicked(view: View){
+    private fun radiusButtonClicked(view: View){
         requestRadiusFromUserAndDisplayEvents()
     }
     private fun getBitmapDescriptorFromVector(context: Context, vectorDrawableResourceId: Int): BitmapDescriptor? {
@@ -176,10 +189,10 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         if(hobby == "Ball Games"){
             return R.drawable.ic_baseline_sports_soccer_24
         }
-        if (hobby == "sport"){
+        if (hobby == "Sport"){
             return  R.drawable.ic_sport
         } else if (hobby == "Initiative"){
-            return R.drawable.initiative
+            return R.drawable.ic_light_bulb
         }else if (hobby == "Business"){
             return R.drawable.ic_buisnessicon
         }else if (hobby == "Fashion"){
@@ -193,19 +206,19 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         }else if (hobby == "Beauty and style"){
             return R.drawable.ic_eye_treatment
         }else if (hobby == "Comedy"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_lol
         }else if (hobby == "Food"){
             return R.drawable.ic_spaguetti
         }else if (hobby == "Animals"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_pets
         }else if (hobby == "Talent"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_talent
         }else if (hobby == "Cars"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_cars1
         }else if (hobby == "Love and dating"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_hearts
         }else if (hobby == "Fitness and health"){
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_meditation
         }else if (hobby == "Dance"){
             return R.drawable.ic_dancing
         }else if (hobby == "Outdoor activities"){
@@ -215,7 +228,7 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         }else if (hobby == "Gaming"){
             return R.drawable.ic_joystick
         } else {
-            return R.drawable.ic_baseline_sports_soccer_24
+            return R.drawable.ic_location
         }
     }
 

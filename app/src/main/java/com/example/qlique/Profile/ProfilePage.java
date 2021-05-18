@@ -19,8 +19,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.qlique.LoginAndSignUp.SignupActivity;
+import com.example.qlique.NewMessageActivity;
+import com.example.qlique.NewMessageActivityKt;
 import com.example.qlique.Profile.User;
 import com.example.qlique.R;
+import com.example.qlique.chatLogActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,10 +42,9 @@ public class ProfilePage extends AppCompatActivity{
     private User user;
     private String userIdProfile;
     ArrayAdapter<String> adapter;
-    void setProfile(){
+    void setProfile(String uid){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-        DatabaseReference ref = database.getReference("users/"+FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DatabaseReference ref = database.getReference("users/"+uid);
 // Attach a listener to read the data at our posts reference
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -79,9 +81,9 @@ public class ProfilePage extends AppCompatActivity{
         Button chat = findViewById(R.id.envelop);
         com.mikhaellopez.circularimageview.CircularImageView profilePic = findViewById(R.id.ProfileCircularImage);
         User curUser = SignupActivity.Companion.getCurrentUser();
-        setProfile();
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         userIdProfile = getIntent().getStringExtra("EXTRA_SESSION_ID");
+        setProfile(userIdProfile);
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         assert userIdProfile != null;
         if (!userIdProfile.equals(FirebaseAuth.getInstance().getUid())){
             chat.setVisibility(View.VISIBLE);
@@ -133,12 +135,16 @@ public class ProfilePage extends AppCompatActivity{
             }
             // We view other user's profile so we will add him to our friends list and start
             // a conversation with him.
-            String ourUid = FirebaseAuth.getInstance().getUid();
-            String otherUserUid = userIdProfile;
+            openChatActivity(view);
 
         });
         Button back = findViewById(R.id.back_button);
         back.setOnClickListener(view -> finish());
     }
 
+    public void openChatActivity(View view) {
+        Intent intent = new Intent(this, chatLogActivity.class);
+        intent.putExtra(NewMessageActivity.Companion.getUSER_KEY(), user);
+        this.startActivity(intent);
+    }
 }
