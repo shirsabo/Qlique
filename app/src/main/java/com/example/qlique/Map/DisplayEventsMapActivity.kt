@@ -102,10 +102,8 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
                             "lastName"
                         ).value.toString()
                 }
-
                 override fun onCancelled(error: DatabaseError) {}
             })
-
     }
     private fun addRadiusImageView() {
         val radiusImage: ImageView = findViewById(R.id.radiusImageView)
@@ -141,7 +139,6 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         requestRadiusFromUserAndDisplayEvents()
     }
     private fun getBitmapDescriptorFromVector(context: Context, vectorDrawableResourceId: Int): BitmapDescriptor? {
-
         val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
         val bitmap = Bitmap.createBitmap(
             vectorDrawable!!.intrinsicWidth,
@@ -154,7 +151,6 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
 
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
-
     private fun displayEventsNearby(events: ArrayList<Event>, uid: String) {
         // get the locations of the events nearby and add markers in their locations.
         for (event in events){
@@ -172,19 +168,11 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
                             applicationContext, getImageByHobby(hobby)
                         )
                     )
-
             )
             marker?.tag = uid
         }
     }
-
     private fun getImageByHobby(hobby: String): Int {
-        /*
-        "Sport", "Initiative", "Business", "Fashion", "Social",
-        "Entertainment", "Study", "Beauty and style", "Comedy", "Food", "Animals",
-        "Talent", "Cars", "Love and dating", "Fitness and health",
-        "Dance", "Outdoor activities", "Home and garden", "Gaming"
-         */
         if(hobby == "Ball Games"){
             return R.drawable.ic_baseline_sports_soccer_24
         }
