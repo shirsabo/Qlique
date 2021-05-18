@@ -87,7 +87,7 @@
                 app:srcCompat="@drawable/ic_speech_bubble" />
 
             <ImageView
-                android:id="@+id/post_image_comment_btn2"
+                android:id="@+id/map_image_view"
                 android:layout_width="53dp"
                 android:layout_height="41dp"
                 android:layout_alignParentEnd="true"
@@ -100,7 +100,8 @@
                 android:layout_toEndOf="@+id/post_image_comment_btn"
                 android:layout_toRightOf="@+id/post_image_comment_btn"
                 app:srcCompat="@drawable/ic_mapcolor"
-                tools:ignore="UnknownId" />
+                tools:ignore="UnknownId"
+                android:onClick="displayEventInMap"/>
 
         </RelativeLayout>
 

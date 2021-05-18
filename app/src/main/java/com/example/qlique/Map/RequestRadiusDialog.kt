@@ -45,7 +45,7 @@ class RequestRadiusDialog : DialogFragment() {
     override fun onStart() {
         super.onStart()
         val width = (resources.displayMetrics.widthPixels).toInt()
-        val height = (resources.displayMetrics.heightPixels * 0.40).toInt()
+        val height = (resources.displayMetrics.heightPixels * 1.0).toInt()
         button = dialog?.findViewById(R.id.dialog_button) as Button
         seekBar = dialog?.findViewById(R.id.dialog_seekbar) as SeekBar
         text = dialog?.findViewById(R.id.seekbarVal) as TextView

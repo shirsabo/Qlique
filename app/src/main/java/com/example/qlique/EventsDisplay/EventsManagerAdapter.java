@@ -23,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import CreateEvent.Event;
+import com.example.qlique.CreateEvent.Event;
 
 public class EventsManagerAdapter extends RecyclerView.Adapter<EventsManagerAdapter.ViewHolder> {
 

@@ -1,6 +1,5 @@
-package CreateEvent
+package com.example.qlique.CreateEvent
 
-import CreateEvent.NewEvent
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle

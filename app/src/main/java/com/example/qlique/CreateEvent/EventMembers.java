@@ -1,4 +1,4 @@
-package CreateEvent;
+package com.example.qlique.CreateEvent;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 

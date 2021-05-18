@@ -1,6 +1,6 @@
-package Feed
+package com.example.qlique.Feed
 
-import CreateEvent.Event
+import com.example.qlique.CreateEvent.Event
 import android.app.AlertDialog
 import android.content.Intent
 import android.util.DisplayMetrics
@@ -8,12 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.qlique.Map.ShowEventMap
 import com.example.qlique.NewMessageActivity
 import com.example.qlique.Profile.ProfilePage
 import com.example.qlique.Profile.User
 import com.example.qlique.R
 import com.example.qlique.chatLogActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -22,7 +25,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.post.view.*
 
 
-class postAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<postAdapter.ViewHolder>(){
+class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapter.ViewHolder>(){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -77,6 +80,10 @@ class postAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<postAdapte
                  holder.itemView.post_image_like_btn.setOnClickListener {
                      openDialog(holder)
                  }
+                 val mapImageView = holder.itemView.map_image_view
+                 mapImageView.setOnClickListener {
+                     openShowEventInMap(holder, events[position])
+                 }
              }
 
              override fun onCancelled(po: DatabaseError) {
@@ -84,6 +91,13 @@ class postAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<postAdapte
          })
 
     }
+
+    private fun openShowEventInMap(holder:ViewHolder , event: Event) {
+        val intent = Intent(holder.itemView.context, ShowEventMap::class.java)
+        intent.putExtra("event", event)
+        holder.itemView.context.startActivity(intent)
+    }
+
     fun openProfile(holder: ViewHolder, user: User?){
         val intent = Intent(holder.itemView.context, ProfilePage::class.java)
         if (user != null) {
