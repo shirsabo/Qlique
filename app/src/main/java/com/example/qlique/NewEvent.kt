@@ -74,6 +74,7 @@ class NewEvent : AppCompatActivity(),RequestCapacityDialog.OnCompleteListener,Da
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_event)
+
         savedDate = DateNewEvent
         savedtime = hourNewEvent
         authorUid = FirebaseAuth.getInstance().currentUser?.uid
@@ -144,8 +145,7 @@ class NewEvent : AppCompatActivity(),RequestCapacityDialog.OnCompleteListener,Da
             description.movementMethod = ScrollingMovementMethod()
         }
         next_first_step.setOnClickListener {
-            if (urLImage != null && authorUid != null && textInputDesc.getEditText()?.getText()
-                    .toString() != null
+            if (urLImage != null && authorUid != null && textInputDesc.getEditText()?.getText().toString() != null && savedDate!=null&& savedtime!=null&&savedDate?.text!=""&& savedtime?.text!=""
             ) {
                 val event: Event = Event(
                     urLImage.toString(),
@@ -175,7 +175,8 @@ class NewEvent : AppCompatActivity(),RequestCapacityDialog.OnCompleteListener,Da
                 event.latitude = Companion.chosenLat
                 event.longitude = Companion.chosenLon
                 event.setMembers_capacity( capacityMembers)
-                event.setDate(savedDate.toString())
+                event.setDate(savedDate?.text.toString())
+                event.setHour(savedtime?.text.toString())
                 val db_ref: DatabaseReference =
                     mDatabase.child("/posts").push() //creates blank record in db
                 val postKey = db_ref.key.toString() //the UniqueID/key you seek
@@ -262,6 +263,6 @@ class NewEvent : AppCompatActivity(),RequestCapacityDialog.OnCompleteListener,Da
     }
 
     override fun onComplete(r: String) {
-        TODO("Not yet implemented")
+        capacityMembers = r.toInt()
     }
 }

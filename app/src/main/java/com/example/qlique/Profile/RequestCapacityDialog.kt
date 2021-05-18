@@ -10,7 +10,9 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.example.qlique.R
+import kotlinx.android.synthetic.main.request_capacity.*
 import kotlinx.android.synthetic.main.request_radius.*
+import kotlinx.android.synthetic.main.request_radius.seekbarVal
 
 
 class RequestCapacityDialog : DialogFragment() {
@@ -44,7 +46,7 @@ class RequestCapacityDialog : DialogFragment() {
     override fun onStart() {
         super.onStart()
         val width = (resources.displayMetrics.widthPixels).toInt()
-        val height = (resources.displayMetrics.heightPixels * 0.40).toInt()
+        val height = (resources.displayMetrics.heightPixels * 0.5).toInt()
         button = dialog?.findViewById(R.id.dialog_buttonCapacity) as Button
         seekBar = dialog?.findViewById(R.id.dialog_seekbarCapacity) as SeekBar
         text = dialog?.findViewById(R.id.seekbarValCapacity) as TextView
@@ -58,7 +60,7 @@ class RequestCapacityDialog : DialogFragment() {
             override fun onProgressChanged(seek: SeekBar,
                                            progress: Int, fromUser: Boolean) {
                 val progressCustom = ( progress )
-                seekbarVal.text = progressCustom.toString()
+                seekbarValCapacity.text = progressCustom.toString()
             }
 
             override fun onStartTrackingTouch(seek: SeekBar) {

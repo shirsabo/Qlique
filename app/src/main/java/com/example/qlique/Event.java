@@ -25,6 +25,7 @@ import kotlinx.android.parcel.Parcelize;
      public Double latitude;
      public String  header;
      public String date;
+     public String hour;
      public int members_capacity;
      public Event(String photoUrlIn, String uidIn,String descriptionIn, ArrayList<String> hobbiesRelatedIn){
          uid = uidIn;
@@ -34,6 +35,9 @@ import kotlinx.android.parcel.Parcelize;
          members = new ArrayList<String>();
          longitude = 0.0;
          latitude = 0.0;
+     }
+     public void setHour(String hourIn){
+         this.hour = hourIn;
      }
     public void setDate(String dateIn) {
         this.date = dateIn;
@@ -79,6 +83,7 @@ import kotlinx.android.parcel.Parcelize;
         header =in.readString();
         date = in.readString();
         members_capacity = in.readInt();
+        hour = in.readString();
     }
     public static final Creator<Event> CREATOR = new Creator<Event>() {
         @Override
@@ -108,6 +113,7 @@ import kotlinx.android.parcel.Parcelize;
         dest.writeString(header);
         dest.writeString(date);
         dest.writeInt(members_capacity);
+        dest.writeString(hour);
 
     }
 }
