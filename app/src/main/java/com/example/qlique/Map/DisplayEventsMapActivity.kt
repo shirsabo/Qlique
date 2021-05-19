@@ -31,7 +31,7 @@ import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 
 
-class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnCompleteListener {
+class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListener {
     private var radius :Double = 0.0
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -77,7 +77,7 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         requestRadiusFromUserAndDisplayEvents()
         //addRadiusImageView()
     }
-    private fun updateViewOfBottomDialog(view: View,event: Event){
+    /* fun updateViewOfBottomDialog(view: View,event: Event){
         val textView =view.findViewById<View>(R.id.description_post_info_bottom) as TextView
         val title =view.findViewById<View>(R.id.title) as TextView
         textView.text = event.description
@@ -92,7 +92,7 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
 
         }
         updateAuthor(view, event.uid)
-    }
+    }*/
     private fun loadUser(snapshot: DataSnapshot):User{
         val user :User = User()
         /*
@@ -109,7 +109,7 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         user. url = snapshot.child("url").value.toString()
         return user;
     }
-    private fun updateAuthor(view:View ,uid: String){
+    /*private fun updateAuthor(view:View ,uid: String){
         FirebaseDatabase.getInstance().getReference("/users/$uid")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -132,7 +132,7 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
                 }
                 override fun onCancelled(error: DatabaseError) {}
             })
-    }
+    }*/
     private fun addRadiusImageView() {
         val radiusImage: ImageView = findViewById(R.id.radiusImageView)
         radiusImage.visibility = View.VISIBLE
@@ -166,7 +166,7 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
     private fun radiusButtonClicked(view: View){
         requestRadiusFromUserAndDisplayEvents()
     }
-    fun getBitmapDescriptorFromVector(context: Context, vectorDrawableResourceId: Int): BitmapDescriptor? {
+    /*fun getBitmapDescriptorFromVector(context: Context, vectorDrawableResourceId: Int): BitmapDescriptor? {
         val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
         val bitmap = Bitmap.createBitmap(
             vectorDrawable!!.intrinsicWidth,
@@ -178,7 +178,7 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         vectorDrawable.draw(canvas)
 
         return BitmapDescriptorFactory.fromBitmap(bitmap)
-    }
+    }*/
     private fun displayEventsNearby(events: ArrayList<Event>, uid: String) {
         // get the locations of the events nearby and add markers in their locations.
         for (event in events){
@@ -200,7 +200,7 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
             marker?.tag = uid
         }
     }
-    fun getImageByHobby(hobby: String): Int {
+    /*fun getImageByHobby(hobby: String): Int {
         if(hobby == "Ball Games"){
             return R.drawable.ic_baseline_sports_soccer_24
         }
@@ -245,7 +245,7 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         } else {
             return R.drawable.ic_location
         }
-    }
+    }*/
 
     private fun addEventFromFirebase(uid: String) {
         val events: ArrayList<Event> = ArrayList()

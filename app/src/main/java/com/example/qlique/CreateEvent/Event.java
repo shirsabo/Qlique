@@ -3,13 +3,14 @@ package com.example.qlique.CreateEvent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import kotlinx.android.parcel.Parcelize;
 
 @Parcelize
-public class Event implements Parcelable {
+public class Event implements Parcelable, Serializable {
     public String photoUrl;
     public String uid;
     public String eventUid;

@@ -144,7 +144,7 @@ public class ProfilePage extends AppCompatActivity{
 
     public void openChatActivity(View view) {
         Intent intent = new Intent(this, chatLogActivity.class);
-        intent.putExtra(NewMessageActivity.Companion.getUSER_KEY(), user);
+        intent.putExtra(NewMessageActivity.USER_KEY, user);
         this.startActivity(intent);
     }
 }

@@ -46,7 +46,7 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
     private var mLocationPermissionsGranted = false
     protected var mMap: GoogleMap? = null
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
-    private val DEFAULT_ZOOM = 15f
+    val DEFAULT_ZOOM = 15f
     private var mSearchText: AutocompleteSupportFragment? = null
     private var mGps: ImageView? = null
     private lateinit var back: Button
@@ -298,5 +298,6 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
         prevMarker = null
         mMap?.clear()
     }
+
 
 }

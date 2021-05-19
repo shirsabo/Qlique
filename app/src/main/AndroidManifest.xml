@@ -18,14 +18,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".Map.ShowEventMap"></activity>
+        <activity android:name=".Map.EventsMap"></activity>
+        <activity android:name=".Map.ShowEventMap" />
         <activity android:name=".Map.DisplayEventsMapActivity" />
         <activity android:name=".Map.CreateEventMapActivity" />
         <activity android:name=".Map.BasicMapActivity" />
-        <activity android:name="com.example.qlique.CreateEvent.EventMembers" />
+        <activity android:name=".CreateEvent.EventMembers" />
         <activity android:name=".EventsDisplay.EventInfo" />
         <activity android:name=".EventsDisplay.EventsManager" />
-        <activity android:name="com.example.qlique.CreateEvent.NewEvent" />
+        <activity android:name=".CreateEvent.NewEvent" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -49,7 +50,7 @@
         </activity>
         <activity android:name=".Profile.ProfilePage" />
         <activity
-            android:name="com.example.qlique.Feed.MainActivity"
+            android:name=".Feed.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="stateUnchanged"
             tools:replace="android:windowSoftInputMode">

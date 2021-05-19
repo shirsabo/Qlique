@@ -20,6 +20,7 @@ import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.join_event_dialog.view.*
 import kotlinx.android.synthetic.main.post.view.*
+import java.io.Serializable
 
 
 class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapter.ViewHolder>(){
@@ -207,7 +208,7 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
 
     private fun openShowEventInMap(holder: ViewHolder, event: Event) {
         val intent = Intent(holder.itemView.context, ShowEventMap::class.java)
-        intent.putExtra("event", event)
+        intent.putExtra("event", event as Serializable)
         holder.itemView.context.startActivity(intent)
     }
 

@@ -10,8 +10,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.qlique.Chat.ChatListActivity;
+import com.example.qlique.NewMessageActivity;
 import com.example.qlique.Profile.User;
 import com.example.qlique.R;
+import com.example.qlique.chatLogActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -52,6 +55,14 @@ public class EventInfo extends AppCompatActivity {
                 ImageView photo_info =findViewById(R.id.image_home_info);
                 Picasso.get().load( event.photoUrl).into(photo_info);
                 desc.setText(event.description);
+                ImageView chat = findViewById(R.id.info_image_chat_btn);
+                chat.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Intent intent = new Intent(v.getContext(), chatLogActivity.class);
+                        intent.putExtra(NewMessageActivity.USER_KEY, user);
+                        startActivity(intent);
+                    }
+                });
             }
 
             @Override
