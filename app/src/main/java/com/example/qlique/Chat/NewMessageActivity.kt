@@ -53,7 +53,22 @@ class NewMessageActivity : AppCompatActivity() {
 
     }
 }
-
+private fun loadUser(snapshot: DataSnapshot):User{
+    val user :User = User()
+    /*
+        public String firstName, lastName, email, city, gender, uid, url, instagramUserName;
+public List<String> friends;
+public List<String> hobbies;
+public List<String> events;*/
+    user.firstName = snapshot.child("firstName").value.toString()
+    user.lastName = snapshot.child("lastName").value.toString()
+    user.email  =  snapshot.child("email").value.toString()
+    user.city =  snapshot.child("city").value.toString()
+    user.gender =  snapshot.child("gender").value.toString()
+    user.uid = snapshot.child("uid").value.toString()
+    user. url = snapshot.child("url").value.toString()
+    return user;
+}
 private fun fetchFriends(){
     val mFirebaseInstance= FirebaseDatabase.getInstance()
     val mFirebaseDatabase= mFirebaseInstance.getReference("users")
@@ -67,7 +82,7 @@ private fun fetchFriends(){
                         val  userFriend= mFirebaseInstance.getReference("users/$friendKey")
                         val newUser =Firebase.database.reference.child("users").child(friendKey).addValueEventListener(object :ValueEventListener{
                             override fun onDataChange(dataSnapshot: DataSnapshot){
-                                val user1=dataSnapshot.getValue(User::class.java)
+                                val user1= loadUser(dataSnapshot)
                                 if (user1!=null&& !friendsAdded.contains(friendKey)){
                                     adapter.add(UserItem(user1))
                                     friendsAdded.add(friendKey)

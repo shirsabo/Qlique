@@ -34,7 +34,22 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHold
         return new ViewHolder(view);
     }
 
-
+   private User loadUser(DataSnapshot snapshot){
+        User user = new User();
+            /*
+                public String firstName, lastName, email, city, gender, uid, url, instagramUserName;
+        public List<String> friends;
+        public List<String> hobbies;
+        public List<String> events;*/
+        user.firstName = snapshot.child("firstName").getValue().toString();
+        user.lastName = snapshot.child("lastName").getValue().toString();
+        user.email  =  snapshot.child("email").getValue().toString();
+        user.city =  snapshot.child("city").getValue().toString();
+        user.gender =  snapshot.child("gender").getValue().toString();
+        user.uid = snapshot.child("uid").getValue().toString();
+        user. url = snapshot.child("url").getValue().toString();
+        return user;
+    }
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -43,7 +58,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHold
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
+                User user = loadUser(dataSnapshot);
                 String  url_profile = user.url;
                 ImageView targetAuthorImageView = viewHolder.itemView.findViewById(R.id.photo_event_new);
                 TextView targetAuthor = viewHolder.itemView.findViewById(R.id.member_username);

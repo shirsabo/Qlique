@@ -12,6 +12,7 @@ public class User implements Parcelable{
     public String firstName, lastName, email, city, gender, uid, url, instagramUserName;
     public List<String> friends;
     public List<String> hobbies;
+    public List<String> events;
 
     public void setInstagramUserName(String instagramUserName) {
         this.instagramUserName = instagramUserName;
@@ -29,6 +30,7 @@ public class User implements Parcelable{
         this.uid = uid;
         this.url = url;
         this.instagramUserName = instagramUserName;
+        this.events =  new ArrayList<>();
     }
 
     public User() {
@@ -44,6 +46,7 @@ public class User implements Parcelable{
         url = in.readString();
         friends = in.createStringArrayList();
         hobbies = in.createStringArrayList();
+        events = in.createStringArrayList();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -78,5 +81,6 @@ public class User implements Parcelable{
         dest.writeString(url);
         dest.writeStringList(friends);
         dest.writeStringList(hobbies);
+        dest.writeStringList(events);
     }
 }

@@ -53,8 +53,25 @@ class ChatListActivity: AppCompatActivity()  {
         }
     }
 
+
     class LatestMessageRow(val chatMessage: chatLogActivity.chatMessage): com.xwray.groupie.Item<GroupieViewHolder>() {
         var chatPartnerUser : User?=null
+        private fun loadUser(snapshot: DataSnapshot):User{
+            val user :User = User()
+            /*
+                public String firstName, lastName, email, city, gender, uid, url, instagramUserName;
+        public List<String> friends;
+        public List<String> hobbies;
+        public List<String> events;*/
+            user.firstName = snapshot.child("firstName").value.toString()
+            user.lastName = snapshot.child("lastName").value.toString()
+            user.email  =  snapshot.child("email").value.toString()
+            user.city =  snapshot.child("city").value.toString()
+            user.gender =  snapshot.child("gender").value.toString()
+            user.uid = snapshot.child("uid").value.toString()
+            user. url = snapshot.child("url").value.toString()
+            return user;
+        }
         override fun bind(viewHolder: GroupieViewHolder, position: Int) {
             viewHolder.itemView.latest_msg_latest_message.text=chatMessage.text
             var chatPartnerId:String
@@ -66,7 +83,7 @@ class ChatListActivity: AppCompatActivity()  {
             val ref = FirebaseDatabase.getInstance().getReference("users/$chatPartnerId")
             ref.addListenerForSingleValueEvent(object:ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                   chatPartnerUser = snapshot.getValue(User::class.java)
+                   chatPartnerUser = loadUser(snapshot)
                     viewHolder.itemView.user_name_latest.text= chatPartnerUser?.firstName +" " + chatPartnerUser?.lastName
                     val targetImageView = viewHolder.itemView.circularImageViewLatestMsg
                     if(chatPartnerUser?.url!=null&&chatPartnerUser?.url!=""){
@@ -121,12 +138,28 @@ class ChatListActivity: AppCompatActivity()  {
 
 
     }
+    private fun loadUser(snapshot: DataSnapshot):User{
+        val user :User = User()
+        /*
+            public String firstName, lastName, email, city, gender, uid, url, instagramUserName;
+    public List<String> friends;
+    public List<String> hobbies;
+    public List<String> events;*/
+        user.firstName = snapshot.child("firstName").value.toString()
+        user.lastName = snapshot.child("lastName").value.toString()
+        user.email  =  snapshot.child("email").value.toString()
+        user.city =  snapshot.child("city").value.toString()
+        user.gender =  snapshot.child("gender").value.toString()
+        user.uid = snapshot.child("uid").value.toString()
+        user. url = snapshot.child("url").value.toString()
+        return user;
+    }
     private fun fetchCurrentUser(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
         ref.addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                SignupActivity.currentUser =snapshot.getValue(User::class.java)
+                SignupActivity.currentUser =loadUser(snapshot)
             }
             override fun onCancelled(po: DatabaseError) {
                 TODO("Not yet implemented")

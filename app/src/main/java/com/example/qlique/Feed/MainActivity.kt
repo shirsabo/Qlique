@@ -227,10 +227,10 @@ class MainActivity : AppCompatActivity() {
                         snapshot.getValue(Event::class.java)
                     event?.uid = snapshot.child("uid").value.toString()
                     event?.description = snapshot.child("description").value.toString()
+                    event?.setEventUid(snapshot.key)
                     if (event != null) {
                         events.add(event)
                     }
-
                 }
                 feed.adapter= PostAdapter(events)
 

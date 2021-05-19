@@ -93,13 +93,27 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
         }
         updateAuthor(view, event.uid)
     }
+    private fun loadUser(snapshot: DataSnapshot):User{
+        val user :User = User()
+        /*
+            public String firstName, lastName, email, city, gender, uid, url, instagramUserName;
+    public List<String> friends;
+    public List<String> hobbies;
+    public List<String> events;*/
+        user.firstName = snapshot.child("firstName").value.toString()
+        user.lastName = snapshot.child("lastName").value.toString()
+        user.email  =  snapshot.child("email").value.toString()
+        user.city =  snapshot.child("city").value.toString()
+        user.gender =  snapshot.child("gender").value.toString()
+        user.uid = snapshot.child("uid").value.toString()
+        user. url = snapshot.child("url").value.toString()
+        return user;
+    }
     private fun updateAuthor(view:View ,uid: String){
         FirebaseDatabase.getInstance().getReference("/users/$uid")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val user = dataSnapshot.getValue(
-                        User::class.java
-                    )
+                    val user = loadUser(dataSnapshot)
                     if (user!!.url != null) {
                         val authorImage = view.findViewById<ImageView>(R.id.user_profile_info_bottom)
                         Picasso.get().load(user.url).into(authorImage)

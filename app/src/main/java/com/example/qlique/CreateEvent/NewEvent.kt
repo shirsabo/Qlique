@@ -178,6 +178,7 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
                 val db_ref: DatabaseReference =
                     mDatabase.child("/posts").push() //creates blank record in db
                 val postKey = db_ref.key.toString() //the UniqueID/key you seek
+                event.eventUid = postKey
                 db_ref.setValue(event)
                 WriteEventLocation(event, postKey)
             }
@@ -201,7 +202,11 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
                 }
 
                 override fun onComplete(key: String?, error: DatabaseError?) {
-                    TODO("Not yet implemented")
+                    if (error != null) {
+                        System.err.println("There was an error saving the location to GeoFire: $error")
+                    } else {
+                        println("Location saved on server successfully!")
+                    }
                 }
             })
     }

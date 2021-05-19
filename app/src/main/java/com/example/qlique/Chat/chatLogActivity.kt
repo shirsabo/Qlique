@@ -19,6 +19,22 @@ import kotlinx.android.synthetic.main.post.view.*
 class chatLogActivity : AppCompatActivity() {
     val adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
     //var toUser:User?=intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
+    private fun loadUser(snapshot: DataSnapshot):User{
+        val user :User = User()
+        /*
+            public String firstName, lastName, email, city, gender, uid, url, instagramUserName;
+    public List<String> friends;
+    public List<String> hobbies;
+    public List<String> events;*/
+        user.firstName = snapshot.child("firstName").value.toString()
+        user.lastName = snapshot.child("lastName").value.toString()
+        user.email  =  snapshot.child("email").value.toString()
+        user.city =  snapshot.child("city").value.toString()
+        user.gender =  snapshot.child("gender").value.toString()
+        user.uid = snapshot.child("uid").value.toString()
+        user. url = snapshot.child("url").value.toString()
+        return user;
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
@@ -35,7 +51,7 @@ class chatLogActivity : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
         ref.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val curUser :User? = snapshot.getValue(User::class.java)
+                val curUser :User? = loadUser(snapshot)
                 if (curUser != null) {
                     listenForMessages(curUser)
                 }

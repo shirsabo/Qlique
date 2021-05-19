@@ -1,4 +1,5 @@
 package com.example.qlique.EventsDisplay;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 
@@ -25,6 +26,8 @@ import com.squareup.picasso.Picasso;
 
 import com.example.qlique.CreateEvent.Event;
 
+import java.util.Objects;
+
 public class EventsManagerAdapter extends RecyclerView.Adapter<EventsManagerAdapter.ViewHolder> {
 
     private LayoutInflater inflater;
@@ -42,14 +45,34 @@ public class EventsManagerAdapter extends RecyclerView.Adapter<EventsManagerAdap
         View view = inflater.inflate(R.layout.event_custom,viewGroup,false);
         return new ViewHolder(view);
     }
+    private User  loadUser(DataSnapshot snapshot){
+        User user = new User();
+            /*
+                public String firstName, lastName, email, city, gender, uid, url, instagramUserName;
+        public List<String> friends;
+        public List<String> hobbies;
+        public List<String> events;*/
+        user.firstName = Objects.requireNonNull(snapshot.child("firstName").getValue()).toString();
+        user.lastName = Objects.requireNonNull(snapshot.child("lastName").getValue()).toString();
+        user.email  =  Objects.requireNonNull(snapshot.child("email").getValue()).toString();
+        user.city =  Objects.requireNonNull(snapshot.child("city").getValue()).toString();
+        user.gender =  Objects.requireNonNull(snapshot.child("gender").getValue()).toString();
+        user.uid = Objects.requireNonNull(snapshot.child("uid").getValue()).toString();
+        user. url = Objects.requireNonNull(snapshot.child("url").getValue()).toString();
+        return user;
+    }
 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        if(events[i].uid==null||events[i]==null){
+            return;
+        }
         DatabaseReference ref = database.getReference("users/"+events[i].uid);
 // Attach a listener to read the data at our posts reference
         ref.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -58,6 +81,7 @@ public class EventsManagerAdapter extends RecyclerView.Adapter<EventsManagerAdap
                 ImageView targetAuthorImageView = viewHolder.itemView.findViewById(R.id.photo_event_new);
                 TextView targetTextView = viewHolder.itemView.findViewById(R.id.desc_card);
                 Picasso.get().load(uri).into(targetImageView);
+                assert user != null;
                 Picasso.get().load(user.url).into(targetAuthorImageView);
                 targetImageView.setColorFilter(Color.argb(155, 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
                 TextView targetAuthor =viewHolder.itemView.findViewById(R.id.member_username);

@@ -9,30 +9,34 @@ import java.util.List;
 import kotlinx.android.parcel.Parcelize;
 
 @Parcelize
- public class Event implements Parcelable {
-     public String photoUrl;
-     public String uid;
-     public String description;
-     public List<String> hobbiesRelated;
-     public List<String> members;
-     public Double longitude;
-     public Double latitude;
-     public String  header;
-     public String date;
-     public String hour;
-     public int members_capacity;
-     public Event(String photoUrlIn, String uidIn,String descriptionIn, ArrayList<String> hobbiesRelatedIn){
-         uid = uidIn;
-         photoUrl = photoUrlIn;
-         description = descriptionIn;
-         hobbiesRelated =  hobbiesRelatedIn;
-         members = new ArrayList<String>();
-         longitude = 0.0;
-         latitude = 0.0;
-     }
-     public void setHour(String hourIn){
-         this.hour = hourIn;
-     }
+public class Event implements Parcelable {
+    public String photoUrl;
+    public String uid;
+    public String eventUid;
+    public String description;
+    public List<String> hobbiesRelated;
+    public List<String> members;
+    public Double longitude;
+    public Double latitude;
+    public String  header;
+    public String date;
+    public String hour;
+    public int members_capacity;
+    public Event(String photoUrlIn, String uidIn,String descriptionIn, ArrayList<String> hobbiesRelatedIn){
+        uid = uidIn;
+        photoUrl = photoUrlIn;
+        description = descriptionIn;
+        hobbiesRelated =  hobbiesRelatedIn;
+        members = new ArrayList<String>();
+        longitude = 0.0;
+        latitude = 0.0;
+    }
+    public void setEventUid(String eventUidIn){
+        this.eventUid = eventUidIn;
+    }
+    public void setHour(String hourIn){
+        this.hour = hourIn;
+    }
     public void setDate(String dateIn) {
         this.date = dateIn;
     }
@@ -44,27 +48,27 @@ import kotlinx.android.parcel.Parcelize;
     }
 
     public void addMember(String newMember){
-         if (newMember!=null&& members_capacity>members.size()){
-             members.add(newMember);
-         }
-     }
-     public void setCoordinate(Double latitude,Double longitude){
-         this.longitude =longitude;
-         this.latitude = latitude;
-     }
-     public Event() {
-     }
-     public void setuid(String uidIn){
+        if (newMember!=null&& members_capacity>members.size()){
+            members.add(newMember);
+        }
+    }
+    public void setCoordinate(Double latitude,Double longitude){
+        this.longitude =longitude;
+        this.latitude = latitude;
+    }
+    public Event() {
+    }
+    public void setuid(String uidIn){
         uid = uid;
-     }
+    }
     public void setdescription(String descriptionIn){
-       description = uid;
+        description = uid;
     }
     public void sethobbiesRelated(List<String>hobbiesRelatedIn){
-       hobbiesRelated=hobbiesRelatedIn;
+        hobbiesRelated=hobbiesRelatedIn;
     }
     public void setPhotoUrl(String url){
-         photoUrl = url;
+        photoUrl = url;
     }
     protected Event(Parcel in) {
         photoUrl = in.readString();
