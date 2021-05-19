@@ -18,8 +18,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import CreateEvent.Event;
-import CreateEvent.EventMembers;
+import com.example.qlique.CreateEvent.Event;
+import com.example.qlique.CreateEvent.EventMembers;
 
 public class EventInfo extends AppCompatActivity {
 

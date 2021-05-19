@@ -14,7 +14,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import CreateEvent.Event;
+import com.example.qlique.CreateEvent.Event;
 
 public class EventsManager extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 

@@ -1,4 +1,4 @@
-package CreateEvent;
+package com.example.qlique.CreateEvent;
 
 import android.os.Parcel;
 import android.os.Parcelable;

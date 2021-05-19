@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import CreateEvent.Event
+import com.example.qlique.CreateEvent.Event
 import com.example.qlique.NewMessageActivity.Companion.USER_KEY
 import com.example.qlique.Profile.User
 import com.example.qlique.R
@@ -58,7 +58,8 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
                                     )
                                 )
                             updateViewOfBottomDialog(bottom_sheet_view,event)
-                            bottom_sheet_view.findViewById<TextView>(R.id.description_post_info_bottom).setText("hey")
+                            bottom_sheet_view.findViewById<TextView>(R.id.description_post_info_bottom).text =
+                                "hey"
                             updateViewOfBottomDialog(bottom_sheet_view,event)
                             bottomSheetDialogIn.setContentView(bottom_sheet_view)
                             bottomSheetDialogIn.show()
@@ -151,7 +152,7 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
     private fun radiusButtonClicked(view: View){
         requestRadiusFromUserAndDisplayEvents()
     }
-    private fun getBitmapDescriptorFromVector(context: Context, vectorDrawableResourceId: Int): BitmapDescriptor? {
+    fun getBitmapDescriptorFromVector(context: Context, vectorDrawableResourceId: Int): BitmapDescriptor? {
         val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
         val bitmap = Bitmap.createBitmap(
             vectorDrawable!!.intrinsicWidth,
@@ -185,7 +186,7 @@ class DisplayEventsMapActivity :BasicMapActivity(), RequestRadiusDialog.OnComple
             marker?.tag = uid
         }
     }
-    private fun getImageByHobby(hobby: String): Int {
+    fun getImageByHobby(hobby: String): Int {
         if(hobby == "Ball Games"){
             return R.drawable.ic_baseline_sports_soccer_24
         }

@@ -1,4 +1,4 @@
-package CreateEvent
+package com.example.qlique.CreateEvent
 
 import android.app.Activity
 import android.app.AlertDialog

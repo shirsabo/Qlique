@@ -311,8 +311,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_party" />
-                            <entry key="sourceFile" value="C:\Users\shirs\Downloads\party.svg" />
+                            <entry key="outputName" value="ic_place" />
+                            <entry key="sourceFile" value="C:\Users\ASUS\Downloads\place.svg" />
                           </map>
                         </option>
                       </PersistentState>

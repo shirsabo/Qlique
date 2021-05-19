@@ -1,7 +1,7 @@
-package Feed
+package com.example.qlique.Feed
 
-import CreateEvent.Event
-import CreateEvent.NewEvent
+import com.example.qlique.CreateEvent.Event
+import com.example.qlique.CreateEvent.NewEvent
 import android.app.Dialog
 import android.content.ContentValues.TAG
 import android.content.Intent
@@ -22,6 +22,7 @@ import com.example.qlique.EventsDisplay.EventsManager
 import com.example.qlique.LoginAndSignUp.LoginActivity
 import com.example.qlique.LoginAndSignUp.UpdatePassword
 import com.example.qlique.Map.DisplayEventsMapActivity
+import com.example.qlique.Map.ShowEventMap
 //import com.example.qlique.Map.DisplayEventsMapActivity
 import com.example.qlique.Profile.ProfilePage
 import com.example.qlique.Profile.User
@@ -231,17 +232,9 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 }
-                feed.adapter= postAdapter(events)
+                feed.adapter= PostAdapter(events)
 
             }})
-        /*
-        for(i in 0..100){
-            events.add(Event(null,null,null,null))
-        }
-*/
-
     }
-
-
 
 }

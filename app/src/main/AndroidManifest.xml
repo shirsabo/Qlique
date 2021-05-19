@@ -18,13 +18,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity android:name=".Map.ShowEventMap"></activity>
         <activity android:name=".Map.DisplayEventsMapActivity" />
         <activity android:name=".Map.CreateEventMapActivity" />
         <activity android:name=".Map.BasicMapActivity" />
-        <activity android:name="CreateEvent.EventMembers" />
+        <activity android:name="com.example.qlique.CreateEvent.EventMembers" />
         <activity android:name=".EventsDisplay.EventInfo" />
         <activity android:name=".EventsDisplay.EventsManager" />
-        <activity android:name="CreateEvent.NewEvent" />
+        <activity android:name="com.example.qlique.CreateEvent.NewEvent" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -32,7 +33,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
 
         <activity android:name=".LoginAndSignUp.HobbiesSelection" />
         <activity
@@ -49,7 +49,7 @@
         </activity>
         <activity android:name=".Profile.ProfilePage" />
         <activity
-            android:name="Feed.MainActivity"
+            android:name="com.example.qlique.Feed.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="stateUnchanged"
             tools:replace="android:windowSoftInputMode">
@@ -70,7 +70,7 @@
         <activity android:name=".Chat.ChatListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="Feed.MainActivity" />
+                android:value="com.example.qlique.Feed.MainActivity" />
         </activity>
     </application>
 
