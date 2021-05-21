@@ -143,14 +143,6 @@ import java.util.*
         }
 
         instagram.setOnClickListener{
-          /*  val uri = Uri.parse("http://instagram.com/_u/nikolbabai")
-            val intent = Intent(Intent.ACTION_VIEW, uri)
-            intent.setPackage("com.instagram.android")
-            try {
-                startActivity(intent)
-            } catch (e : ActivityNotFoundException){
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://instagram.com/_u/nikolbabai")))
-            }*/
             mApp.authorize()
         }
         signUpBtn.setOnClickListener {
@@ -161,8 +153,8 @@ import java.util.*
             val lname : String = lastNameEt.text.toString()
             var gender : String
             if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(city)
-                || TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname) ||
-                genderbtn.checkedRadioButtonId == -1) {
+                || TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname) || selectedPhotoUri == null
+                || genderbtn.checkedRadioButtonId == -1) {
                 Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()
             } else {
                 auth.createUserWithEmailAndPassword(email, password)
