@@ -61,9 +61,7 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
                 photo_event_new.setImageBitmap(bitmap)
             }
         }
-    private fun membersCapacityClicked(){
-        openCapacityDialog()
-    }
+
     private fun openCapacityDialog(){
         RequestCapacityDialog().show(supportFragmentManager, "MyCustomFragment")
     }
@@ -79,9 +77,6 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             launchSomeActivity.launch(intent)
-        }
-        members_capacity.setOnClickListener {
-            membersCapacityClicked()
         }
         btnCatergories.setOnClickListener {
             categories = ArrayList(0)
@@ -267,5 +262,9 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
 
     override fun onComplete(r: String) {
         capacityMembers = r.toInt()
+    }
+
+    fun capacityOnClick(view: View) {
+        openCapacityDialog()
     }
 }
