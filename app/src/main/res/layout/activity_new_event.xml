@@ -37,10 +37,10 @@
             android:layout_width="match_parent"
             android:layout_height="61dp"
             android:gravity="top|left"
-            android:hint="Enter event's header.."
+            android:hint="Enter the event's title"
             android:inputType="textMultiLine"
-            android:minLines="1"
             android:maxLength="20"
+            android:minLines="1"
             android:scrollbars="vertical" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,7 +60,7 @@
             android:id="@+id/descNewEvent"
             android:layout_width="match_parent"
             android:layout_height="77dp"
-            android:hint="Enter Description.."
+            android:hint="Enter the event's description"
             android:scrollbars="vertical" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -72,7 +72,7 @@
         android:layout_marginStart="27dp"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="165dp"
-        android:text="please choose event's catagorries:"
+        android:text="Choose the relevant categories:"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -83,10 +83,11 @@
         android:id="@+id/btnCatergories"
         android:layout_width="41dp"
         android:layout_height="36dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="110dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/categories"
         app:layout_constraintTop_toBottomOf="@+id/textInputDesc"
         app:srcCompat="@drawable/ic_categories" />
@@ -120,11 +121,13 @@
         android:id="@+id/hourButton"
         android:layout_width="40dp"
         android:layout_height="31dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="192dp"
         android:background="@drawable/ic_24_hours"
         android:onClick="showTimePickerDialog"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/hourNewEvent"
         app:layout_constraintTop_toBottomOf="@+id/categories"
         tools:text="0.0.0" />
 
@@ -132,11 +135,9 @@
         android:id="@+id/hourNewEvent"
         android:layout_width="49dp"
         android:layout_height="22dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="5dp"
         android:text="0:00"
-        app:layout_constraintEnd_toStartOf="@+id/hourButton"
-        app:layout_constraintHorizontal_bias="0.642"
         app:layout_constraintStart_toEndOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/categories"
         tools:text="0:00" />
@@ -157,10 +158,11 @@
         android:id="@+id/imageView5"
         android:layout_width="43dp"
         android:layout_height="32dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
         android:onClick="openCreateEventMapActivity"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.073"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView11"
         app:layout_constraintTop_toBottomOf="@+id/DateNewEvent"
         app:srcCompat="@drawable/ic_mapcolor" />
@@ -198,11 +200,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="156dp"
         android:text="Choose the event's location:"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateButton" />
 
@@ -211,7 +210,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Choose the event's capacity:"
+        android:text="Choose the number of participants:"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.116"
@@ -222,15 +221,15 @@
         android:id="@+id/capacity"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="160dp"
+        android:onClick="capacityOnClick"
         app:layout_constraintBottom_toTopOf="@+id/next_first_step"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/imageView5"
-        app:layout_constraintVertical_bias="0.025"
-        app:srcCompat="@drawable/ic_group"
-        android:onClick="capacityOnClick"/>
+        app:layout_constraintVertical_bias="0.034"
+        app:srcCompat="@drawable/ic_group" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

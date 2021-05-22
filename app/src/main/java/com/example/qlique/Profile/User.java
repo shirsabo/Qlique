@@ -3,6 +3,7 @@ package com.example.qlique.Profile;
 import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import kotlinx.android.parcel.Parcelize;
@@ -82,5 +83,14 @@ public class User implements Parcelable{
         dest.writeStringList(friends);
         dest.writeStringList(hobbies);
         dest.writeStringList(events);
+    }
+    public static User createUserFromHashMap(HashMap map){
+        User user = new User(map.get("firstName").toString(), map.get("lastName").toString(), map.get("city").toString(),
+                map.get("email").toString(), map.get("gender").toString(),
+                map.get("uid").toString(), map.get("url").toString(), map.get("instagramUserName").toString());
+        user.events = (List<String>) map.get("events");
+        user.friends = (List<String>) map.get("friends");
+        user.hobbies = (List<String>) map.get("hobbies");
+        return user;
     }
 }

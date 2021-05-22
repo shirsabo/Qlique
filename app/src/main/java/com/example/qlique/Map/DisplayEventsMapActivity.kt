@@ -166,19 +166,7 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
     private fun radiusButtonClicked(view: View){
         requestRadiusFromUserAndDisplayEvents()
     }
-    /*fun getBitmapDescriptorFromVector(context: Context, vectorDrawableResourceId: Int): BitmapDescriptor? {
-        val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
-        val bitmap = Bitmap.createBitmap(
-            vectorDrawable!!.intrinsicWidth,
-            vectorDrawable.intrinsicHeight,
-            Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(bitmap)
-        vectorDrawable.setBounds(0, 0, canvas.width, canvas.height)
-        vectorDrawable.draw(canvas)
 
-        return BitmapDescriptorFactory.fromBitmap(bitmap)
-    }*/
     private fun displayEventsNearby(events: ArrayList<Event>, uid: String) {
         // get the locations of the events nearby and add markers in their locations.
         for (event in events){
@@ -287,7 +275,7 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
                             location.longitude
                         )
                     )
-                    addEventFromFirebase(key) // fetches to uid of post from firebase and adds it to list of events
+                    addEventFromFirebase(key) // fetches to uid of post_in_feed from firebase and adds it to list of events
                 }
 
 

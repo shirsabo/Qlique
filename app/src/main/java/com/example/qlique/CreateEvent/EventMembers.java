@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,7 +23,13 @@ public class EventMembers extends AppCompatActivity implements NavigationView.On
     MembersAdapter adapter;
     String[] members={};
     void fetchMembers(Event event){
+        TextView noMembersText = findViewById(R.id.no_members_text_view);
+        if (event.members == null || event.members.size() == 0){
+            noMembersText.setVisibility(View.VISIBLE);
+            return;
+        }
         for (int i=0;i<event.members.size();i++){
+            noMembersText.setVisibility(View.GONE);
             members = Arrays.copyOf(members, members.length+1);
             members[i]= event.members.get(i);
         }

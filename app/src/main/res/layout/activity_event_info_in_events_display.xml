@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,10 +8,8 @@
     android:layout_marginTop="12dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    android:background="@drawable/bottom_sheet_event_map"
-    app:cardElevation="5dp"
-    android:id="@+id/bottomContainer"
-    >
+    app:cardElevation="5dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="651dp"
@@ -20,14 +17,14 @@
 
 
         <LinearLayout
-            android:id="@+id/linear_bottom"
+            android:id="@+id/linear1"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:orientation="horizontal">
 
 
             <com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/user_profile_info_bottom"
+                android:id="@+id/user_profile_info"
                 android:layout_width="126dp"
                 android:layout_height="49dp"
                 android:padding="2dp"
@@ -38,7 +35,7 @@
                 app:srcCompat="@drawable/ic_user" />
 
             <TextView
-                android:id="@+id/user_name_info_bottom"
+                android:id="@+id/user_name_info"
                 android:layout_width="85dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -49,34 +46,20 @@
 
 
         <ImageView
-            android:id="@+id/image_home_info_bottom"
+            android:id="@+id/image_home_info"
             android:layout_width="match_parent"
-            android:layout_height="248dp"
+            android:layout_height="282dp"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/ic_user" />
 
         <RelativeLayout
-            android:layout_width="392dp"
-            android:layout_height="58dp"
+            android:layout_width="402dp"
+            android:layout_height="56dp"
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp">
 
             <ImageView
-                android:id="@+id/post_image_like_btn"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="7dp"
-                android:layout_marginLeft="7dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                app:srcCompat="@drawable/ic_team" />
-
-            <ImageView
-                android:id="@+id/info_image_chat_btn_bottom"
+                android:id="@+id/info_image_chat_btn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentTop="true"
@@ -90,20 +73,37 @@
                 app:srcCompat="@drawable/ic_speech_bubble" />
 
             <ImageView
-                android:id="@+id/members_info_bottom"
+                android:id="@+id/members_info"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="113dp"
+                android:layout_marginStart="81dp"
+                android:layout_marginLeft="81dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="229dp"
                 android:layout_marginBottom="10dp"
-                android:layout_toEndOf="@+id/info_image_chat_btn_bottom"
                 app:srcCompat="@drawable/ic_group" />
+
+            <ImageView
+                android:id="@+id/map_image_view"
+                android:layout_width="48dp"
+                android:layout_height="41dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="218dp"
+                android:layout_marginLeft="249dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="9dp"
+                android:layout_marginBottom="10dp"
+                android:layout_toEndOf="@+id/members_info"
+                android:onClick="displayEventInMap"
+                app:srcCompat="@drawable/ic_mapcolor"
+                tools:ignore="UnknownId" />
 
 
         </RelativeLayout>
@@ -115,40 +115,41 @@
                 android:id="@+id/title"
                 android:layout_width="372dp"
                 android:layout_height="34dp"
-                android:layout_below="@+id/date"
                 android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="18dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="14dp"
+                android:layout_marginTop="38dp"
+                android:layout_marginEnd="17dp"
                 android:scrollbars="vertical"
                 android:text="title"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/description_post_info_bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="143dp"
+                android:id="@+id/description_post_info_events"
+                android:layout_width="372dp"
+                android:layout_height="137dp"
                 android:layout_below="@+id/title"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="17dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="19dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="14dp"
                 android:layout_marginBottom="32dp"
                 android:scrollbars="vertical"
                 android:text="Hello" />
+
             <TextView
                 android:id="@+id/date"
                 android:layout_width="88dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="114dp"
+                android:layout_marginStart="104dp"
                 android:layout_marginTop="10dp"
                 android:text="10.12.2021"
                 android:textAlignment="center"
@@ -157,15 +158,13 @@
 
             <TextView
                 android:id="@+id/hour"
-                android:layout_width="52dp"
+                android:layout_width="67dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="22dp"
+                android:layout_marginStart="19dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="126dp"
-                android:layout_marginBottom="242dp"
+                android:layout_marginEnd="124dp"
                 android:layout_toEndOf="@+id/date"
                 android:text="20:30"
                 android:textAlignment="center"
@@ -177,4 +176,3 @@
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
-

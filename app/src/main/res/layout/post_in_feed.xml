@@ -49,65 +49,81 @@
         <ImageView
             android:id="@+id/post_image_home"
             android:layout_width="match_parent"
-            android:layout_height="317dp"
+            android:layout_height="275dp"
             android:scaleType="centerCrop" />
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="69dp"
+            android:layout_width="392dp"
+            android:layout_height="68dp"
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp">
 
             <ImageView
                 android:id="@+id/post_image_like_btn"
                 android:layout_width="48dp"
-                android:layout_height="31dp"
+                android:layout_height="35dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="7dp"
                 android:layout_marginLeft="7dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="15dp"
                 app:srcCompat="@drawable/ic_team" />
 
             <ImageView
                 android:id="@+id/post_image_chat_btn"
-                android:layout_width="35dp"
+                android:layout_width="48dp"
                 android:layout_height="35dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="18dp"
+                android:layout_marginBottom="15dp"
                 android:layout_toEndOf="@+id/post_image_like_btn"
                 android:layout_toRightOf="@+id/post_image_like_btn"
                 app:srcCompat="@drawable/ic_speech_bubble" />
 
             <ImageView
+                android:id="@+id/members_info_bottom"
+                android:layout_width="48dp"
+                android:layout_height="35dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="137dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="207dp"
+                android:layout_marginBottom="15dp"
+                android:layout_toEndOf="@+id/post_image_chat_btn"
+                app:srcCompat="@drawable/ic_group" />
+
+            <ImageView
                 android:id="@+id/map_image_view"
-                android:layout_width="53dp"
+                android:layout_width="48dp"
                 android:layout_height="41dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginStart="249dp"
                 android:layout_marginLeft="249dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginEnd="9dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginRight="9dp"
                 android:layout_toEndOf="@+id/post_image_comment_btn"
                 android:layout_toRightOf="@+id/post_image_comment_btn"
+                android:onClick="displayEventInMap"
                 app:srcCompat="@drawable/ic_mapcolor"
-                tools:ignore="UnknownId"
-                android:onClick="displayEventInMap"/>
+                tools:ignore="UnknownId" />
 
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="187dp">
+            android:layout_height="227dp">
 
             <TextView
                 android:id="@+id/headerPost"
@@ -116,9 +132,9 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="18dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="37dp"
                 android:layout_marginEnd="18dp"
                 android:paddingLeft="5dp"
                 android:paddingTop="5dp"
@@ -130,13 +146,13 @@
 
             <TextView
                 android:id="@+id/description_post"
-                android:layout_width="369dp"
-                android:layout_height="118dp"
+                android:layout_width="364dp"
+                android:layout_height="131dp"
                 android:layout_below="@+id/title"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="18dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="18dp"
@@ -146,6 +162,36 @@
                 android:paddingRight="5dp"
                 android:paddingBottom="5dp"
                 android:text="Description" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="88dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="114dp"
+                android:layout_marginTop="10dp"
+                android:text="10.12.2021"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/hour"
+                android:layout_width="82dp"
+                android:layout_height="21dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="127dp"
+                android:layout_marginBottom="193dp"
+                android:layout_toEndOf="@+id/date"
+                android:text="20:30"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
         </RelativeLayout>
 
 

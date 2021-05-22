@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.qlique.R;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.Semaphore;
@@ -42,8 +43,6 @@ import com.example.qlique.CreateEvent.Event;
 public class EventsManager extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView recyclerView;
-    //EventsManagerAdapter adapter;
-    //Event[] events={};
     private GroupAdapter<GroupieViewHolder> groupieAdapter =
             new GroupAdapter<com.xwray.groupie.GroupieViewHolder>();
     private void addEvents(String eventIn){
@@ -55,13 +54,9 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Event event = dataSnapshot.getValue(Event.class);
                 event.uid = dataSnapshot.child("uid").getValue().toString();
+                /** TO DO: Check that the event has not yet occurred **/
                 if(event==null){return;}
-                /*
-                events = Arrays.copyOf(events, events.length+1);
-                events[events.length - 1]=event;*/
                 groupieAdapter.add(new EventItem(event));
-
-
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -79,10 +74,16 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                TextView noEventsText = findViewById(R.id.no_events_text_view);
                 User user = dataSnapshot.getValue(User.class);
-                int n =user.events.size();
-                for (int i =0;i<n;i++){
-                    addEvents(user.events.get(i));
+                if (user != null && user.events != null) {
+                    noEventsText.setVisibility(View.GONE);
+                    int n = user.events.size();
+                    for (int i = 0; i < n; i++) {
+                        addEvents(user.events.get(i));
+                    }
+                } else {
+                    noEventsText.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -102,8 +103,6 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(groupieAdapter);
         fetchEvents();
-        //adapter = new EventsManagerAdapter(this,events); // our adapter takes two string array
-
     }
 
     @Override
@@ -120,15 +119,12 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
         }
         @Override
         public void bind(@NonNull GroupieViewHolder viewHolder, int position) {
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            viewHolder.itemView.setOnClickListener(v -> {
 
-                    Intent i = new Intent(v.getContext(), EventInfo.class);
-                    // send story title and contents through recyclerview to detail activity
-                    i.putExtra("event", (Parcelable) event);
-                    v.getContext().startActivity(i);
-                }
+                Intent i = new Intent(v.getContext(), EventInfo.class);
+                // send story title and contents through recyclerview to detail activity
+                i.putExtra("event", (Serializable) event);
+                v.getContext().startActivity(i);
             });
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             if(event ==null ||event.uid==null){

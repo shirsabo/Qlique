@@ -45,7 +45,6 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
         var chosenLon by Delegates.notNull<Double>()
         var capacityMembers by Delegates.notNull<Int>()
     }
-
     var urLImage: Uri? = null
     var authorUid: String? = null
     var categories: ArrayList<String> = ArrayList(0)
@@ -99,11 +98,11 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
             val categoriesList = listOf(*categoriesArray)
             //setTitle
             builder.setTitle("Select categories")
-            //set multichoice
+            //set multi choice
             builder.setMultiChoiceItems(
                 categoriesArray,
                 checkedCategoriesArray
-            ) { dialog, which, isChecked ->
+            ) { _, which, isChecked ->
                 // Update the current focused item's checked status
                 checkedCategoriesArray[which] = isChecked
                 // Get the current focused item
@@ -111,11 +110,11 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
                 // Notify the current action
                 Toast.makeText(
                     applicationContext,
-                    currentItem + " " + isChecked,
+                    "$currentItem $isChecked",
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            builder.setPositiveButton("OK") { dialog, which ->
+            builder.setPositiveButton("OK") { _, _ ->
                 // Do something when click positive button
                 for (i in checkedCategoriesArray.indices) {
                     val checked = checkedCategoriesArray[i]
@@ -137,8 +136,9 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
             description.movementMethod = ScrollingMovementMethod()
         }
         next_first_step.setOnClickListener {
-            if (urLImage != null && authorUid != null && textInputDesc.getEditText()?.getText().toString() != null && savedDate !=null&& savedtime !=null&& savedDate?.text!=""&& savedtime?.text!=""
-            ) {
+            if (urLImage != null && authorUid != null && savedDate !=null && savedtime !=null && savedDate?.text!="" && savedtime?.text!=""
+                && textInputDesc.editText?.text != null && textInputDesc.editText?.text.toString() != "" && categories.size != 0
+                && (findViewById<TextView>(R.id.headerNewEvent)).text != "") {
                 val event: Event =
                     Event(
                         urLImage.toString(),
@@ -148,6 +148,8 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
                     )
                 createEvent(event)
                 finish()
+            } else{
+                Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()
             }
 
         }
@@ -156,7 +158,6 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
     }
 
     private fun createEvent(event: Event) {
-        //uploadImage(event.photoUrl)
         val filename = UUID.randomUUID().toString()
         var mDatabase = FirebaseDatabase.getInstance().reference
         val ref = FirebaseStorage.getInstance().getReference("images/$filename")
@@ -167,20 +168,20 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
                 event.header = headerText.text.toString()
                 event.latitude = chosenLat
                 event.longitude = chosenLon
-                event.setMembers_capacity( capacityMembers)
+                event.setMembersCapacity( capacityMembers)
                 event.setDate(savedDate?.text.toString())
                 event.setHour(savedtime?.text.toString())
-                val db_ref: DatabaseReference =
+                val dbRef: DatabaseReference =
                     mDatabase.child("/posts").push() //creates blank record in db
-                val postKey = db_ref.key.toString() //the UniqueID/key you seek
+                val postKey = dbRef.key.toString() //the UniqueID/key you seek
                 event.eventUid = postKey
-                db_ref.setValue(event)
-                WriteEventLocation(event, postKey)
+                dbRef.setValue(event)
+                writeEventLocation(event, postKey)
             }
         }
     }
 
-    private fun WriteEventLocation(event: Event, postKey: String) {
+    private fun writeEventLocation(event: Event, postKey: String) {
         val firebaseDatabase = FirebaseDatabase.getInstance()
         val ref: DatabaseReference = firebaseDatabase.getReference("geoFire")
         val geoFire = GeoFire(ref)
@@ -247,16 +248,16 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
         hourNewEvent.text = hourOfDay.toString() + ":" + minute.toString()
     }
 
-    fun setCurrentTime() {
+    private fun setCurrentTime() {
         val timeFormat: DateFormat = SimpleDateFormat("HH:mm")
-        timeFormat.setTimeZone(TimeZone.getTimeZone("Asia/Jerusalem"))
+        timeFormat.timeZone = TimeZone.getTimeZone("Asia/Jerusalem")
         val curTime: String = timeFormat.format(Date())
         hourNewEvent.text = curTime
     }
 
     private fun setCurrentDate() {
         val c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jerusalem"));
-        var dateFormat: SimpleDateFormat? = SimpleDateFormat("MMMM dd, yyyy");
+        val dateFormat: SimpleDateFormat? = SimpleDateFormat("MMMM dd, yyyy");
         DateNewEvent.text = dateFormat?.format(c.getTime())
     }
 

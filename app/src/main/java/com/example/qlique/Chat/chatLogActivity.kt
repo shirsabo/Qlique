@@ -14,7 +14,7 @@ import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_chat_log.*
 import kotlinx.android.synthetic.main.chat_from_row.view.*
 import kotlinx.android.synthetic.main.chat_to_row.view.*
-import kotlinx.android.synthetic.main.post.view.*
+import kotlinx.android.synthetic.main.post_in_feed.view.*
 
 class chatLogActivity : AppCompatActivity() {
     val adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()

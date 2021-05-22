@@ -1,17 +1,19 @@
 package com.example.qlique.Map
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import android.os.Parcelable
 import android.text.method.ScrollingMovementMethod
+import android.util.DisplayMetrics
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.qlique.CreateEvent.Event
+import com.example.qlique.CreateEvent.EventMembers
 import com.example.qlique.NewMessageActivity
 import com.example.qlique.Profile.User
 import com.example.qlique.R
@@ -23,6 +25,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.join_event_dialog.view.*
 
 open class EventsMap : BasicMapActivity() {
 
@@ -33,10 +36,19 @@ open class EventsMap : BasicMapActivity() {
         title.text = event.header
         textView.movementMethod = ScrollingMovementMethod()
         title.movementMethod = ScrollingMovementMethod()
+        val date =view.findViewById<View>(R.id.date) as TextView
+        val hour =view.findViewById<View>(R.id.hour) as TextView
+        date.text = event.date
+        hour.text = event.hour
         val view1: ImageView = view.findViewById(R.id.image_home_info_bottom)
         if(event.photoUrl!=null){
             Picasso.get().load(event.photoUrl).into(view1)
-            //Picasso.get().load(event.photoUrl).into( view.findViewById<ImageView>(R.id.user_profile_info_bottom))
+        }
+        val members = view.findViewById<View>(R.id.members_info_bottom)
+        members.setOnClickListener {
+            val i = Intent(view.context, EventMembers::class.java)
+            i.putExtra("eventobj",  event as Parcelable)
+            view.context.startActivity(i)
         }
         updateAuthor(view, event.uid)
     }

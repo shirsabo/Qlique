@@ -22,7 +22,7 @@ public class Event implements Parcelable, Serializable {
     public String  header;
     public String date;
     public String hour;
-    public int members_capacity;
+    public int membersCapacity;
     public Event(String photoUrlIn, String uidIn,String descriptionIn, ArrayList<String> hobbiesRelatedIn){
         uid = uidIn;
         photoUrl = photoUrlIn;
@@ -41,15 +41,15 @@ public class Event implements Parcelable, Serializable {
     public void setDate(String dateIn) {
         this.date = dateIn;
     }
-    public void setMembers_capacity(int capacityIn) {
-        this.members_capacity = capacityIn;
+    public void setMembersCapacity(int capacityIn) {
+        this.membersCapacity = capacityIn;
     }
     public void setHeader(String header) {
         this.header = header;
     }
 
     public void addMember(String newMember){
-        if (newMember!=null&& members_capacity>members.size()){
+        if (newMember!=null&& membersCapacity >members.size()){
             members.add(newMember);
         }
     }
@@ -81,7 +81,7 @@ public class Event implements Parcelable, Serializable {
         latitude = in.readDouble();
         header =in.readString();
         date = in.readString();
-        members_capacity = in.readInt();
+        membersCapacity = in.readInt();
         hour = in.readString();
     }
     public static final Creator<Event> CREATOR = new Creator<Event>() {
@@ -111,7 +111,7 @@ public class Event implements Parcelable, Serializable {
         dest.writeDouble(latitude);
         dest.writeString(header);
         dest.writeString(date);
-        dest.writeInt(members_capacity);
+        dest.writeInt(membersCapacity);
         dest.writeString(hour);
 
     }
