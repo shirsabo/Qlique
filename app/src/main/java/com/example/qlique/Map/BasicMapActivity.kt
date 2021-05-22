@@ -43,19 +43,19 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
     private val FINE_LOCATION: String = Manifest.permission.ACCESS_FINE_LOCATION
     private val COURSE_LOCATION: String = Manifest.permission.ACCESS_COARSE_LOCATION
     private val LOCATION_PERMISSION_REQUEST_CODE = 1234
-    private var mLocationPermissionsGranted = false
+    protected var mLocationPermissionsGranted = false
     protected var mMap: GoogleMap? = null
-    private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
+    protected var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     val DEFAULT_ZOOM = 15f
     private var mSearchText: AutocompleteSupportFragment? = null
-    private var mGps: ImageView? = null
+    protected var mGps: ImageView? = null
     private lateinit var back: Button
     protected var prevMarker : Marker? = null
     private var mInfo : ImageView? = null
     private var mInfoTxt : TextView? = null
     private lateinit var mPlacesClient: PlacesClient
     private lateinit var mPlaceSearch: EditText
-    private var mGoogleApiClient: GoogleApiClient? = null
+    protected var mGoogleApiClient: GoogleApiClient? = null
     private val LAT_LNG_BOUNDS: LatLngBounds = LatLngBounds(
         LatLng(-40.0, -168.0),
         LatLng(71.0, 136.0)
@@ -192,7 +192,7 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
         }
     }
 
-    private fun getDeviceLocation() {
+    protected open fun getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location")
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         try {
@@ -245,7 +245,7 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
         mapFragment.getMapAsync(this@BasicMapActivity)
     }
 
-    private fun init() {
+    open fun init() {
         Log.d(TAG, "init: initializing")
 
         mGoogleApiClient = GoogleApiClient.Builder(this)

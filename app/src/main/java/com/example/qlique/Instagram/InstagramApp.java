@@ -112,7 +112,6 @@ public class InstagramApp {
                     urlConnection.setRequestMethod("POST");
                     urlConnection.setDoInput(true);
                     urlConnection.setDoOutput(true);
-                    //urlConnection.connect();
                     OutputStreamWriter writer = new OutputStreamWriter(
                             urlConnection.getOutputStream());
                     writer.write("client_id=" + mClientId + "&client_secret="
@@ -171,12 +170,6 @@ public class InstagramApp {
                     System.out.println(response);
                     JSONObject jsonObj = (JSONObject) new JSONTokener(response)
                             .nextValue();
-
-                    // String name = jsonObj.getJSONObject("data").getString(
-                    // "full_name");
-                    // String bio =
-                    // jsonObj.getJSONObject("data").getString("bio");
-                    // Log.i(TAG, "Got name: " + name + ", bio [" + bio + "]");
                     JSONObject data_obj = jsonObj.getJSONObject(TAG_DATA);
                     userInfo.put(TAG_ID, data_obj.getString(TAG_ID));
 
