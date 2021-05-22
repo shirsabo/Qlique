@@ -1,10 +1,31 @@
 package com.example.qlique.EventsDisplay;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.qlique.CreateEvent.EventMembers;
+import com.example.qlique.Profile.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.GroupieViewHolder;
+import com.xwray.groupie.Item;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,26 +34,64 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.Semaphore;
 
 import com.example.qlique.CreateEvent.Event;
+
 
 public class EventsManager extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView recyclerView;
-    EventsManagerAdapter adapter;
-    Event[] events={};
-    void fetchEvents(){
-        for (int i=0;i<10;i++){
-            events = Arrays.copyOf(events, events.length+1);
-            String curUser =  "FTNv4hPQYgMz4ScpvBhUasCjm6B3";
-            String photo = "https://miro.medium.com/max/11630/0*C5Y8W-6e9OVIB3AM";
-            ArrayList<String> hobbies = new ArrayList<String>();
-            hobbies.add("Soccer");
-            Event event =  new Event(photo,curUser,"Basketball game tonight at 7:00 PM",hobbies);
-            event.addMember("FTNv4hPQYgMz4ScpvBhUasCjm6B3");
-            events[events.length - 1]=event;
-        }
+    //EventsManagerAdapter adapter;
+    //Event[] events={};
+    private GroupAdapter<GroupieViewHolder> groupieAdapter =
+            new GroupAdapter<com.xwray.groupie.GroupieViewHolder>();
+    private void addEvents(String eventIn){
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("posts/"+eventIn);
+        // Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Event event = dataSnapshot.getValue(Event.class);
+                event.uid = dataSnapshot.child("uid").getValue().toString();
+                if(event==null){return;}
+                /*
+                events = Arrays.copyOf(events, events.length+1);
+                events[events.length - 1]=event;*/
+                groupieAdapter.add(new EventItem(event));
 
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+
+        });
+
+
+    }
+    private void fetchEvents(){
+        final Semaphore semaphore = new Semaphore(0);
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users/"+ FirebaseAuth.getInstance().getCurrentUser().getUid());
+        // Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                int n =user.events.size();
+                for (int i =0;i<n;i++){
+                    addEvents(user.events.get(i));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
     }
 
     @Override
@@ -41,9 +100,10 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
         setContentView(R.layout.activity_events_manager);
         recyclerView = findViewById(R.id.manager_rec);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(groupieAdapter);
         fetchEvents();
-        adapter = new EventsManagerAdapter(this,events); // our adapter takes two string array
-        recyclerView.setAdapter(adapter);
+        //adapter = new EventsManagerAdapter(this,events); // our adapter takes two string array
+
     }
 
     @Override
@@ -53,4 +113,59 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
         }
         return true;
     }
+    class EventItem extends Item<GroupieViewHolder>{
+        Event event;
+        public EventItem(Event event){
+            this.event = event;
+        }
+        @Override
+        public void bind(@NonNull GroupieViewHolder viewHolder, int position) {
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent i = new Intent(v.getContext(), EventInfo.class);
+                    // send story title and contents through recyclerview to detail activity
+                    i.putExtra("event", (Parcelable) event);
+                    v.getContext().startActivity(i);
+                }
+            });
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            if(event ==null ||event.uid==null){
+                return;
+            }
+            DatabaseReference ref = database.getReference("users/"+event.uid);
+            // Attach a listener to read the data at our posts reference
+            ref.addValueEventListener(new ValueEventListener() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+                    String  uri = event.photoUrl;
+                    ImageView targetImageView = viewHolder.itemView.findViewById(R.id.cardImage);
+                    ImageView targetAuthorImageView = viewHolder.itemView.findViewById(R.id.photo_event_new);
+                    TextView targetTextView = viewHolder.itemView.findViewById(R.id.desc_card);
+                    Picasso.get().load(uri).into(targetImageView);
+                    assert user != null;
+                    Picasso.get().load(user.url).into(targetAuthorImageView);
+                    targetImageView.setColorFilter(Color.argb(155, 0, 0, 0), PorterDuff.Mode.SRC_ATOP);
+                    TextView targetAuthor =viewHolder.itemView.findViewById(R.id.member_username);
+                    targetAuthor.setText(user.firstName+" "+user.lastName);
+                    targetTextView.setText(event.description);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+
+            });
+        }
+
+        @Override
+        public int getLayout() {
+            return R.layout.event_custom;
+        }
+    }
 }
+

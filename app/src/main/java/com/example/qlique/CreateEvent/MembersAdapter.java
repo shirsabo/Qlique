@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import com.example.qlique.Profile.User;
 import com.example.qlique.R;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +23,7 @@ import com.squareup.picasso.Picasso;
 public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHolder> {
     private LayoutInflater inflater;
     private String[] members;
+
     MembersAdapter(Context context,String[] events){
         this.inflater = LayoutInflater.from(context);
         this.members = events;
