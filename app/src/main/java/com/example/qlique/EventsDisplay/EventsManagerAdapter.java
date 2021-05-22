@@ -42,7 +42,7 @@ public class EventsManagerAdapter extends RecyclerView.Adapter<EventsManagerAdap
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = inflater.inflate(R.layout.event_custom,viewGroup,false);
+        View view = inflater.inflate(R.layout.event_custom_in_events_display,viewGroup,false);
         return new ViewHolder(view);
     }
     private User  loadUser(DataSnapshot snapshot){

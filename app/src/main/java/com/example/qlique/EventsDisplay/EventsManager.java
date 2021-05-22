@@ -7,14 +7,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.qlique.CreateEvent.EventMembers;
 import com.example.qlique.Profile.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -33,8 +31,6 @@ import com.example.qlique.R;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.Semaphore;
 
 import com.example.qlique.CreateEvent.Event;
@@ -148,6 +144,8 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
                     TextView targetAuthor =viewHolder.itemView.findViewById(R.id.member_username);
                     targetAuthor.setText(user.firstName+" "+user.lastName);
                     targetTextView.setText(event.description);
+                    TextView date = viewHolder.itemView.findViewById(R.id.date);
+                    date.setText(event.date);
                 }
 
                 @Override
@@ -160,7 +158,7 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
 
         @Override
         public int getLayout() {
-            return R.layout.event_custom;
+            return R.layout.event_custom_in_events_display;
         }
     }
 }
