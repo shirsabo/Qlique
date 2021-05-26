@@ -191,6 +191,13 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
                  date.text = events[position].date
                  val hour = holder.itemView.hour
                  hour.text = events[position].hour
+                 val trash = holder.itemView.trash
+                 if (user != null && user.uid == FirebaseAuth.getInstance().currentUser?.uid ) {
+                     // The user who created the event is the current user.
+                     trash.visibility = View.VISIBLE
+                 } else {
+                     trash.visibility = View.GONE
+                 }
              }
 
              override fun onCancelled(po: DatabaseError) {
