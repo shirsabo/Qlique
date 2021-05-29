@@ -62,6 +62,9 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
                 event.photoUrl = dataSnapshot.child("photoUrl").getValue().toString();
                 /** TO DO: Check that the event has not yet occurred **/
                 if(event==null){return;}
+                if(eventsLists.contains(eventIn)){
+                    return;
+                }
                 groupieAdapter.add(new EventItem(event));
                 eventsLists.add(eventIn);
             }
@@ -176,6 +179,7 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
 
                 }
 
+
             });
         }
 
@@ -200,7 +204,7 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users/"+ FirebaseAuth.getInstance().getCurrentUser().getUid());
         // Attach a listener to read the data at our posts reference
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -230,7 +234,7 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("posts/"+eventUid);
         // Attach a listener to read the data at our posts reference
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Event event = dataSnapshot.getValue(Event.class);
@@ -242,17 +246,22 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
                 event.description=dataSnapshot.child("description").getValue().toString();
                 if(event.members!=null){
                     event.members.remove(FirebaseAuth.getInstance().getCurrentUser().getUid());//remove event's uid
+                    ref.setValue(event);
+                    recreate();
                 }
-                ref.setValue(event);
+
                 /*
                 if(groupieAdapter.getItemCount()>=1){
                     return;
                 }
                 groupieAdapter.remove(eventItem);
                 */
+                /*
                 finish();
                 startActivity(getIntent());
-
+                */
+                //recreate();
+                //startActivity(MyClass.this, MyClass.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
 
             }
@@ -265,15 +274,5 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        try{
-            Runtime.getRuntime().gc();
-            finish();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
 }
 

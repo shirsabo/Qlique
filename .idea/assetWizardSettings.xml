@@ -311,8 +311,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_trash" />
-                            <entry key="sourceFile" value="C:\Users\ASUS\Downloads\trash.svg" />
+                            <entry key="outputName" value="ic_check_out" />
+                            <entry key="sourceFile" value="C:\Users\shirs\Downloads\check-out.svg" />
                           </map>
                         </option>
                       </PersistentState>

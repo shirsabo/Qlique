@@ -35,14 +35,14 @@
 
             <ImageView
                 android:id="@+id/leave_btn_custom"
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="16dp"
+                android:layout_width="74dp"
+                android:layout_height="66dp"
+                android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.094"
+                app:layout_constraintHorizontal_bias="0.021"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_trash" />
+                app:srcCompat="@drawable/ic_check_out" />
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/photo_event_new"
