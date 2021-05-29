@@ -128,6 +128,7 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
         }
         view.cancle_btn.setOnClickListener {
             dialog.cancel()
+
         }
     }
     private fun loadEvent(snapshot: DataSnapshot):Event{

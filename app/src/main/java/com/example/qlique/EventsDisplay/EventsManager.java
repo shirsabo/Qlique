@@ -251,7 +251,8 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
                 groupieAdapter.remove(eventItem);
                 */
                 finish();
-                startActivity(getIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                startActivity(getIntent());
+
 
 
             }
@@ -262,6 +263,17 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
             }
 
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try{
+            Runtime.getRuntime().gc();
+            finish();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
 

@@ -25,7 +25,7 @@
         <activity android:name=".Map.BasicMapActivity" />
         <activity android:name=".CreateEvent.EventMembers" />
         <activity android:name=".EventsDisplay.EventInfo" />
-        <activity android:name=".EventsDisplay.EventsManager" />
+        <activity android:name=".EventsDisplay.EventsManager" android:launchMode="singleTask" />
         <activity android:name=".CreateEvent.NewEvent" />
 
         <meta-data
