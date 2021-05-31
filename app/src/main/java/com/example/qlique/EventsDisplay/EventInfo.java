@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +14,7 @@ import com.example.qlique.NewMessageActivity;
 import com.example.qlique.Profile.User;
 import com.example.qlique.R;
 import com.example.qlique.chatLogActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -25,7 +25,6 @@ import com.example.qlique.CreateEvent.Event;
 import com.example.qlique.CreateEvent.EventMembers;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class EventInfo extends AppCompatActivity {
 
@@ -44,10 +43,12 @@ public class EventInfo extends AppCompatActivity {
                 v.getContext().startActivity(i);
             }
         });
+        String curUser = FirebaseAuth.getInstance().getUid();
         FirebaseDatabase.getInstance().getReference("/users/"+ event.uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
+
                 assert user != null;
                 if(user.url!=null){
                    ImageView author_image =findViewById(R.id.user_profile_info);
@@ -66,17 +67,26 @@ public class EventInfo extends AppCompatActivity {
                 ImageView photo_info =findViewById(R.id.image_home_info);
                 Picasso.get().load( event.photoUrl).into(photo_info);
                 ImageView chat = findViewById(R.id.info_image_chat_btn);
-                chat.setOnClickListener(v -> {
-                    Intent intent = new Intent(v.getContext(), chatLogActivity.class);
-                    intent.putExtra(NewMessageActivity.USER_KEY, user);
-                    startActivity(intent);
-                });
+                if(checkIfAuthorIsCUrUser(user.uid,curUser)) {
+                    chat.setVisibility(View.GONE);
+                }
+                else{
+                    chat.setOnClickListener(v -> {
+
+                        Intent intent = new Intent(v.getContext(), chatLogActivity.class);
+                        intent.putExtra(NewMessageActivity.USER_KEY, user);
+                        startActivity(intent);
+                    });
+                }
                 ImageView mapImageView = findViewById(R.id.map_image_view);
                 mapImageView.setOnClickListener(v -> {
                     Intent intent = new Intent(v.getContext(), ShowEventMap.class);
                     intent.putExtra("event", (Serializable) event);
                     startActivity(intent);
                 });
+            }
+            private boolean checkIfAuthorIsCUrUser(String author, String curUserIn){
+              return author.equals(curUserIn);
             }
 
             @Override

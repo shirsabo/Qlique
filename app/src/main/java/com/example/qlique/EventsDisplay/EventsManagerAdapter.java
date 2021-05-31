@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.qlique.Profile.User;
 import com.example.qlique.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -70,7 +71,6 @@ public class EventsManagerAdapter extends RecyclerView.Adapter<EventsManagerAdap
             return;
         }
         DatabaseReference ref = database.getReference("users/"+events[i].uid);
-// Attach a listener to read the data at our posts reference
         ref.addValueEventListener(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -95,6 +95,7 @@ public class EventsManagerAdapter extends RecyclerView.Adapter<EventsManagerAdap
             }
 
         });
+        //checkAbleChat( viewHolder,events[i].uid, FirebaseAuth.getInstance().getUid());
 
     }
 
@@ -111,7 +112,6 @@ public class EventsManagerAdapter extends RecyclerView.Adapter<EventsManagerAdap
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     Intent i = new Intent(v.getContext(), EventInfo.class);
                     // send story title and contents through recyclerview to detail activity
                     Event event =events[getAdapterPosition()];

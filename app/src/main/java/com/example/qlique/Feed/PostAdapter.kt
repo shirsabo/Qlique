@@ -7,7 +7,6 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -31,7 +30,11 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view:View=LayoutInflater.from(parent.context).inflate(R.layout.post_in_feed, parent, false)
+        val view:View=LayoutInflater.from(parent.context).inflate(
+            R.layout.post_in_feed,
+            parent,
+            false
+        )
         return ViewHolder(view)
 
     }
@@ -40,11 +43,11 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
         return events.size
 
     }
-    private fun saveEvent(event:Event){
+    private fun saveEvent(event: Event){
         val refPost = FirebaseDatabase.getInstance().getReference("/posts/${event.eventUid}")
         refPost.setValue(event)
     }
-    private fun saveUser(user:User){
+    private fun saveUser(user: User){
         val refUser = FirebaseDatabase.getInstance().getReference("/users/${user.uid}")
         refUser.setValue(user)
     }
@@ -58,8 +61,9 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
         val refPost = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().currentUser?.uid}")
         refPost.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val user: User =(snapshot.getValue(User::class.java)) ?: return//FirebaseAuth.getInstance().currentUser//snapshot.getValue(User::class.java) ?: return
-                if(user.events==null){
+                val user: User = (snapshot.getValue(User::class.java))
+                    ?: return//FirebaseAuth.getInstance().currentUser//snapshot.getValue(User::class.java) ?: return
+                if (user.events == null) {
                     user.events = java.util.ArrayList()
                 }
                 user.events.add(eventUid)
@@ -77,23 +81,28 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
             override fun onDataChange(snapshot: DataSnapshot) {
                 val event: Event? = snapshot.getValue(Event::class.java) ?: return
                 event?.setEventUid(eventUid)
-                event?.description= snapshot.child("description").value.toString()
+                event?.description = snapshot.child("description").value.toString()
                 event?.uid = snapshot.child("uid").value.toString()
                 if (event?.members == null) {
                     event?.members = java.util.ArrayList()
                 }
                 if (event?.membersCapacity!! > event.members?.size!!) {
                     if (event.members.contains(memberUID)) {
-                        Toast.makeText(holder.itemView.context, "You are already registered for this event", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            holder.itemView.context,
+                            "You are already registered for this event",
+                            Toast.LENGTH_LONG
+                        ).show()
                         return
                     } else {
                         event.members.add(memberUID)
                         saveEvent(event)
                         addEventToUser(eventUid)
                     }
-                } else{
+                } else {
                     // It is not possible to register because there is no space available at the event.
-                    Toast.makeText(holder.itemView.context, "Failed to register", Toast.LENGTH_LONG).show()
+                    Toast.makeText(holder.itemView.context, "Failed to register", Toast.LENGTH_LONG)
+                        .show()
                 }
 
 
@@ -122,11 +131,11 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
         val height = (DisplayMetrics().heightPixels * 0.4).toInt()
        dialog.window?.setLayout(width, height)
         dialog.show()
-        view.join_btn.setOnClickListener {
+        view.leave_btn.setOnClickListener {
             joinEvent(eventUid, holder)
             dialog.cancel()
         }
-        view.cancle_btn.setOnClickListener {
+        view.cancle_leave_btn.setOnClickListener {
             dialog.cancel()
 
         }
@@ -152,7 +161,6 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
         return user;
     }
      private fun fetchAuthor(uid: String, holder: ViewHolder, position: Int){
-
          val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
          ref.addListenerForSingleValueEvent(object : ValueEventListener {
              override fun onDataChange(snapshot: DataSnapshot) {
@@ -171,14 +179,18 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
                  description.text = events[position].description
                  val header = holder.itemView.headerPost
                  header.text = events[position].header
-                 holder.itemView.post_image_chat_btn.setOnClickListener {
-                     val intent = Intent(holder.itemView.context, chatLogActivity::class.java)
-                     intent.putExtra(NewMessageActivity.USER_KEY, user)
-                     holder.itemView.context.startActivity(intent)
+                 if (!checkIfAuthorIsCUrUser(user!!.uid,  FirebaseAuth.getInstance().currentUser?.uid)){
+                     holder.itemView.post_image_chat_btn.setOnClickListener {
+                         val intent = Intent(holder.itemView.context, chatLogActivity::class.java)
+                         intent.putExtra(NewMessageActivity.USER_KEY, user)
+                         holder.itemView.context.startActivity(intent)
+                     }
+                 }else{
+                     holder.itemView.post_image_chat_btn.visibility=View.GONE
                  }
-                 holder.itemView.members_info_bottom.setOnClickListener{
-                         val i = Intent(holder.itemView.context, EventMembers::class.java)
-                         i.putExtra("eventobj", events[position] as Parcelable?)
+                 holder.itemView.members_info_bottom.setOnClickListener {
+                     val i = Intent(holder.itemView.context, EventMembers::class.java)
+                     i.putExtra("eventobj", events[position] as Parcelable?)
                      holder.itemView.context.startActivity(i)
                  }
                  holder.itemView.post_image_like_btn.setOnClickListener {
@@ -193,7 +205,7 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
                  val hour = holder.itemView.hour
                  hour.text = events[position].hour
                  val trash = holder.itemView.trash
-                 if (user != null && user.uid == FirebaseAuth.getInstance().currentUser?.uid ) {
+                 if (user != null && user.uid == FirebaseAuth.getInstance().currentUser?.uid) {
                      // The user who created the event is the current user.
                      trash.visibility = View.VISIBLE
                  } else {
@@ -205,6 +217,10 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
              }
          })
 
+    }
+
+    private fun checkIfAuthorIsCUrUser(uidAuthor: String?, curUseruid: String?): Boolean {
+        return uidAuthor.equals(curUseruid)
     }
 
     private fun openShowEventInMap(holder: ViewHolder, event: Event) {

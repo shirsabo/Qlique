@@ -30,10 +30,10 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="343dp"
+        android:layout_height="152dp"
         android:gravity="center"
-        android:text="Join the event!"
+        android:text="Are you sure you want to leave the event?"
         android:textSize="40dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/header_join"
@@ -43,33 +43,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.321" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Are you sure you want to join the event?"
-        android:textSize="15dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/header_join"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.625" />
-
     <ImageView
         android:id="@+id/imageLeave"
         android:layout_width="144dp"
         android:layout_height="160dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginBottom="88dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/leave_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:layout_constraintVertical_bias="0.409"
-        app:srcCompat="@drawable/ic_party" />
+        app:srcCompat="@drawable/ic_leaveevent" />
 
     <Button
         android:id="@+id/leave_btn"
@@ -77,9 +61,9 @@
         android:layout_height="39dp"
         android:layout_gravity="center"
         android:layout_marginTop="432dp"
-        android:background="@drawable/green_btn"
+        android:background="@drawable/gray_btn"
         android:gravity="center"
-        android:text="Join"
+        android:text="Leave"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.135"
         app:layout_constraintStart_toStartOf="parent"

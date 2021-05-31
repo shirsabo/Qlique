@@ -1,5 +1,6 @@
 package com.example.qlique.EventsDisplay;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -123,6 +125,25 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
     }
     class EventItem extends Item<GroupieViewHolder>{
         Event event;
+        private void openLeaveDialog(@NonNull GroupieViewHolder viewHolder){
+            AlertDialog.Builder builder = new AlertDialog.Builder(viewHolder.itemView.getContext());
+            LayoutInflater layoutInflaterAndroid = LayoutInflater.from(viewHolder.itemView.getContext());
+            View view = layoutInflaterAndroid.inflate(R.layout.leave_dialog, null);
+            builder.setView(view);
+            builder.setCancelable(false);
+            final AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+
+            view.findViewById(R.id.leave_btn).setOnClickListener(v -> {
+                handleExitEvent(event,this);
+                alertDialog.cancel();
+
+            });
+            view.findViewById(R.id.cancle_leave_btn).setOnClickListener(v -> {
+                alertDialog.cancel();
+
+            });
+        }
         public EventItem(Event event){
             this.event = event;
         }
@@ -136,7 +157,8 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
                 v.getContext().startActivity(i);
             });
             viewHolder.itemView.findViewById(R.id.leave_btn_custom).setOnClickListener(v -> {
-                handleExitEvent(event,this);
+                openLeaveDialog(viewHolder);
+                //handleExitEvent(event,this);
 
             });
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -273,6 +295,7 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
 
         });
     }
+
 
 }
 
