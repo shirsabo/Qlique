@@ -43,7 +43,7 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
         return events.size
 
     }
-    private fun saveEvent(event: Event){
+     fun saveEvent(event: Event){
         val refPost = FirebaseDatabase.getInstance().getReference("/posts/${event.eventUid}")
         refPost.setValue(event)
     }
@@ -75,7 +75,7 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
         })
 
     }
-    private fun addMemberToEvent(eventUid: String, memberUID: String, holder: ViewHolder){
+    fun addMemberToEvent(eventUid: String, memberUID: String, holder: ViewHolder){
         val refPost = FirebaseDatabase.getInstance().getReference("/posts/$eventUid")
         refPost.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -112,7 +112,7 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
             }
         })
     }
-    fun joinEvent(eventUid: String, holder: ViewHolder){
+     fun joinEvent(eventUid: String, holder: ViewHolder){
         val curUidUser = FirebaseAuth.getInstance().currentUser?.uid ?: return
         if(eventUid.isEmpty()){
             return

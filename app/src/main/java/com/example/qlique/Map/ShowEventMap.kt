@@ -43,25 +43,7 @@ class ShowEventMap : EventsMap() {
         gps.visibility = View.GONE
         displayInfo(event)
     }
-    private fun openJoinDialog(applicationContext: Context, eventUid: String) {
-        val view = View.inflate(applicationContext, R.layout.join_event_dialog, null)
-        val builder = AlertDialog.Builder(applicationContext)
-        builder.setView(view)
-        val dialog: Dialog = builder.create()
-        val width = (DisplayMetrics().widthPixels)
-        val height = (DisplayMetrics().heightPixels * 0.4).toInt()
-        dialog.window?.setLayout(width, height)
-        dialog.show() /*
-        view.leave_btn.setOnClickListener {
-            joinEvent(eventUid, holder)
-            dialog.cancel()
-        }
-        view.cancle_leave_btn.setOnClickListener {
-            dialog.cancel()
 
-        }
-        */
-    }
 
     private fun displayInfo(event: Event) {
         // Display the information of the event.

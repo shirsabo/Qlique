@@ -19,7 +19,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity android:name=".Map.EventsMap"></activity>
-        <activity android:name=".Map.ShowEventMap" />
+        <activity android:name=".Map.ShowEventMap" android:launchMode="singleTask"/>
         <activity android:name=".Map.DisplayEventsMapActivity" />
         <activity android:name=".Map.CreateEventMapActivity" />
         <activity android:name=".Map.BasicMapActivity" />
@@ -73,6 +73,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.qlique.Feed.MainActivity" />
         </activity>
+        <service
+            android:name=".FirebaseMesseging">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

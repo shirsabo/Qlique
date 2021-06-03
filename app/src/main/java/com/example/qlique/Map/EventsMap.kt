@@ -1,6 +1,8 @@
 package com.example.qlique.Map
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -11,6 +13,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.qlique.CreateEvent.Event
 import com.example.qlique.CreateEvent.EventMembers
@@ -20,6 +23,7 @@ import com.example.qlique.R
 import com.example.qlique.chatLogActivity
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -50,11 +54,103 @@ open class EventsMap : BasicMapActivity() {
             i.putExtra("eventobj",  event as Parcelable)
             view.context.startActivity(i)
         }
+        val joinBtn = view.findViewById<ImageView>(R.id.post_image_join_btn)
+        joinBtn.setOnClickListener {
+            openJoinDialog(view.context,event.eventUid)
+        }
         updateAuthor(view, event.uid)
+    }
+    private fun joinCurUserToEvent(eventUid :String){
+        val curUidUser = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        if(eventUid.isEmpty()){
+            return
+        }
+        addMemberToEvent(eventUid, curUidUser)
+    }
+    fun saveEvent(event: Event){
+        val refPost = FirebaseDatabase.getInstance().getReference("/posts/${event.eventUid}")
+        refPost.setValue(event)
+    }
+    private fun addEventToCurUser(eventUid: String){
+        val refPost = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().currentUser?.uid}")
+        refPost.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user: User = (snapshot.getValue(User::class.java))
+                    ?: return//FirebaseAuth.getInstance().currentUser//snapshot.getValue(User::class.java) ?: return
+                if (user.events == null) {
+                    user.events = java.util.ArrayList()
+                }
+                user.events.add(eventUid)
+                refPost.setValue(user)
+            }
+
+            override fun onCancelled(po: DatabaseError) {
+            }
+        })
+
+    }
+
+    private fun addMemberToEvent(eventUid: String, curUidUser: String) {
+        val refPost = FirebaseDatabase.getInstance().getReference("/posts/$eventUid")
+        refPost.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val event: Event? = snapshot.getValue(Event::class.java) ?: return
+                event?.setEventUid(eventUid)
+                event?.description = snapshot.child("description").value.toString()
+                event?.uid = snapshot.child("uid").value.toString()
+                if (event?.members == null) {
+                    event?.members = java.util.ArrayList()
+                }
+                if (event?.membersCapacity!! > event.members?.size!!) {
+                    if (event.members.contains(curUidUser)) {
+                        Toast.makeText(
+                           applicationContext,
+                            "You are already registered for this event",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return
+                    } else {
+                        event.members.add(curUidUser)
+                        saveEvent(event)
+                        addEventToCurUser(eventUid)
+                    }
+                } else {
+                    // It is not possible to register because there is no space available at the event.
+                    Toast.makeText(applicationContext, "Failed to register", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+
+            override fun onCancelled(po: DatabaseError) {
+            }
+        })
+
+    }
+
+    private fun openJoinDialog(applicationContext: Context, eventUid: String) {
+        val view = View.inflate(applicationContext, R.layout.join_event_dialog, null)
+        val builder = androidx.appcompat.app.AlertDialog.Builder(applicationContext)
+        builder.setView(view)
+        val dialog: Dialog = builder.create()
+        val width = (DisplayMetrics().widthPixels)
+        val height = (DisplayMetrics().heightPixels * 0.4).toInt()
+        dialog.window?.setLayout(width, height)
+        dialog.show()
+        view.leave_btn.setOnClickListener {
+            joinCurUserToEvent(eventUid)
+            //dialog.dismiss()
+            dialog.cancel()
+        }
+        view.cancle_leave_btn.setOnClickListener {
+           // dialog.dismiss()
+            dialog.cancel()
+
+        }
     }
     protected fun updateAuthor(view:View ,uid: String){
         FirebaseDatabase.getInstance().getReference("/users/$uid")
-            .addValueEventListener(object : ValueEventListener {
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                @SuppressLint("SetTextI18n")
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val user = (dataSnapshot).getValue(User::class.java)
                     if (user!!.url != null) {
