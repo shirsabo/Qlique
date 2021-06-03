@@ -126,22 +126,31 @@
                 android:text="title"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-
-            <TextView
+            <com.borjabravo.readmoretextview.ReadMoreTextView
                 android:id="@+id/description_post_info_events"
-                android:layout_width="372dp"
-                android:layout_height="137dp"
+                android:layout_width="364dp"
+                android:layout_height="131dp"
                 android:layout_below="@+id/title"
+                app:trimCollapsedText="read more"
+                app:trimExpandedText="read less"
+                app:trimMode="trimModeLength"
+                app:trimLength="20"
+                app:colorClickableText="@color/coolGreen"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="17dp"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginEnd="14dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginBottom="17dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginLeft="15dp"
                 android:scrollbars="vertical"
-                android:text="Hello" />
+                android:text="Description"
+                tools:ignore="UnknownIdInLayout" />
 
             <TextView
                 android:id="@+id/date"

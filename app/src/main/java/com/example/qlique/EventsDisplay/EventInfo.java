@@ -1,8 +1,11 @@
 package com.example.qlique.EventsDisplay;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +31,7 @@ import java.io.Serializable;
 
 public class EventInfo extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,13 +39,16 @@ public class EventInfo extends AppCompatActivity {
         Intent i = getIntent();
         Event event = i.getParcelableExtra("event");
         ImageView membersInfo =findViewById(R.id.members_info);
-        membersInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(v.getContext(), EventMembers.class);
-                i.putExtra("eventobj", (Serializable) event);
-                v.getContext().startActivity(i);
-            }
+        ImageView join_btn = findViewById(R.id.post_image_join_btn);
+        /*
+        join_btn.setOnClickListener(v -> {
+            openJoinDialog(getApplicationContext(), event.eventUid);
+        });
+        */
+        membersInfo.setOnClickListener(v -> {
+            Intent i1 = new Intent(v.getContext(), EventMembers.class);
+            i1.putExtra("eventobj", (Serializable) event);
+            v.getContext().startActivity(i1);
         });
         String curUser = FirebaseAuth.getInstance().getUid();
         FirebaseDatabase.getInstance().getReference("/users/"+ event.uid).addValueEventListener(new ValueEventListener() {
