@@ -3,6 +3,7 @@ package com.example.qlique
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.android.volley.toolbox.JsonObjectRequest
 import com.example.qlique.LoginAndSignUp.SignupActivity
 import com.example.qlique.Profile.User
 import com.google.firebase.auth.FirebaseAuth
@@ -91,8 +92,39 @@ class chatLogActivity : AppCompatActivity() {
         latestMessageRef.setValue(chatMsg)
         val latestMessageRefTo= FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
         latestMessageRefTo.setValue(chatMsg)
+        //sendNotification()
 
     }
+/*
+    private fun sendNotification() {
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, AllConstants.NOTIFICATION_URL, to, response -> {
+            Log.d("notification", "sendNotification: " + response);
+        }, error -> {
+            Log.d("notification", "sendNotification: " + error);
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+            Map<String, String> map = new HashMap<>();
+            map.put("Authorization", "key=" + AllConstants.SERVER_KEY);
+            map.put("Content-Type", "application/json");
+            return map;
+        }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            request.setRetryPolicy(new DefaultRetryPolicy(30000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            requestQueue.add(request);
+        }
+    }
+*/
     fun listenForMessages(curUser: User){
         val fromId= FirebaseAuth.getInstance().uid
 

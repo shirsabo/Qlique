@@ -9,7 +9,7 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackgroundBorderless"
-    android:gravity="bottom"
+    android:gravity="bottom|center|center_vertical"
     android:orientation="vertical"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
@@ -17,8 +17,9 @@
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/nav_ProfileCircularImage"
-        android:layout_width="124dp"
-        android:layout_height="123dp"
+        android:layout_width="169dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center|top"
         app:civ_border_color="#ffffff"
         app:civ_border_width="5dp"
         app:civ_shadow="false"
@@ -29,6 +30,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_login_hero" />
+        app:srcCompat="@drawable/ic_cliqueicon" />
+
+    <TextView
+        android:layout_width="316dp"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -56,9 +56,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val lay: View = findViewById(R.id.app_bar_main_layout)
         val toolbar: Toolbar = lay.findViewById(R.id.toolbar_main)
+        title = "Clique"
         val profilePic = lay.nav_ProfileCircularImage
         setSupportActionBar(toolbar)
         drawer = findViewById(R.id.drawer_layout)
+
 
         toggle = ActionBarDrawerToggle(
             this,
