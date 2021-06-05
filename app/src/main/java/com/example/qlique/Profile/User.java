@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize;
 
 @Parcelize
 public class User implements Parcelable{
-    public String firstName, lastName, email, city, gender, uid, url, instagramUserName;
+    public String firstName, lastName, email, city, gender, uid, url, instagramUserName, tokenFCM;
     public List<String> friends;
     public List<String> hobbies;
     public List<String> events;
@@ -48,6 +48,7 @@ public class User implements Parcelable{
         friends = in.createStringArrayList();
         hobbies = in.createStringArrayList();
         events = in.createStringArrayList();
+        tokenFCM = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -83,6 +84,7 @@ public class User implements Parcelable{
         dest.writeStringList(friends);
         dest.writeStringList(hobbies);
         dest.writeStringList(events);
+        dest.writeString(tokenFCM);
     }
     public static User createUserFromHashMap(HashMap map){
         User user = new User(map.get("firstName").toString(), map.get("lastName").toString(), map.get("city").toString(),

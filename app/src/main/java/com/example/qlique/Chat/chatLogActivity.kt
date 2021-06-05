@@ -1,10 +1,11 @@
 package com.example.qlique
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.*
 import com.android.volley.toolbox.JsonObjectRequest
-import com.example.qlique.LoginAndSignUp.SignupActivity
+import com.android.volley.toolbox.Volley
 import com.example.qlique.Profile.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -15,9 +16,13 @@ import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_chat_log.*
 import kotlinx.android.synthetic.main.chat_from_row.view.*
 import kotlinx.android.synthetic.main.chat_to_row.view.*
-import kotlinx.android.synthetic.main.post_in_feed.view.*
+import org.json.JSONException
+import org.json.JSONObject
+
 
 class chatLogActivity : AppCompatActivity() {
+    var NOTIFICATION_URL = "https://fcm.googleapis.com/fcm/send"
+    var SERVER_KEY = "AAAAxFzL4DI:APA91bF0XL_FWScS0pjrd3xbEpiYQ4tYn99_gHLXWDkxti202bXk9KMxPyuUUGrcHdIWQf9zCdm3Wmmk0_CKKOWWfpOrWQFffEguUytD0mW-U2c5CaTE3pGcIkocOlzGzPGXt9skLgzt"
     val adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
     //var toUser:User?=intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
     private fun loadUser(snapshot: DataSnapshot):User{
@@ -50,28 +55,56 @@ class chatLogActivity : AppCompatActivity() {
         }
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
-        ref.addListenerForSingleValueEvent(object: ValueEventListener {
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val curUser :User? = loadUser(snapshot)
+                val curUser: User? = loadUser(snapshot)
                 if (curUser != null) {
                     listenForMessages(curUser)
                 }
 
 
-
             }
+
             override fun onCancelled(po: DatabaseError) {
             }
         })
 
 
     }
-    class chatMessage(val id:String, val text: String,
-    val fromId:String, val toId:String,val timeStamp: Long){
-        constructor(): this("","","",
-            "", -1)
+    class chatMessage(
+        val id: String, val text: String,
+        val fromId: String, val toId: String, val timeStamp: Long
+    ){
+        constructor(): this(
+            "", "", "",
+            "", -1
+        )
 
     }
+
+    private fun getToken(message: String, targetUid: String) {
+        val database = FirebaseDatabase.getInstance().getReference("users").child(targetUid)
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                 val user = snapshot.getValue(User::class.java)
+                val token = user?.tokenFCM
+                val to = JSONObject()
+                val data = JSONObject()
+                try {
+                    data.put("title", "Hello")
+                    data.put("message", message)
+                    to.put("to", token)
+                    to.put("data", data)
+                    sendNotification(to)
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
     fun performSendMessage(){
         val textInput = text_message_chat.text.toString()
         if(textInput.length == 0){
@@ -83,66 +116,79 @@ class chatLogActivity : AppCompatActivity() {
         if (fromId==null)return
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId").push()
         val toRef=FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId").push()
-        val chatMsg = chatMessage(ref.key!!,textInput,fromId!!,toId,System.currentTimeMillis()/1000)
+        val chatMsg = chatMessage(
+            ref.key!!,
+            textInput,
+            fromId!!,
+            toId,
+            System.currentTimeMillis() / 1000
+        )
         ref.setValue(chatMsg).addOnSuccessListener {
             text_message_chat.text.clear()
-            recyclerView_chat.scrollToPosition(adapter.itemCount-1) }
+            recyclerView_chat.scrollToPosition(adapter.itemCount - 1) }
         toRef.setValue(chatMsg)
         val latestMessageRef= FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
         latestMessageRef.setValue(chatMsg)
         val latestMessageRefTo= FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
         latestMessageRefTo.setValue(chatMsg)
-        //sendNotification()
-
+        getToken(textInput, toId)
     }
-/*
-    private fun sendNotification() {
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, AllConstants.NOTIFICATION_URL, to, response -> {
-            Log.d("notification", "sendNotification: " + response);
-        }, error -> {
-            Log.d("notification", "sendNotification: " + error);
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-
-            Map<String, String> map = new HashMap<>();
-            map.put("Authorization", "key=" + AllConstants.SERVER_KEY);
-            map.put("Content-Type", "application/json");
-            return map;
-        }
-
-            @Override
-            public String getBodyContentType() {
-                return "application/json";
+    private fun sendNotification(messageBody: JSONObject) {
+        val request: JsonObjectRequest = object : JsonObjectRequest(
+            Method.POST,NOTIFICATION_URL, messageBody,
+            Response.Listener { response: JSONObject ->
+                Log.d(
+                    "notification",
+                    "sendNotification: $response"
+                )
+            },
+            Response.ErrorListener { error: VolleyError ->
+                Log.d(
+                    "notification",
+                    "sendNotification: $error"
+                )
+            }) {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val map: MutableMap<String, String> = HashMap()
+                map["Authorization"] = "key=" + SERVER_KEY
+                map["Content-Type"] = "application/json"
+                return map
             }
-        };
 
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            request.setRetryPolicy(new DefaultRetryPolicy(30000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            requestQueue.add(request);
+            override fun getBodyContentType(): String {
+                return "application/json"
+            }
         }
+
+        val requestQueue = Volley.newRequestQueue(this)
+        request.retryPolicy = DefaultRetryPolicy(
+            30000,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        )
+        requestQueue.add(request)
+
     }
-*/
     fun listenForMessages(curUser: User){
         val fromId= FirebaseAuth.getInstance().uid
 
         val toId =intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY).uid
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId")
-        ref.addChildEventListener(object :ChildEventListener{
+        ref.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val msg = snapshot.getValue(chatMessage::class.java)
                 val toUser = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
-                if (msg!=null){
-                    if(msg.fromId==FirebaseAuth.getInstance().uid && msg.toId==toUser!!.uid ){
-                        adapter.add(ChatFromItem(msg.text,curUser!!))
-                    }else if (msg.fromId==toUser!!.uid && msg.toId==FirebaseAuth.getInstance().uid){
-                            adapter.add(ChatToItem(msg.text,toUser!!))
+                if (msg != null) {
+                    if (msg.fromId == FirebaseAuth.getInstance().uid && msg.toId == toUser!!.uid) {
+                        adapter.add(ChatFromItem(msg.text, curUser!!))
+                    } else if (msg.fromId == toUser!!.uid && msg.toId == FirebaseAuth.getInstance().uid) {
+                        adapter.add(ChatToItem(msg.text, toUser!!))
                     }
-                    recyclerView_chat.scrollToPosition(adapter.itemCount-1)
+                    recyclerView_chat.scrollToPosition(adapter.itemCount - 1)
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
@@ -163,8 +209,8 @@ class chatLogActivity : AppCompatActivity() {
 
     }
 }
-class ChatFromItem(val string: String,val user: User): Item<com.xwray.groupie.GroupieViewHolder>(){
-    override fun bind(viewHolder: GroupieViewHolder,position:Int){
+class ChatFromItem(val string: String, val user: User): Item<com.xwray.groupie.GroupieViewHolder>(){
+    override fun bind(viewHolder: GroupieViewHolder, position: Int){
         viewHolder.itemView.messageFrom.text= string
         //load user image
         val uri = user.url
@@ -179,8 +225,8 @@ class ChatFromItem(val string: String,val user: User): Item<com.xwray.groupie.Gr
     }
 
 }
-class ChatToItem(val string: String,val user: User): Item<com.xwray.groupie.GroupieViewHolder>(){
-    override fun bind(viewHolder: GroupieViewHolder,position:Int){
+class ChatToItem(val string: String, val user: User): Item<com.xwray.groupie.GroupieViewHolder>(){
+    override fun bind(viewHolder: GroupieViewHolder, position: Int){
         viewHolder.itemView.messageTo.text = string
         val uri = user.url
         val targetImageView = viewHolder.itemView.circularImageViewTo

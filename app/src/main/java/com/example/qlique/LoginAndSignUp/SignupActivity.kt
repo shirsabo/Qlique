@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.scwang.wave.MultiWaveHeader
 import kotlinx.android.synthetic.main.activity_signup.view.*
@@ -103,8 +104,8 @@ import java.util.*
         waveHeader.isRunning()
         waveHeader.gradientAngle = 70
         waveHeader.waveHeight = 60
-        waveHeader.closeColor = Color.rgb(	47,122,255)
-        waveHeader.startColor = Color.rgb(	47,122,160)
+        waveHeader.closeColor = Color.rgb(47, 122, 255)
+        waveHeader.startColor = Color.rgb(47, 122, 160)
         auth = FirebaseAuth.getInstance()
         database = Firebase.database.reference
         firstNameEt = findViewById(R.id.fName_edt_text)
@@ -198,7 +199,7 @@ import java.util.*
             instagram = mApp.userName
         }
         val user = User(fName, lName, city, email, gender, uid, url, instagram)
-
+        SetCurDeviceToken(user)
         // Creating a new user and saving it in the real time database.
         database.child("users").child(userId).setValue(user)
 
@@ -210,6 +211,22 @@ import java.util.*
         myIntent.putExtra("StringVariableName", uid)
         startActivity(myIntent)
         finish()
+    }
+
+    private fun SetCurDeviceToken(user: User) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            val deviceToken = task.result!!
+            user.tokenFCM = deviceToken
+            updateFcm(user)
+        }
+    }
+
+    private fun updateFcm(user: User) {
+        if(user.uid==null){
+            return
+        }
+        val ref =FirebaseDatabase.getInstance().getReference("/users/${user.uid}")
+        ref.setValue(user)
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

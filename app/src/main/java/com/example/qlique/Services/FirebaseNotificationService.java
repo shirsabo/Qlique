@@ -62,6 +62,7 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(@NonNull String s) {
+
         super.onNewToken(s);
     }
     public void fetchUser(String uidOfSender,String title, String message, String name){
@@ -99,7 +100,6 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
         });
 
     }
-//title, message, uidOfSender,name
     private void createNormalNotification(User user, String title, String message, String uidOfSender, String nameOfSender) {
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
