@@ -46,9 +46,8 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
             String title = map.get("title");
             String message = map.get("message");
             String uidOfSender = map.get("SenderUid");
-            String name = map.get("Name");
             Log.d("TAG", "onMessageReceived: Title is " + title + "\n hisID" + uidOfSender);
-            fetchUser(uidOfSender,title,  message,  name);
+            fetchUser(uidOfSender,title,  message);
 /*
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O)
                 createOreoNotification(title, message, uidOfSender,name);
@@ -59,13 +58,18 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
 
         super.onMessageReceived(remoteMessage);
     }
+    public void updateCurUserToken(@NonNull String newToken){
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users/"+FirebaseAuth.getInstance().getCurrentUser().getUid());
+        ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("which field do you want to update").setValue(newToken);
+    }
 
     @Override
     public void onNewToken(@NonNull String s) {
 
         super.onNewToken(s);
     }
-    public void fetchUser(String uidOfSender,String title, String message, String name){
+    public void fetchUser(String uidOfSender,String title, String message){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         if(uidOfSender==null){
             return;
@@ -87,9 +91,9 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
                 user.uid = dataSnapshot.child("uid").getValue().toString();
                 user. url = dataSnapshot.child("url").getValue().toString();
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O)
-                    createOreoNotification( user,title, message,name);
+                    createOreoNotification( user,title, message);
                 else
-                    createNormalNotification(user,title, message, uidOfSender,name);
+                    createNormalNotification(user,title, message);
             }
 
             @Override
@@ -100,17 +104,16 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
         });
 
     }
-    private void createNormalNotification(User user, String title, String message, String uidOfSender, String nameOfSender) {
+    private void createNormalNotification(User user, String title, String message) {
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
-        builder.setContentTitle(title+ " "+ nameOfSender)
+        builder.setContentTitle(title)
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setAutoCancel(true)
                 .setColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null))
                 .setSound(uri);
-
         Intent intent = new Intent(getApplicationContext(), chatLogActivity.class);
         intent.putExtra(NewMessageActivity.USER_KEY, user);
         getBaseContext().startActivity(intent);
@@ -123,7 +126,7 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void createOreoNotification(User user, String title, String message,String name) {
+    private void createOreoNotification(User user, String title, String message) {
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Message", NotificationManager.IMPORTANCE_HIGH);
         channel.setShowBadge(true);
         channel.enableLights(true);
@@ -137,7 +140,7 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
        // getBaseContext().startActivity(intent);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
         Notification notification = new Notification.Builder(this, CHANNEL_ID)
-                .setContentTitle(title + " " + name)
+                .setContentTitle(title)
                 .setContentText(message)
                 .setColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null))
                 .setSmallIcon(R.drawable.ic_cliqueicon)

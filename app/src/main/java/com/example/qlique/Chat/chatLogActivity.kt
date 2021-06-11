@@ -1,9 +1,14 @@
 package com.example.qlique
 
+import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.android.volley.*
+import com.android.volley.AuthFailureError
+import com.android.volley.DefaultRetryPolicy
+import com.android.volley.Response
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.qlique.Profile.User
@@ -27,11 +32,6 @@ class chatLogActivity : AppCompatActivity() {
     //var toUser:User?=intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
     private fun loadUser(snapshot: DataSnapshot):User{
         val user :User = User()
-        /*
-            public String firstName, lastName, email, city, gender, uid, url, instagramUserName;
-    public List<String> friends;
-    public List<String> hobbies;
-    public List<String> events;*/
         user.firstName = snapshot.child("firstName").value.toString()
         user.lastName = snapshot.child("lastName").value.toString()
         user.email  =  snapshot.child("email").value.toString()
@@ -41,6 +41,7 @@ class chatLogActivity : AppCompatActivity() {
         user. url = snapshot.child("url").value.toString()
         return user;
     }
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
@@ -59,7 +60,9 @@ class chatLogActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val curUser: User? = loadUser(snapshot)
                 if (curUser != null) {
+                    Log.d(ContentValues.TAG, "listening")
                     listenForMessages(curUser)
+
                 }
 
 
@@ -71,6 +74,9 @@ class chatLogActivity : AppCompatActivity() {
 
 
     }
+    override fun onBackPressed() {
+        finish()
+    }
     class chatMessage(
         val id: String, val text: String,
         val fromId: String, val toId: String, val timeStamp: Long
@@ -81,18 +87,45 @@ class chatLogActivity : AppCompatActivity() {
         )
 
     }
+    private fun handleNotificationToSrc(message: String, targetUid: String){
+        val database = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().uid.toString())
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue(User::class.java)
+                val userFullName =
+                    snapshot.child("firstName").value.toString() + "  " + snapshot.child(
+                        "lastName"
+                    ).value.toString()
+                if (userFullName != null) {
+                    userFullName
+                    if (user != null) {
+                        sendNotificationToSrc(message, targetUid, userFullName, user)
+                    }
+                }
+            }
 
-    private fun getToken(message: String, targetUid: String) {
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    private fun sendNotificationToSrc(
+        message: String,
+        targetUid: String,
+        userFullName: String,
+        senderUser: User
+    ) {
         val database = FirebaseDatabase.getInstance().getReference("users").child(targetUid)
         database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                 val user = snapshot.getValue(User::class.java)
+                val user = snapshot.getValue(User::class.java)
+                val userUid = snapshot.child("uid").value.toString()
                 val token = user?.tokenFCM
                 val to = JSONObject()
                 val data = JSONObject()
                 try {
-                    data.put("title", "Hello")
+                    data.put("title", userFullName)
                     data.put("message", message)
+                    data.put("SenderUid", senderUser.uid)
                     to.put("to", token)
                     to.put("data", data)
                     sendNotification(to)
@@ -131,11 +164,11 @@ class chatLogActivity : AppCompatActivity() {
         latestMessageRef.setValue(chatMsg)
         val latestMessageRefTo= FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
         latestMessageRefTo.setValue(chatMsg)
-        getToken(textInput, toId)
+        handleNotificationToSrc(textInput, toId)
     }
     private fun sendNotification(messageBody: JSONObject) {
         val request: JsonObjectRequest = object : JsonObjectRequest(
-            Method.POST,NOTIFICATION_URL, messageBody,
+            Method.POST, NOTIFICATION_URL, messageBody,
             Response.Listener { response: JSONObject ->
                 Log.d(
                     "notification",
@@ -172,7 +205,6 @@ class chatLogActivity : AppCompatActivity() {
     }
     fun listenForMessages(curUser: User){
         val fromId= FirebaseAuth.getInstance().uid
-
         val toId =intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY).uid
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId")
         ref.addChildEventListener(object : ChildEventListener {
@@ -236,5 +268,6 @@ class ChatToItem(val string: String, val user: User): Item<com.xwray.groupie.Gro
     override fun getLayout(): Int {
         return R.layout.chat_to_row
     }
+
 
 }

@@ -38,11 +38,6 @@ class ChatListActivity: AppCompatActivity()  {
             startActivity(intent)
 
         }
-        newMessageBtn.setOnClickListener{
-            val intent = Intent(this, NewMessageActivity::class.java)
-            startActivity(intent)
-        }
-
         listenForLatestMessages()
         //setupDummyRows()
         fetchCurrentUser()
