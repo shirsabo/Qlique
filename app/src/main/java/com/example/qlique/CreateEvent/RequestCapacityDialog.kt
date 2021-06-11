@@ -43,22 +43,23 @@ class RequestCapacityDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
+        capacityImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_youth));
         val width = (resources.displayMetrics.widthPixels).toInt()
-        val height = (resources.displayMetrics.heightPixels * 0.5).toInt()
-        button = dialog?.findViewById(R.id.dialog_buttonCapacity) as Button
-        seekBar = dialog?.findViewById(R.id.dialog_seekbarCapacity) as SeekBar
-        text = dialog?.findViewById(R.id.seekbarValCapacity) as TextView
+        val height = (resources.displayMetrics.heightPixels*0.9).toInt()
+        button = dialog?.findViewById(R.id.dialog_button_cap) as Button
+        seekBar = dialog?.findViewById(R.id.dialog_seekbar_cap) as SeekBar
+        text = dialog?.findViewById(R.id.seekbarValCap) as TextView
         button.setOnClickListener {
             val capacity = text.text
             this.mListener?.onComplete(capacity as String)
             dialog!!.dismiss()
         }
-        seekBar.setOnSeekBarChangeListener(object :
+        seekBar .setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seek: SeekBar,
                                            progress: Int, fromUser: Boolean) {
                 val progressCustom = ( progress )
-                seekbarValCapacity.text = progressCustom.toString()
+                seekbarValCap.text = progressCustom.toString()
             }
 
             override fun onStartTrackingTouch(seek: SeekBar) {

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
@@ -50,6 +51,8 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
     var categories: ArrayList<String> = ArrayList(0)
     var latlng: DoubleArray? = null
     var firstTime = true
+    var timePickerFragment = TimePickerFragment()
+    var datePickernFragment = DatePickerFragment()
 
     private var launchSomeActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -82,15 +85,34 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
             val builder = AlertDialog.Builder(this@NewEvent)
             // String array for alert dialog multi choice items
             val categoriesArray = arrayOf(
-                "Sport","Ball Game" ,"Biking","Initiative", "Business", "Fashion", "Social",
-                "Entertainment","Cooking","Study","Art", "Beauty and style", "Comedy", "Food", "Animals",
-                "Talent", "Cars", "Love and dating", "Fitness and health",
-                "Dance", "Outdoor activities", "Home and garden", "Gaming"
+                "Sport",
+                "Ball Game",
+                "Biking",
+                "Initiative",
+                "Business",
+                "Fashion",
+                "Social",
+                "Entertainment",
+                "Cooking",
+                "Study",
+                "Art",
+                "Beauty and style",
+                "Comedy",
+                "Food",
+                "Animals",
+                "Talent",
+                "Cars",
+                "Love and dating",
+                "Fitness and health",
+                "Dance",
+                "Outdoor activities",
+                "Home and garden",
+                "Gaming"
             )
             // Boolean array for initial selected items
             val checkedCategoriesArray = booleanArrayOf(
-                false,false ,false,false, false,false, false,
-                false,false,false,false, false, false, false, false,
+                false, false, false, false, false, false, false,
+                false, false, false, false, false, false, false, false,
                 false, false, false, false,
                 false, false, false, false
             )
@@ -136,9 +158,10 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
             description.movementMethod = ScrollingMovementMethod()
         }
         next_first_step.setOnClickListener {
+            val textHeader = findViewById<TextView>(R.id.headerNewEvent)
             if (urLImage != null && authorUid != null && savedDate !=null && savedtime !=null && savedDate?.text!="" && savedtime?.text!=""
                 && textInputDesc.editText?.text != null && textInputDesc.editText?.text.toString() != "" && categories.size != 0
-                && (findViewById<TextView>(R.id.headerNewEvent)).text != "") {
+                && textHeader.length()!=0 &&checkIfTimeNotPassed(timePickerFragment.hourOfDay,timePickerFragment.minute)){
                 val event: Event =
                     Event(
                         urLImage.toString(),
@@ -149,12 +172,29 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
                 createEvent(event)
                 finish()
             } else{
-                Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Please check if all fields are correct", Toast.LENGTH_LONG).show()
             }
 
         }
         setCurrentTime()
         setCurrentDate()
+    }
+
+    private fun checkIfTimeNotPassed(hourOfDayIn: Int,minuteIn: Int): Boolean {
+        if (!datePickernFragment.iseventToday){
+            return true
+        }
+        val c = Calendar.getInstance()
+        return if((hourOfDayIn <= (c.get(Calendar.HOUR_OF_DAY)))&&
+            (minuteIn <= (c.get(Calendar.MINUTE)))){
+            Toast.makeText(
+                this, "Wrong hour",
+                Toast.LENGTH_SHORT).show()
+            false
+        } else{
+            true
+        }
+
     }
 
     private fun createEvent(event: Event) {
@@ -168,7 +208,7 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
                 event.header = headerText.text.toString()
                 event.latitude = chosenLat
                 event.longitude = chosenLon
-                event.setMembersCapacity( capacityMembers)
+                event.setMembersCapacity(capacityMembers)
                 event.setDate(savedDate?.text.toString())
                 event.setHour(savedtime?.text.toString())
                 val dbRef: DatabaseReference =
@@ -208,15 +248,15 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
     }
 
     fun showTimePickerDialog(v: View) {
-        val newFragment = TimePickerFragment()
-        newFragment.show(supportFragmentManager, "timePicker")
-        hourNewEvent.text = newFragment.time
+        //val newFragment = TimePickerFragment()
+        timePickerFragment.show(supportFragmentManager, "timePicker")
+        hourNewEvent.text = timePickerFragment.time
     }
 
     fun showDatePickerDialog(v: View) {
-        val newFragment = DatePickerFragment()
-        newFragment.show(supportFragmentManager, "datePicker")
-        DateNewEvent.text = newFragment.date
+        //val datePickernFragment = DatePickerFragment()
+        datePickernFragment .show(supportFragmentManager, "datePicker")
+        DateNewEvent.text = datePickernFragment.date
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -231,7 +271,6 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
     fun openCreateEventMapActivity(v: View) {
         val intent = Intent(this, CreateEventMapActivity::class.java)
         startActivityForResult(intent, 19)
-
         intent.putExtra("FirstTime", firstTime)
         startActivity(intent)
         firstTime = false
@@ -247,12 +286,15 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         hourNewEvent.text = hourOfDay.toString() + ":" + minute.toString()
     }
-
-    private fun setCurrentTime() {
+    private fun getCurrentTime(): String {
         val timeFormat: DateFormat = SimpleDateFormat("HH:mm")
         timeFormat.timeZone = TimeZone.getTimeZone("Asia/Jerusalem")
         val curTime: String = timeFormat.format(Date())
-        hourNewEvent.text = curTime
+        return curTime
+    }
+
+    private fun setCurrentTime() {
+        hourNewEvent.text = getCurrentTime()
     }
 
     private fun setCurrentDate() {

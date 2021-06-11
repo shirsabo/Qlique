@@ -10,6 +10,7 @@ import java.util.*
 
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
     var date :String=""
+    var iseventToday = true;
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Use the current date as the default date in the picker
@@ -28,10 +29,14 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         return datePicker
     }
 
-    override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
+    override fun onDateSet(view: DatePicker, yearIn: Int, monthIn: Int, dayIn: Int) {
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+        iseventToday = yearIn == year && monthIn==month&&dayIn==day
         if ( NewEvent.savedDate!=null){
             NewEvent.savedDate!!.text  = day.toString()+"."+(month+1)+"."+year
-
         }
     }
 }

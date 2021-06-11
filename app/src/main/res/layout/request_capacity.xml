@@ -3,26 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/White">
+    android:layout_height="match_parent">
 
     <SeekBar
-        android:id="@+id/dialog_seekbarCapacity"
+        android:id="@+id/dialog_seekbar_cap"
         android:layout_width="256dp"
         android:layout_height="49dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginBottom="264dp"
         android:max="200"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.245"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayoutCapacity" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/seekbarValCapacity"
-        android:layout_width="80dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="16dp"
+        android:id="@+id/seekbarValCap"
+        android:layout_width="93dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="8dp"
         android:paddingStart="10dp"
         android:paddingTop="10dp"
         android:paddingEnd="10dp"
@@ -30,32 +29,32 @@
         android:text="0"
         android:textAlignment="center"
         android:textSize="@dimen/dimen_20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/dialog_button_cap"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayoutCapacity"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.069"
+        app:layout_constraintStart_toEndOf="@+id/dialog_seekbar_cap"
+        app:layout_constraintTop_toBottomOf="@+id/capacityImage"
+        app:layout_constraintVertical_bias="0.435" />
 
     <Button
-        android:id="@+id/dialog_buttonCapacity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
+        android:id="@+id/dialog_button_cap"
+        android:layout_width="124dp"
+        android:layout_height="46dp"
         android:background="@drawable/rounded"
         android:paddingStart="10dp"
         android:paddingTop="10dp"
         android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         android:text="@string/continu"
-        android:textColorHighlight="#0B0A0A"
-        android:textColorLink="#131111"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_seekbarCapacity"
-        app:layout_constraintVertical_bias="0.517" />
+        app:layout_constraintTop_toBottomOf="@+id/dialog_seekbar_cap"
+        app:layout_constraintVertical_bias="0.191" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayoutCapacity"
+        android:id="@+id/constraintLayout"
         android:layout_width="368dp"
         android:layout_height="95dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -65,7 +64,7 @@
         app:layout_constraintVertical_bias="0.003">
 
         <TextView
-            android:id="@+id/textViewCapacity"
+            android:id="@+id/capacityRequest"
             android:layout_width="358dp"
             android:layout_height="74dp"
             android:background="@drawable/rounded"
@@ -73,29 +72,26 @@
             android:paddingTop="10dp"
             android:paddingEnd="10dp"
             android:paddingBottom="10dp"
-            android:text="Please choose members's capacity for your future event"
+            android:text="please choose members capacity for your future event"
             android:textAlignment="center"
             android:textSize="@dimen/dimen_20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
-        android:id="@+id/imageView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="79dp"
-        app:layout_constraintBottom_toBottomOf="@+id/dialog_buttonCapacity"
+        android:id="@+id/capacityImage"
+        android:layout_width="123dp"
+        android:layout_height="144dp"
+        app:layout_constraintBottom_toTopOf="@+id/dialog_seekbar_cap"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_seekbarCapacity"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintVertical_bias="0.448" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
