@@ -59,6 +59,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/descNewEvent"
             android:layout_width="match_parent"
+            android:maxLength="250"
+            android:maxLines="7"
             android:layout_height="77dp"
             android:hint="Enter the event's description"
             android:scrollbars="vertical" />

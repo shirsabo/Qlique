@@ -30,5 +30,8 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
     override fun onTimeSet(view: TimePicker, hourOfDayIn: Int, minuteIn: Int) {
         hourOfDay =hourOfDayIn
         minute = minuteIn
+        if ( NewEvent.savedtime!=null){
+            NewEvent.savedtime!!.text  = "$hourOfDay:$minute"
+        }
     }
 }

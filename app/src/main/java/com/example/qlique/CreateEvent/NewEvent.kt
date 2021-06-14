@@ -18,6 +18,7 @@ import android.widget.TimePicker
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.example.qlique.Feed.PostAdapter
 import com.example.qlique.Map.CreateEventMapActivity
 import com.example.qlique.R
 import com.firebase.geofire.GeoFire
@@ -66,6 +67,44 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
 
     private fun openCapacityDialog(){
         RequestCapacityDialog().show(supportFragmentManager, "MyCustomFragment")
+    }
+    private fun isHeaderExists(): Boolean {
+        val textHeader = findViewById<TextView>(R.id.headerNewEvent)
+        return textHeader.length()!=0
+    }
+    private fun isDescExists(): Boolean {
+        val textDesc = findViewById<TextView>(R.id.descNewEvent)
+        return textDesc.length()!=0
+    }
+    private fun checkIfAllValuesExist(): Boolean {
+        if(!isHeaderExists()){
+            Toast.makeText(this, "Please write header", Toast.LENGTH_LONG).show()
+            return false
+        }
+        if(!isDescExists()){
+            Toast.makeText(this, "Please write description", Toast.LENGTH_LONG).show()
+            return false
+        }
+        if(urLImage==null){
+            Toast.makeText(this, "Please choose photo", Toast.LENGTH_LONG).show()
+            return false
+        }
+        if(authorUid == null){
+            return false
+        }
+        if(savedDate ==null||savedDate?.text==""){
+            Toast.makeText(this, "Please choose date", Toast.LENGTH_LONG).show()
+            return false
+        }
+        if(savedtime==null|| savedtime?.text==""){
+            Toast.makeText(this, "Please choose hour", Toast.LENGTH_LONG).show()
+            return false
+        }
+        if(categories.size == 0){
+            Toast.makeText(this, "Please choose hobbies related", Toast.LENGTH_LONG).show()
+            return false
+        }
+        return  true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -159,10 +198,9 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
         }
         next_first_step.setOnClickListener {
             val textHeader = findViewById<TextView>(R.id.headerNewEvent)
-            if (urLImage != null && authorUid != null && savedDate !=null && savedtime !=null && savedDate?.text!="" && savedtime?.text!=""
-                && textInputDesc.editText?.text != null && textInputDesc.editText?.text.toString() != "" && categories.size != 0
-                && textHeader.length()!=0 &&checkIfTimeNotPassed(timePickerFragment.hourOfDay,timePickerFragment.minute)){
-                val event: Event =
+            //val textDesc = findViewById<TextView>(R.id.textInputDesc)
+            if (checkIfAllValuesExist()&&checkIfTimeNotPassed(timePickerFragment.hourOfDay,timePickerFragment.minute)){
+                val event =
                     Event(
                         urLImage.toString(),
                         authorUid,
@@ -182,10 +220,16 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
 
     private fun checkIfTimeNotPassed(hourOfDayIn: Int,minuteIn: Int): Boolean {
         if (!datePickernFragment.iseventToday){
-            return true
+            return true;
         }
         val c = Calendar.getInstance()
-        return if((hourOfDayIn <= (c.get(Calendar.HOUR_OF_DAY)))&&
+        if(hourOfDayIn<c.get(Calendar.HOUR_OF_DAY)){
+            Toast.makeText(
+                this, "Wrong hour",
+                Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return if((hourOfDayIn == (c.get(Calendar.HOUR_OF_DAY)))&& //may be the same hour but wrong minutes
             (minuteIn <= (c.get(Calendar.MINUTE)))){
             Toast.makeText(
                 this, "Wrong hour",
@@ -217,6 +261,8 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
                 event.eventUid = postKey
                 dbRef.setValue(event)
                 writeEventLocation(event, postKey)
+                PostAdapter.addEventToUser(event.eventUid)
+
             }
         }
     }

@@ -27,6 +27,26 @@ import java.io.Serializable
 
 
 class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapter.ViewHolder>(){
+    companion object{
+        fun  addEventToUser(eventUid: String){
+            val refPost = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().currentUser?.uid}")
+            refPost.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val user: User = (snapshot.getValue(User::class.java))
+                        ?: return//FirebaseAuth.getInstance().currentUser//snapshot.getValue(User::class.java) ?: return
+                    if (user.events == null) {
+                        user.events = java.util.ArrayList()
+                    }
+                    user.events.add(eventUid)
+                    refPost.setValue(user)
+                }
+
+                override fun onCancelled(po: DatabaseError) {
+                }
+            })
+
+        }
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -57,24 +77,7 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
         ref.child(root).updateChildren(map as Map<String, String>)
 
     }
-    private fun addEventToUser(eventUid: String){
-        val refPost = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().currentUser?.uid}")
-        refPost.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val user: User = (snapshot.getValue(User::class.java))
-                    ?: return//FirebaseAuth.getInstance().currentUser//snapshot.getValue(User::class.java) ?: return
-                if (user.events == null) {
-                    user.events = java.util.ArrayList()
-                }
-                user.events.add(eventUid)
-                refPost.setValue(user)
-            }
 
-            override fun onCancelled(po: DatabaseError) {
-            }
-        })
-
-    }
     fun addMemberToEvent(eventUid: String, memberUID: String, holder: ViewHolder){
         val refPost = FirebaseDatabase.getInstance().getReference("/posts/$eventUid")
         refPost.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -204,13 +207,14 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
                  date.text = events[position].date
                  val hour = holder.itemView.hour
                  hour.text = events[position].hour
+                 /*
                  val trash = holder.itemView.trash
                  if (user != null && user.uid == FirebaseAuth.getInstance().currentUser?.uid) {
                      // The user who created the event is the current user.
                      trash.visibility = View.VISIBLE
                  } else {
                      trash.visibility = View.GONE
-                 }
+                 }*/
              }
 
              override fun onCancelled(po: DatabaseError) {

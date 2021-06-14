@@ -35,7 +35,6 @@ import com.google.android.material.navigation.NavigationView;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 import com.example.qlique.CreateEvent.Event;
 
@@ -57,13 +56,18 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Event event = dataSnapshot.getValue(Event.class);
+                if(event==null)
+                {
+                    exitEventFromCurUser(eventIn);
+                    recreate();
+                    return;
+                }
                 event.uid = dataSnapshot.child("uid").getValue().toString();
                 event.description =dataSnapshot.child("description").getValue().toString();
                 event.date = dataSnapshot.child("date").getValue().toString();
                 event.header = dataSnapshot.child("header").getValue().toString();
                 event.photoUrl = dataSnapshot.child("photoUrl").getValue().toString();
                 /** TO DO: Check that the event has not yet occurred **/
-                if(event==null){return;}
                 if(eventsLists.contains(eventIn)){
                     return;
                 }
@@ -210,19 +214,40 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
             return R.layout.event_custom_in_events_display;
         }
     }
+    private void handleDeleteEventByAdmin(String userUid,String eventUid) {
+        exitEventFromCurUser(eventUid);
+        deleteEvent(eventUid);
+
+    }
+
+    private void deleteEvent(String eventUid) {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference refPost = database.getReference("posts/");
+        refPost.child(eventUid).removeValue();
+        DatabaseReference refGPSQuery = database.getReference("geoFire/");
+        refGPSQuery.child(eventUid).removeValue();
+    }
 
     private void handleExitEvent(Event event,EventItem eventItem) {
         if(event==null){
             return;
         }
         else{ //delete eventUid from events in current user's events.
-            String eventUid = new String(event.eventUid);
-            ExitEventFromCurUser(event.eventUid);
-            deleteUserFromEventsMembers(eventUid,eventItem);
+            String curUser = FirebaseAuth.getInstance().getUid();
+            if(event.uid.equals(FirebaseAuth.getInstance().getUid())){ // Admin deletes event.
+                handleDeleteEventByAdmin(curUser,event.eventUid);
+                recreate();
+            }else{
+                String eventUid = event.eventUid;
+                exitEventFromCurUser(event.eventUid);
+                deleteUserFromEventsMembers(eventUid,eventItem);
+            }
         }
     }
 
-    private void ExitEventFromCurUser(String eventUid) {
+
+
+    private void exitEventFromCurUser(String eventUid) {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users/"+ FirebaseAuth.getInstance().getCurrentUser().getUid());
         // Attach a listener to read the data at our posts reference
@@ -261,6 +286,7 @@ public class EventsManager extends AppCompatActivity implements NavigationView.O
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Event event = dataSnapshot.getValue(Event.class);
                 if(event==null){
+                    exitEventFromCurUser(eventUid);
                     return;
                 }
                 event.uid = dataSnapshot.child("uid").getValue().toString();
