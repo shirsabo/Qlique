@@ -18,6 +18,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qlique.Chat.ChatListActivity
+import com.example.qlique.CreateEvent.CalendarEvent
 import com.example.qlique.EventsDisplay.EventsManager
 import com.example.qlique.LoginAndSignUp.LoginActivity
 import com.example.qlique.LoginAndSignUp.UpdatePassword
@@ -229,6 +230,15 @@ class MainActivity : AppCompatActivity() {
                         snapshot.getValue(Event::class.java)
                     event?.uid = snapshot.child("uid").value.toString()
                     event?.description = snapshot.child("description").value.toString()
+                    event?.hour = snapshot.child("hour").value.toString()
+                    event?.date = snapshot.child("date").value.toString()
+                    if (event != null) {
+                       if(CalendarEvent.isDatePassed(event.date)) {
+                           continue;
+                       }else if(CalendarEvent.isTimePassed(event.hour)){
+                           continue
+                       }
+                    }
                     event?.setEventUid(snapshot.key)
                     if (event != null) {
                         events.add(event)

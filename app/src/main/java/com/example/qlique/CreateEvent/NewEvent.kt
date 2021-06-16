@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
@@ -342,11 +341,13 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
     private fun setCurrentTime() {
         hourNewEvent.text = getCurrentTime()
     }
-
-    private fun setCurrentDate() {
+    private fun getCurrentDate(): Date {
         val c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jerusalem"));
+        return c.getTime()
+    }
+    private fun setCurrentDate() {
         val dateFormat: SimpleDateFormat? = SimpleDateFormat("MMMM dd, yyyy");
-        DateNewEvent.text = dateFormat?.format(c.getTime())
+        DateNewEvent.text = dateFormat?.format(getCurrentDate())
     }
 
     override fun onComplete(r: String) {
