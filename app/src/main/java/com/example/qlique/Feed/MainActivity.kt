@@ -232,13 +232,14 @@ class MainActivity : AppCompatActivity() {
                     event?.description = snapshot.child("description").value.toString()
                     event?.hour = snapshot.child("hour").value.toString()
                     event?.date = snapshot.child("date").value.toString()
+                    /*
                     if (event != null) {
                        if(CalendarEvent.isDatePassed(event.date)) {
                            continue;
                        }else if(CalendarEvent.isTimePassed(event.hour)){
                            continue
                        }
-                    }
+                    }*/
                     event?.setEventUid(snapshot.key)
                     if (event != null) {
                         events.add(event)
