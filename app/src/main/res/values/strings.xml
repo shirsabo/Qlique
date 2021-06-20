@@ -92,4 +92,11 @@
     <string name="please_choose_the_distance_of_the_events_shown_in_the_map">Please choose the distance of the events shown in the map</string>
     <string name="showHide">Show</string>
     <string name="there_are_no_registered_users_for_the_event_yet">There are no registered users for the event yet</string>
+    <string name="change_password">change password</string>
+    <string name="_0">0</string>
+    <string name="events">Events</string>
+    <string name="account_info">Account Info</string>
+    <string name="gender">Gender</string>
+    <string name="name">Name</string>
+    <string name="back">back</string>
 </resources>

@@ -38,14 +38,13 @@ import java.util.Objects;
 
 public class ProfilePage extends AppCompatActivity{
     private TextView name, city, profileName, eventsNumber, gender;
-    private ListView hobbies;
     private User user;
     private String userIdProfile;
-    ArrayAdapter<String> adapter;
+
     void setProfile(String uid){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users/"+uid);
-// Attach a listener to read the data at our posts reference
+        // Attach a listener to read the data at our posts reference
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -73,14 +72,12 @@ public class ProfilePage extends AppCompatActivity{
         Context context = this;
         name = findViewById(R.id.name);
         city = findViewById(R.id.city);
-        //hobbies = findViewById(R.id.multiple_list_view);
         Button instagram = findViewById(R.id.instagram);
         profileName =findViewById(R.id.profile_name);
         eventsNumber = findViewById(R.id.events_number);
         gender = findViewById(R.id.gender);
         Button chat = findViewById(R.id.envelop);
         com.mikhaellopez.circularimageview.CircularImageView profilePic = findViewById(R.id.ProfileCircularImage);
-        User curUser = SignupActivity.Companion.getCurrentUser();
         userIdProfile = getIntent().getStringExtra("EXTRA_SESSION_ID");
         setProfile(userIdProfile);
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -101,13 +98,14 @@ public class ProfilePage extends AppCompatActivity{
                     String nameCombine = user.firstName + " " + user.lastName;
                     name.setText(nameCombine);
                     city.setText(user.city);
-                /*    adapter=new ArrayAdapter<String>(context,
-                            android.R.layout.simple_list_item_1,
-                            user.hobbies);
-               //     hobbies.setAdapter(adapter);
-                 */
                     profileName.setText(nameCombine);
-                    eventsNumber.setText("0");
+                    String events_num;
+                    if (user.events != null) {
+                        events_num = "" + user.events.size();
+                    } else {
+                        events_num = "0";
+                    }
+                    eventsNumber.setText(events_num);
                     gender.setText(user.gender);
                 }
             }

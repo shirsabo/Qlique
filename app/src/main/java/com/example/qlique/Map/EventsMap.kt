@@ -113,6 +113,7 @@ open class EventsMap : BasicMapActivity() {
                         event.members.add(curUidUser)
                         saveEvent(event)
                         addEventToCurUser(eventUid)
+                        return
                     }
                 } else {
                     // It is not possible to register because there is no space available at the event.
@@ -146,8 +147,9 @@ open class EventsMap : BasicMapActivity() {
             dialog.cancel()
 
         }
+        dialog.cancel()
     }
-    protected fun updateAuthor(view:View ,uid: String){
+    private fun updateAuthor(view:View, uid: String){
         FirebaseDatabase.getInstance().getReference("/users/$uid")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 @SuppressLint("SetTextI18n")
