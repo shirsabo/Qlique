@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.opengl.Visibility
+import android.os.CountDownTimer
 import android.os.Parcelable
 import android.text.method.ScrollingMovementMethod
 import android.util.DisplayMetrics
@@ -34,6 +35,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.join_event_dialog.view.*
 
 open class EventsMap : BasicMapActivity() {
+    var isJoinDialogOpen = false
 
     protected fun updateViewOfBottomDialog(view: View, event: Event){
         val map = view.findViewById<View>(R.id.map_image_view) as ImageView
@@ -133,6 +135,7 @@ open class EventsMap : BasicMapActivity() {
     }
 
     private fun openJoinDialog(applicationContext: Context, eventUid: String) {
+        isJoinDialogOpen = true
         val view = View.inflate(applicationContext, R.layout.join_event_dialog, null)
         val builder = androidx.appcompat.app.AlertDialog.Builder(applicationContext)
         builder.setView(view)
@@ -142,13 +145,31 @@ open class EventsMap : BasicMapActivity() {
         dialog.window?.setLayout(width, height)
         dialog.show()
         view.leave_btn.setOnClickListener {
+            isJoinDialogOpen = true
             joinCurUserToEvent(eventUid)
             dialog.cancel()
+            setTimer()
         }
         view.cancle_leave_btn.setOnClickListener {
+            isJoinDialogOpen = true
             dialog.cancel()
+            setTimer()
         }
+        isJoinDialogOpen = false
     }
+
+    private fun setTimer(){
+        object : CountDownTimer(3000, 1000) {
+
+            override fun onTick(millisUntilFinished: Long) {
+            }
+
+            override fun onFinish() {
+                isJoinDialogOpen = false
+            }
+        }.start()
+    }
+
     private fun updateAuthor(view:View, uid: String){
         FirebaseDatabase.getInstance().getReference("/users/$uid")
             .addListenerForSingleValueEvent(object : ValueEventListener {

@@ -44,6 +44,9 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
                 .addValueEventListener(object :
                     ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (isJoinDialogOpen){
+                            return
+                        }
                         val event = dataSnapshot.getValue(Event::class.java)
                         if (event != null) {
                             event.uid = dataSnapshot.child("uid").value.toString()
@@ -61,7 +64,7 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
                             updateViewOfBottomDialog(bottom_sheet_view,event)
                             bottom_sheet_view.findViewById<TextView>(R.id.description_post).text =
                                 "hey"
-                            updateViewOfBottomDialog(bottom_sheet_view,event)
+                            // updateViewOfBottomDialog(bottom_sheet_view,event)
                             bottomSheetDialogIn.setContentView(bottom_sheet_view)
                             bottomSheetDialogIn.show()
 

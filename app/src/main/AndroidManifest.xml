@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".Map.EventsMap"></activity>
+        <activity android:name=".Map.EventsMap" />
         <activity android:name=".Map.ShowEventMap" android:launchMode="singleTask"/>
         <activity android:name=".Map.DisplayEventsMapActivity" />
         <activity android:name=".Map.CreateEventMapActivity" />
