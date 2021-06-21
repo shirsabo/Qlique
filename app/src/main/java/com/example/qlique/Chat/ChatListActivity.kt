@@ -98,6 +98,8 @@ class ChatListActivity: AppCompatActivity()  {
     val latestMessagesMap = HashMap<String, chatLogActivity.chatMessage>()
     private fun refreshRecycleViewMessages(){
         adapter.clear()
+        latestMessagesMap.toList().sortedBy { (_, value) -> value.timeStamp}.toMap()
+        latestMessagesMap.toSortedMap(reverseOrder())
         latestMessagesMap.values.forEach{
             adapter.add(LatestMessageRow(it))
         }

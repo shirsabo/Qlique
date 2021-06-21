@@ -1,13 +1,9 @@
 package com.example.qlique.CreateEvent;
 
-import android.annotation.SuppressLint;
-
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 import java.util.TimeZone;
 
 public class CalendarEvent {
@@ -26,8 +22,10 @@ public class CalendarEvent {
         int hour =  Integer.parseInt(parts[0]);
         int minutes = Integer.parseInt(parts[1]);
         int curHour  = Integer.parseInt(splitTimeString(getCurrentTime())[0]);
-        int curmin  = Integer.parseInt(splitTimeString(getCurrentTime())[1]);
-        if (curHour>= hour && curmin>=minutes ){
+        int curMin  = Integer.parseInt(splitTimeString(getCurrentTime())[1]);
+
+
+        if (curHour>= hour && curMin>=minutes ){
             return true;
         }else{
             return false;
@@ -35,7 +33,7 @@ public class CalendarEvent {
 
     }
 
-    public static boolean isDatePassed(String dateIn){
+    public static boolean isEventPassed(String dateIn, String hour){
         if (dateIn==null){
             return true;
         }
@@ -47,15 +45,23 @@ public class CalendarEvent {
         int month = Integer.parseInt(parts[1]);
         int year = Integer.parseInt(parts[2]);
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jerusalem"));
-        if (c.get(Calendar.YEAR)> year){
+        int cur_year = c.get(Calendar.YEAR);//counting starts at zero
+        int cur_month = c.get(Calendar.MONTH)+1;//counting starts at zero
+        int cur_day_of_month = c.get(Calendar.DAY_OF_MONTH);
+        if (cur_year> year){ // 2022>2021 ->passed
             return true;
-        }if(c.get(Calendar.MONTH) == month) {
-            if(Calendar.DAY_OF_MONTH<day){
+        }else if(cur_year== year){
+            if(cur_month > month) {// April>march ->passed
                 return true;
-            }else{return false;}
-        }else{
-            return true;
+            }else if (cur_month==month){
+                if(cur_day_of_month>day){ //// 3>2 ->passed
+                    return true;
+                }else if(cur_day_of_month==day){ //same day
+                    return isTimePassed(hour);
+                }
+            }
         }
+        return false;
     }
     public static Date getCurrentDate(){
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jerusalem"));

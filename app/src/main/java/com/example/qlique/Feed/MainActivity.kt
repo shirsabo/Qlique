@@ -23,7 +23,6 @@ import com.example.qlique.EventsDisplay.EventsManager
 import com.example.qlique.LoginAndSignUp.LoginActivity
 import com.example.qlique.LoginAndSignUp.UpdatePassword
 import com.example.qlique.Map.DisplayEventsMapActivity
-import com.example.qlique.Map.ShowEventMap
 //import com.example.qlique.Map.DisplayEventsMapActivity
 import com.example.qlique.Profile.ProfilePage
 import com.example.qlique.Profile.User
@@ -232,14 +231,11 @@ class MainActivity : AppCompatActivity() {
                     event?.description = snapshot.child("description").value.toString()
                     event?.hour = snapshot.child("hour").value.toString()
                     event?.date = snapshot.child("date").value.toString()
-                    /*
                     if (event != null) {
-                       if(CalendarEvent.isDatePassed(event.date)) {
+                       if(CalendarEvent.isEventPassed(event.date,event.hour)) { // show onlu future events
                            continue;
-                       }else if(CalendarEvent.isTimePassed(event.hour)){
-                           continue
                        }
-                    }*/
+                    }
                     event?.setEventUid(snapshot.key)
                     if (event != null) {
                         events.add(event)

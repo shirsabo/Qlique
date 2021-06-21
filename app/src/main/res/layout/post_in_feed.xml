@@ -164,14 +164,15 @@
                 android:paddingRight="5dp"
                 android:paddingBottom="5dp"
                 app:colorClickableText="@color/coolGreen"
-                app:trimCollapsedText="read more"
-                app:trimExpandedText="read less"
-                app:trimLength="30"
+                app:trimCollapsedText="more.."
+                app:trimExpandedText="less.."
+                app:trimLength="50"
                 app:trimMode="trimModeLength"
                 tools:ignore="UnknownIdInLayout" />
 
             <TextView
                 android:id="@+id/date"
+                android:textStyle="bold"
                 android:layout_width="181dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -184,6 +185,7 @@
 
             <TextView
                 android:id="@+id/hour"
+                android:textStyle="bold"
                 android:layout_width="82dp"
                 android:layout_height="21dp"
                 android:layout_alignParentTop="true"

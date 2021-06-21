@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.example.qlique.CreateEvent.CalendarEvent
 import com.example.qlique.CreateEvent.Event
 import com.example.qlique.NewMessageActivity.Companion.USER_KEY
 import com.example.qlique.Profile.User
@@ -244,6 +245,9 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
                  event?.uid = snapshot.child("uid").value.toString()
                  event?.description = snapshot.child("description").value.toString()
                  if (event != null) {
+                     if(CalendarEvent.isEventPassed(event.date,event.hour)) { // show only future events
+                        return;
+                     }
                      events.add(event)
                  }
                  event?.latitude = snapshot.child("latitude").getValue(Double::class.java)
