@@ -83,6 +83,7 @@ public class Event implements Parcelable, Serializable {
         date = in.readString();
         membersCapacity = in.readInt();
         hour = in.readString();
+        eventUid = in.readString();
     }
     public static final Creator<Event> CREATOR = new Creator<Event>() {
         @Override
@@ -113,6 +114,7 @@ public class Event implements Parcelable, Serializable {
         dest.writeString(date);
         dest.writeInt(membersCapacity);
         dest.writeString(hour);
+        dest.writeString(eventUid);
 
     }
 }
