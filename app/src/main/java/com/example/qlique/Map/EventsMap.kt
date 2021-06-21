@@ -7,10 +7,12 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.opengl.Visibility
 import android.os.Parcelable
 import android.text.method.ScrollingMovementMethod
 import android.util.DisplayMetrics
 import android.view.View
+import android.view.View.GONE
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -34,8 +36,10 @@ import kotlinx.android.synthetic.main.join_event_dialog.view.*
 open class EventsMap : BasicMapActivity() {
 
     protected fun updateViewOfBottomDialog(view: View, event: Event){
-        val textView =view.findViewById<View>(R.id.description_post_info_bottom) as TextView
-        val title =view.findViewById<View>(R.id.title) as TextView
+        val map = view.findViewById<View>(R.id.map_image_view) as ImageView
+        map.visibility = GONE
+        val textView =view.findViewById<View>(R.id.description_post) as TextView
+        val title =view.findViewById<View>(R.id.headerPost) as TextView
         textView.text = event.description
         title.text = event.header
         textView.movementMethod = ScrollingMovementMethod()
@@ -44,7 +48,7 @@ open class EventsMap : BasicMapActivity() {
         val hour =view.findViewById<View>(R.id.hour) as TextView
         date.text = event.date
         hour.text = event.hour
-        val view1: ImageView = view.findViewById(R.id.image_home_info_bottom)
+        val view1: ImageView = view.findViewById(R.id.post_image_home)
         if(event.photoUrl!=null){
             Picasso.get().load(event.photoUrl).into(view1)
         }
@@ -54,7 +58,7 @@ open class EventsMap : BasicMapActivity() {
             i.putExtra("eventobj",  event as Parcelable)
             view.context.startActivity(i)
         }
-        val joinBtn = view.findViewById<ImageView>(R.id.post_image_join_btn)
+        val joinBtn = view.findViewById<ImageView>(R.id.post_image_like_btn)
         joinBtn.setOnClickListener {
             openJoinDialog(view.context,event.eventUid)
         }
@@ -76,7 +80,7 @@ open class EventsMap : BasicMapActivity() {
         refPost.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user: User = (snapshot.getValue(User::class.java))
-                    ?: return//FirebaseAuth.getInstance().currentUser//snapshot.getValue(User::class.java) ?: return
+                    ?: return
                 if (user.events == null) {
                     user.events = java.util.ArrayList()
                 }
@@ -139,15 +143,11 @@ open class EventsMap : BasicMapActivity() {
         dialog.show()
         view.leave_btn.setOnClickListener {
             joinCurUserToEvent(eventUid)
-            //dialog.dismiss()
             dialog.cancel()
         }
         view.cancle_leave_btn.setOnClickListener {
-           // dialog.dismiss()
             dialog.cancel()
-
         }
-        dialog.cancel()
     }
     private fun updateAuthor(view:View, uid: String){
         FirebaseDatabase.getInstance().getReference("/users/$uid")
@@ -156,15 +156,15 @@ open class EventsMap : BasicMapActivity() {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val user = (dataSnapshot).getValue(User::class.java)
                     if (user!!.url != null) {
-                        val authorImage = view.findViewById<ImageView>(R.id.user_profile_info_bottom)
+                        val authorImage = view.findViewById<ImageView>(R.id.photo_event_new)
                         Picasso.get().load(user.url).into(authorImage)
                     }
-                    val userName = view.findViewById<TextView>(R.id.user_name_info_bottom)
+                    val userName = view.findViewById<TextView>(R.id.user_name_post)
                     userName.text =
                         dataSnapshot.child("firstName").value.toString() + " " + dataSnapshot.child(
                             "lastName"
                         ).value.toString()
-                    val chat = view.findViewById<View>(R.id.info_image_chat_btn_bottom) as ImageView
+                    val chat = view.findViewById<View>(R.id.post_image_chat_btn) as ImageView
                     chat.setOnClickListener {
                         val intent = Intent(view.context, chatLogActivity::class.java)
                         intent.putExtra(NewMessageActivity.USER_KEY, user)

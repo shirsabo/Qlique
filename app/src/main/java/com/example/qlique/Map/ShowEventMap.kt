@@ -29,9 +29,8 @@ class ShowEventMap : EventsMap() {
         val event :Event= intent.getSerializableExtra("event") as Event
         this.event = event
         // Move the map's center to be the event chosen.
-        val latLng = CameraUpdateFactory.newLatLng(LatLng(event.latitude, event.longitude)) //= LatLng(event.latitude, event.longitude)
-        val zoom = CameraUpdateFactory.zoomTo(DEFAULT_ZOOM)//: Float = DEFAULT_ZOOM
-       // mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+        val latLng = CameraUpdateFactory.newLatLng(LatLng(event.latitude, event.longitude))
+        val zoom = CameraUpdateFactory.zoomTo(DEFAULT_ZOOM)
         // Add a marker to the map.
         addMarkerToMap(event)
         mMap!!.moveCamera(latLng);
@@ -53,22 +52,16 @@ class ShowEventMap : EventsMap() {
         )
         val bottomSheetView:View =
             LayoutInflater.from(this@ShowEventMap).inflate(
-                R.layout.layout_bottom_sheet_map, findViewById(
+                R.layout.post_in_feed, findViewById(
                     R.id.bottomContainer
                 )
             )
         updateViewOfBottomDialog(bottomSheetView, event)
-        bottomSheetView.findViewById<TextView>(R.id.description_post_info_bottom).text =
+        bottomSheetView.findViewById<TextView>(R.id.description_post).text =
             "hey"
-        //val image:ImageView = bottomSheetView.findViewById(R.id.post_image_join_btn)
         updateViewOfBottomDialog(bottomSheetView, event)
         bottomSheetDialogIn.setContentView(bottomSheetView)
         bottomSheetDialogIn.show()
-        /*
-        image.setOnClickListener {
-            openJoinDialog(applicationContext, event.eventUid);
-        }
-         */
     }
 
     private fun addMarkerToMap(event: Event){

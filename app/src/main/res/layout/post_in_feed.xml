@@ -8,7 +8,8 @@
     android:layout_marginTop="12dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    app:cardElevation="5dp">
+    app:cardElevation="5dp"
+    android:id="@+id/bottomContainer">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -166,7 +167,7 @@
                 app:colorClickableText="@color/coolGreen"
                 app:trimCollapsedText="more.."
                 app:trimExpandedText="less.."
-                app:trimLength="50"
+                app:trimLength="2000"
                 app:trimMode="trimModeLength"
                 tools:ignore="UnknownIdInLayout" />
 

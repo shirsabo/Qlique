@@ -89,8 +89,6 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.Profile -> profileClicked()
                 R.id.Chat -> chatClicked()
-                //R.id.nav_item_three -> Toast.makeText(this, "Clicked item three", Toast.LENGTH_SHORT)
-                //  .show()
                 R.id.ChangePassword -> changePasswordClicked()
                 R.id.EventsManager ->eventsManagerClicked()
                 R.id.Logout -> logoutClicked()
@@ -100,15 +98,6 @@ class MainActivity : AppCompatActivity() {
 
             return@setNavigationItemSelectedListener true
         }
-        /*
-        val events : ArrayList<Event> = ArrayList()
-        for(i in 0..100){
-            events.add(Event())
-        }
-
-        feed.layoutManager = LinearLayoutManager(this)
-        feed.adapter= postAdapter(events)
-         */
         fetchPosts()
         if(!isServicesOK()){
             Toast.makeText(this, "can't open map", Toast.LENGTH_LONG)
@@ -232,7 +221,8 @@ class MainActivity : AppCompatActivity() {
                     event?.hour = snapshot.child("hour").value.toString()
                     event?.date = snapshot.child("date").value.toString()
                     if (event != null) {
-                       if(CalendarEvent.isEventPassed(event.date,event.hour)) { // show onlu future events
+                       if(CalendarEvent.isEventPassed(event.date,event.hour)) {
+                           // show only future events
                            continue;
                        }
                     }

@@ -39,12 +39,6 @@ public class EventInfo extends AppCompatActivity {
         Intent i = getIntent();
         Event event = i.getParcelableExtra("event");
         ImageView membersInfo =findViewById(R.id.members_info);
-        ImageView join_btn = findViewById(R.id.post_image_join_btn);
-        /*
-        join_btn.setOnClickListener(v -> {
-            openJoinDialog(getApplicationContext(), event.eventUid);
-        });
-        */
         membersInfo.setOnClickListener(v -> {
             Intent i1 = new Intent(v.getContext(), EventMembers.class);
             i1.putExtra("eventobj", (Serializable) event);
