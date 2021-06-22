@@ -1,4 +1,5 @@
 package com.example.qlique.CreateEvent;
+import android.annotation.SuppressLint;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,13 +24,7 @@ public class CalendarEvent {
         int minutes = Integer.parseInt(parts[1]);
         int curHour  = Integer.parseInt(splitTimeString(getCurrentTime())[0]);
         int curMin  = Integer.parseInt(splitTimeString(getCurrentTime())[1]);
-
-
-        if (curHour>= hour && curMin>=minutes ){
-            return true;
-        }else{
-            return false;
-        }
+        return curHour >= hour && curMin >= minutes;
 
     }
 
@@ -68,10 +63,9 @@ public class CalendarEvent {
         return c.getTime();
     }
     public static String getCurrentTime(){
-        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        @SuppressLint("SimpleDateFormat") DateFormat timeFormat = new SimpleDateFormat("HH:mm");
         timeFormat.setTimeZone(TimeZone.getTimeZone("Asia/Jerusalem"));
-        String curTime = timeFormat.format(new Date());
-        return curTime;
+        return timeFormat.format(new Date());
     }
 
 }

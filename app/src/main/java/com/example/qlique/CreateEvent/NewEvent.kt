@@ -1,11 +1,11 @@
 package com.example.qlique.CreateEvent
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -52,18 +52,15 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
     var latlng: DoubleArray? = null
     var firstTime = true
     var timePickerFragment = TimePickerFragment()
-    var datePickernFragment = DatePickerFragment()
-
+    private var datePickerFragment = DatePickerFragment()
     private var launchSomeActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 urLImage = result.data?.data
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, result.data?.data)
-                val bitmapDrawble = BitmapDrawable(bitmap)
                 photo_event_new.setImageBitmap(bitmap)
             }
         }
-
     private fun openCapacityDialog(){
         RequestCapacityDialog().show(supportFragmentManager, "MyCustomFragment")
     }
@@ -106,6 +103,7 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
         return  true
     }
 
+    @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_event)
@@ -211,14 +209,13 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
             } else{
                 Toast.makeText(this, "Please check if all fields are correct", Toast.LENGTH_LONG).show()
             }
-
         }
         setCurrentTime()
         setCurrentDate()
     }
 
     private fun checkIfTimeNotPassed(hourOfDayIn: Int,minuteIn: Int): Boolean {
-        if (!datePickernFragment.iseventToday){
+        if (!datePickerFragment.isEventToday){
             return true;
         }
         val c = Calendar.getInstance()
@@ -237,7 +234,6 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
         } else{
             true
         }
-
     }
 
     private fun createEvent(event: Event) {
@@ -261,7 +257,6 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
                 dbRef.setValue(event)
                 writeEventLocation(event, postKey)
                 PostAdapter.addEventToUser(event.eventUid)
-
             }
         }
     }
@@ -271,7 +266,7 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
         val ref: DatabaseReference = firebaseDatabase.getReference("geoFire")
         val geoFire = GeoFire(ref)
         geoFire.setLocation(
-            "$postKey",
+            postKey,
             GeoLocation(event.latitude, event.longitude),
             object : GeoFire.CompletionListener {
                 fun onComplete(key: String?, error: FirebaseError?) {
@@ -293,24 +288,13 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
     }
 
     fun showTimePickerDialog(v: View) {
-        //val newFragment = TimePickerFragment()
         timePickerFragment.show(supportFragmentManager, "timePicker")
         hourNewEvent.text = timePickerFragment.time
     }
 
     fun showDatePickerDialog(v: View) {
-        //val datePickernFragment = DatePickerFragment()
-        datePickernFragment .show(supportFragmentManager, "datePicker")
-        DateNewEvent.text = datePickernFragment.date
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 19) {
-            if (resultCode == RESULT_OK) {
-                //latlng = data?.getDoubleArrayExtra("coordinates")
-            }
-        }
+        datePickerFragment .show(supportFragmentManager, "datePicker")
+        DateNewEvent.text = datePickerFragment.date
     }
 
     fun openCreateEventMapActivity(v: View) {
@@ -324,13 +308,16 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        DateNewEvent.text = dayOfMonth.toString() + "." + month + "." + year
+        DateNewEvent.text = "$dayOfMonth.$month.$year"
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        hourNewEvent.text = hourOfDay.toString() + ":" + minute.toString()
+        hourNewEvent.text = "$hourOfDay:$minute"
     }
+    @SuppressLint("SimpleDateFormat")
     private fun getCurrentTime(): String {
         val timeFormat: DateFormat = SimpleDateFormat("HH:mm")
         timeFormat.timeZone = TimeZone.getTimeZone("Asia/Jerusalem")
@@ -345,6 +332,7 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
         val c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jerusalem"));
         return c.getTime()
     }
+    @SuppressLint("SimpleDateFormat")
     private fun setCurrentDate() {
         val dateFormat: SimpleDateFormat? = SimpleDateFormat("MMMM dd, yyyy");
         DateNewEvent.text = dateFormat?.format(getCurrentDate())

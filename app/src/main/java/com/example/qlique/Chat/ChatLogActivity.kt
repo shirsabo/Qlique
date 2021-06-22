@@ -1,5 +1,4 @@
 package com.example.qlique
-
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.os.Bundle
@@ -25,7 +24,7 @@ import org.json.JSONException
 import org.json.JSONObject
 
 
-class chatLogActivity : AppCompatActivity() {
+class ChatLogActivity : AppCompatActivity() {
     var NOTIFICATION_URL = "https://fcm.googleapis.com/fcm/send"
     var SERVER_KEY = "AAAAxFzL4DI:APA91bF0XL_FWScS0pjrd3xbEpiYQ4tYn99_gHLXWDkxti202bXk9KMxPyuUUGrcHdIWQf9zCdm3Wmmk0_CKKOWWfpOrWQFffEguUytD0mW-U2c5CaTE3pGcIkocOlzGzPGXt9skLgzt"
     val adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
@@ -49,7 +48,7 @@ class chatLogActivity : AppCompatActivity() {
         val user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
         supportActionBar?.title= user?.firstName+ " "+user?.lastName
         other_side_user.text = user?.firstName+ " "+user?.lastName
-        Picasso.get().load(user.url).into(other_side_photo)
+        Picasso.get().load(user?.url).into(other_side_photo)
         //dummySetUP()
         sendBtn.setOnClickListener{
             performSendMessage()
@@ -62,22 +61,17 @@ class chatLogActivity : AppCompatActivity() {
                 if (curUser != null) {
                     Log.d(ContentValues.TAG, "listening")
                     listenForMessages(curUser)
-
                 }
-
-
             }
 
             override fun onCancelled(po: DatabaseError) {
             }
         })
-
-
     }
     override fun onBackPressed() {
         finish()
     }
-    class chatMessage(
+    class ChatMessage(
         val id: String, val text: String,
         val fromId: String, val toId: String, val timeStamp: Long
     ){
@@ -96,14 +90,10 @@ class chatLogActivity : AppCompatActivity() {
                     snapshot.child("firstName").value.toString() + "  " + snapshot.child(
                         "lastName"
                     ).value.toString()
-                if (userFullName != null) {
-                    userFullName
-                    if (user != null) {
-                        sendNotificationToSrc(message, targetUid, userFullName, user)
-                    }
+                if (user != null) {
+                    sendNotificationToSrc(message, targetUid, userFullName, user)
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {}
         })
     }
@@ -133,14 +123,13 @@ class chatLogActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {}
         })
     }
 
-    fun performSendMessage(){
+    private fun performSendMessage(){
         val textInput = text_message_chat.text.toString()
-        if(textInput.length == 0){
+        if(textInput.isEmpty()){
             return
         }
         val user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
@@ -149,10 +138,10 @@ class chatLogActivity : AppCompatActivity() {
         if (fromId==null)return
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId").push()
         val toRef=FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId").push()
-        val chatMsg = chatMessage(
+        val chatMsg = ChatMessage(
             ref.key!!,
             textInput,
-            fromId!!,
+            fromId,
             toId,
             System.currentTimeMillis() / 1000
         )
@@ -201,15 +190,14 @@ class chatLogActivity : AppCompatActivity() {
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         )
         requestQueue.add(request)
-
     }
     fun listenForMessages(curUser: User){
         val fromId= FirebaseAuth.getInstance().uid
-        val toId =intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY).uid
+        val toId =intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)?.uid
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId")
         ref.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val msg = snapshot.getValue(chatMessage::class.java)
+                val msg = snapshot.getValue(ChatMessage::class.java)
                 val toUser = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
                 if (msg != null) {
                     if (msg.fromId == FirebaseAuth.getInstance().uid && msg.toId == toUser!!.uid) {
@@ -236,9 +224,7 @@ class chatLogActivity : AppCompatActivity() {
             override fun onChildRemoved(snapshot: DataSnapshot) {
                 TODO("Not yet implemented")
             }
-
         })
-
     }
 }
 class ChatFromItem(val string: String, val user: User): Item<com.xwray.groupie.GroupieViewHolder>(){
@@ -255,7 +241,6 @@ class ChatFromItem(val string: String, val user: User): Item<com.xwray.groupie.G
     override fun getLayout(): Int {
         return R.layout.chat_from_row
     }
-
 }
 class ChatToItem(val string: String, val user: User): Item<com.xwray.groupie.GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int){
@@ -268,6 +253,4 @@ class ChatToItem(val string: String, val user: User): Item<com.xwray.groupie.Gro
     override fun getLayout(): Int {
         return R.layout.chat_to_row
     }
-
-
 }

@@ -18,14 +18,10 @@ class RequestCapacityDialog : DialogFragment() {
     lateinit var button: Button
     lateinit var seekBar: SeekBar
     lateinit var text: TextView
-
     interface OnCompleteListener {
         fun onComplete(r: String)
     }
-
     private var mListener: OnCompleteListener? = null
-
-    // make sure the Activity implemented it
     override fun onAttach(activity: Activity) {
         super.onAttach(activity)
         try {
@@ -35,15 +31,13 @@ class RequestCapacityDialog : DialogFragment() {
         }
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        //dialog!!.window?.setBackgroundDrawableResource(R.drawable.round_corner)
         return inflater.inflate(R.layout.request_capacity, container, false)
     }
 
     override fun onStart() {
         super.onStart()
-        capacityImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_youth));
+        capacityImage.setImageDrawable(resources.getDrawable(R.drawable.ic_youth));
         val width = (resources.displayMetrics.widthPixels).toInt()
         val height = (resources.displayMetrics.heightPixels*0.9).toInt()
         button = dialog?.findViewById(R.id.dialog_button_cap) as Button
@@ -63,14 +57,12 @@ class RequestCapacityDialog : DialogFragment() {
             }
 
             override fun onStartTrackingTouch(seek: SeekBar) {
-                // write custom code for progress is started
             }
 
             override fun onStopTrackingTouch(seek: SeekBar) {
-                // write custom code for progress is stopped
             }
         })
-        dialog!!.window?.setLayout(width, height)//ViewGroup.LayoutParams.WRAP_CONTENT, width)
+        dialog!!.window?.setLayout(width, height)
     }
 
 }

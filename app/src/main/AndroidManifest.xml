@@ -38,11 +38,11 @@
 
         <activity android:name=".LoginAndSignUp.HobbiesSelection" />
         <activity
-            android:name=".chatLogActivity"
+            android:name=".ChatLogActivity"
             android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".chatLogActivity" />
+                android:value=".ChatLogActivity" />
         </activity>
         <activity android:name=".NewMessageActivity">
             <meta-data

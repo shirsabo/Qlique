@@ -9,14 +9,11 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.qlique.NewMessageActivity;
 import com.example.qlique.Profile.User;
 import com.example.qlique.R;
-import com.example.qlique.chatLogActivity;
+import com.example.qlique.ChatLogActivity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -30,9 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.squareup.picasso.Picasso;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -114,7 +109,7 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
                 .setAutoCancel(true)
                 .setColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimary, null))
                 .setSound(uri);
-        Intent intent = new Intent(getApplicationContext(), chatLogActivity.class);
+        Intent intent = new Intent(getApplicationContext(), ChatLogActivity.class);
         intent.putExtra(NewMessageActivity.USER_KEY, user);
         getBaseContext().startActivity(intent);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
@@ -135,7 +130,7 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
 
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         manager.createNotificationChannel(channel);
-        Intent intent = new Intent(getApplicationContext(), chatLogActivity.class);
+        Intent intent = new Intent(getApplicationContext(), ChatLogActivity.class);
         intent.putExtra(NewMessageActivity.USER_KEY, user);
        // getBaseContext().startActivity(intent);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);

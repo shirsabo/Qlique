@@ -3,27 +3,20 @@ package com.example.qlique.Profile;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.qlique.LoginAndSignUp.SignupActivity;
 import com.example.qlique.NewMessageActivity;
-import com.example.qlique.NewMessageActivityKt;
-import com.example.qlique.Profile.User;
 import com.example.qlique.R;
-import com.example.qlique.chatLogActivity;
+import com.example.qlique.ChatLogActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -141,7 +134,7 @@ public class ProfilePage extends AppCompatActivity{
     }
 
     public void openChatActivity(View view) {
-        Intent intent = new Intent(this, chatLogActivity.class);
+        Intent intent = new Intent(this, ChatLogActivity.class);
         intent.putExtra(NewMessageActivity.USER_KEY, user);
         this.startActivity(intent);
     }

@@ -1,12 +1,9 @@
 package com.example.qlique.CreateEvent;
-
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import kotlinx.android.parcel.Parcelize;
 
 @Parcelize
@@ -23,6 +20,7 @@ public class Event implements Parcelable, Serializable {
     public String date;
     public String hour;
     public int membersCapacity;
+    public Event(){}
     public Event(String photoUrlIn, String uidIn,String descriptionIn, ArrayList<String> hobbiesRelatedIn){
         uid = uidIn;
         photoUrl = photoUrlIn;
@@ -43,33 +41,6 @@ public class Event implements Parcelable, Serializable {
     }
     public void setMembersCapacity(int capacityIn) {
         this.membersCapacity = capacityIn;
-    }
-    public void setHeader(String header) {
-        this.header = header;
-    }
-
-    public void addMember(String newMember){
-        if (newMember!=null&& membersCapacity >members.size()){
-            members.add(newMember);
-        }
-    }
-    public void setCoordinate(Double latitude,Double longitude){
-        this.longitude =longitude;
-        this.latitude = latitude;
-    }
-    public Event() {
-    }
-    public void setuid(String uidIn){
-        uid = uid;
-    }
-    public void setdescription(String descriptionIn){
-        description = uid;
-    }
-    public void sethobbiesRelated(List<String>hobbiesRelatedIn){
-        hobbiesRelated=hobbiesRelatedIn;
-    }
-    public void setPhotoUrl(String url){
-        photoUrl = url;
     }
     protected Event(Parcel in) {
         photoUrl = in.readString();
@@ -115,7 +86,6 @@ public class Event implements Parcelable, Serializable {
         dest.writeInt(membersCapacity);
         dest.writeString(hour);
         dest.writeString(eventUid);
-
     }
 }
 

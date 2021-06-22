@@ -17,14 +17,13 @@ import com.example.qlique.NewMessageActivity
 import com.example.qlique.Profile.ProfilePage
 import com.example.qlique.Profile.User
 import com.example.qlique.R
-import com.example.qlique.chatLogActivity
+import com.example.qlique.ChatLogActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.join_event_dialog.view.*
 import kotlinx.android.synthetic.main.post_in_feed.view.*
 import java.io.Serializable
-
 
 class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapter.ViewHolder>(){
     companion object{
@@ -40,14 +39,12 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
                     user.events.add(eventUid)
                     refPost.setValue(user)
                 }
-
                 override fun onCancelled(po: DatabaseError) {
                 }
             })
 
         }
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view:View=LayoutInflater.from(parent.context).inflate(
@@ -75,10 +72,9 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
         val map: MutableMap<String, String> = HashMap()
         map[member]= ""
         ref.child(root).updateChildren(map as Map<String, String>)
-
     }
 
-    fun addMemberToEvent(eventUid: String, memberUID: String, holder: ViewHolder){
+    private fun addMemberToEvent(eventUid: String, memberUID: String, holder: ViewHolder){
         val refPost = FirebaseDatabase.getInstance().getReference("/posts/$eventUid")
         refPost.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -107,23 +103,18 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
                     Toast.makeText(holder.itemView.context, "Failed to register", Toast.LENGTH_LONG)
                         .show()
                 }
-
-
             }
-
             override fun onCancelled(po: DatabaseError) {
             }
         })
     }
-     fun joinEvent(eventUid: String, holder: ViewHolder){
+     private fun joinEvent(eventUid: String, holder: ViewHolder){
         val curUidUser = FirebaseAuth.getInstance().currentUser?.uid ?: return
         if(eventUid.isEmpty()){
             return
         }
         addMemberToEvent(eventUid, curUidUser, holder)
     }
-
-
 
     private fun openDialog(holder: ViewHolder, eventUid: String){
         val view = View.inflate(holder.itemView.context, R.layout.join_event_dialog, null)
@@ -140,17 +131,7 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
         }
         view.cancle_leave_btn.setOnClickListener {
             dialog.cancel()
-
         }
-    }
-    private fun loadEvent(snapshot: DataSnapshot):Event{
-        val event :Event = Event()
-        event.photoUrl = snapshot.child(" photoUrl").value.toString()
-        event.uid = snapshot.child("uid").value.toString()
-        event.eventUid =  snapshot.child("eventUid").value.toString()
-        event.description =  snapshot.child("city").value.toString()
-        return event;
-
     }
     private fun loadUser(snapshot: DataSnapshot):User{
         val user :User = User()
@@ -184,7 +165,7 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
                  header.text = events[position].header
                  if (!checkIfAuthorIsCUrUser(user!!.uid,  FirebaseAuth.getInstance().currentUser?.uid)){
                      holder.itemView.post_image_chat_btn.setOnClickListener {
-                         val intent = Intent(holder.itemView.context, chatLogActivity::class.java)
+                         val intent = Intent(holder.itemView.context, ChatLogActivity::class.java)
                          intent.putExtra(NewMessageActivity.USER_KEY, user)
                          holder.itemView.context.startActivity(intent)
                      }
@@ -207,20 +188,10 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
                  date.text = events[position].date
                  val hour = holder.itemView.hour
                  hour.text = events[position].hour
-                 /*
-                 val trash = holder.itemView.trash
-                 if (user != null && user.uid == FirebaseAuth.getInstance().currentUser?.uid) {
-                     // The user who created the event is the current user.
-                     trash.visibility = View.VISIBLE
-                 } else {
-                     trash.visibility = View.GONE
-                 }*/
              }
-
              override fun onCancelled(po: DatabaseError) {
              }
          })
-
     }
 
     private fun checkIfAuthorIsCUrUser(uidAuthor: String?, curUseruid: String?): Boolean {
@@ -246,13 +217,8 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
         val targetImageView = holder.itemView.post_image_home
         Picasso.get().load(uri).into(targetImageView)
         fetchAuthor(events[position].uid, holder, position)
-
-
     }
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val username:TextView = itemView.findViewById(R.id.user_name_post)
-
     }
-
-
 }

@@ -1,11 +1,8 @@
 package com.example.qlique.EventsDisplay;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +13,7 @@ import com.example.qlique.Map.ShowEventMap;
 import com.example.qlique.NewMessageActivity;
 import com.example.qlique.Profile.User;
 import com.example.qlique.R;
-import com.example.qlique.chatLogActivity;
+import com.example.qlique.ChatLogActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -74,7 +71,7 @@ public class EventInfo extends AppCompatActivity {
                 else{
                     chat.setOnClickListener(v -> {
 
-                        Intent intent = new Intent(v.getContext(), chatLogActivity.class);
+                        Intent intent = new Intent(v.getContext(), ChatLogActivity.class);
                         intent.putExtra(NewMessageActivity.USER_KEY, user);
                         startActivity(intent);
                     });

@@ -1,8 +1,7 @@
 package com.example.qlique
-
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.qlique.Profile.User
 import com.google.firebase.auth.FirebaseAuth
@@ -12,7 +11,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -20,8 +18,8 @@ import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_new_message.*
 import kotlinx.android.synthetic.main.user_row_new_message.view.*
 
-public var adapter=GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
-public val friendsAdded = arrayListOf<String>()
+var adapter=GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
+val friendsAdded = arrayListOf<String>()
 
 class NewMessageActivity : AppCompatActivity() {
     companion object {
@@ -31,35 +29,19 @@ class NewMessageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
         supportActionBar?.title="Select User"
-        //adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
-
         fetchFriends()
-
-
-
         newMessageRecycle.adapter= adapter
-        /*
-        newMessageRecycle.addItemDecoration(
-            DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL)
-        )*/
         adapter.setOnItemClickListener{item,view->
             val userItemObj = item as UserItem
-            val intent = Intent (view.context,chatLogActivity::class.java)
+            val intent = Intent (view.context,ChatLogActivity::class.java)
             intent.putExtra(USER_KEY,userItemObj.user)
             startActivity(intent)
             finish()
         }
-
     }
 }
 private fun loadUser(snapshot: DataSnapshot):User{
-    val user :User = User()
-    /*
-        public String firstName, lastName, email, city, gender, uid, url, instagramUserName;
-public List<String> friends;
-public List<String> hobbies;
-public List<String> events;*/
+    val user = User()
     user.firstName = snapshot.child("firstName").value.toString()
     user.lastName = snapshot.child("lastName").value.toString()
     user.email  =  snapshot.child("email").value.toString()
@@ -67,7 +49,7 @@ public List<String> events;*/
     user.gender =  snapshot.child("gender").value.toString()
     user.uid = snapshot.child("uid").value.toString()
     user. url = snapshot.child("url").value.toString()
-    return user;
+    return user
 }
 private fun fetchFriends(){
     val mFirebaseInstance= FirebaseDatabase.getInstance()
@@ -79,49 +61,35 @@ private fun fetchFriends(){
             if (user!=null){
                 for (friendKey in user.getFriends()){
                     if (friendKey!=null){
-                        val  userFriend= mFirebaseInstance.getReference("users/$friendKey")
                         val newUser =Firebase.database.reference.child("users").child(friendKey).addValueEventListener(object :ValueEventListener{
                             override fun onDataChange(dataSnapshot: DataSnapshot){
                                 val user1= loadUser(dataSnapshot)
-                                if (user1!=null&& !friendsAdded.contains(friendKey)){
+                                if (!friendsAdded.contains(friendKey)){
                                     adapter.add(UserItem(user1))
                                     friendsAdded.add(friendKey)
                                 }
                             }
                             override fun onCancelled(error: DatabaseError){
-                                //Failed to read value
                             }
                         })
-                        Log.d("tag","hello")
-                        val res =newUser
-
                     }
-
                 }
             }
-
         }
         override fun onCancelled(error: DatabaseError){
-            //Failed to read value
         }
     })
 
 }
-/*
-private fetchUser(){
-
-}
-*/
 
 class UserItem(val user: User): Item<com.xwray.groupie.GroupieViewHolder>(){
+    @SuppressLint("SetTextI18n")
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
        viewHolder.itemView.user_name.text= user.firstName+" "+user.lastName
         val ur = user.url
-        val mStorageRef = FirebaseStorage.getInstance().getReference();
        Picasso.get().load(ur).into(viewHolder.itemView.ProfileCircularImage)
     }
     override fun getLayout(): Int {
-
        return R.layout.user_row_new_message
     }
 }

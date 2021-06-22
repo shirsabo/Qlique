@@ -12,7 +12,7 @@ import com.example.qlique.LoginAndSignUp.SignupActivity
 import com.example.qlique.NewMessageActivity
 import com.example.qlique.R
 import com.example.qlique.Profile.User
-import com.example.qlique.chatLogActivity
+import com.example.qlique.ChatLogActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
@@ -20,6 +20,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.activity_chat_list.*
 import kotlinx.android.synthetic.main.latest_message_row.view.*
+import kotlin.collections.HashMap
 
 class ChatListActivity: AppCompatActivity()  {
     val adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
@@ -32,7 +33,7 @@ class ChatListActivity: AppCompatActivity()  {
         recycleView_latestMessages.adapter=adapter
         recycleView_latestMessages.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
         adapter.setOnItemClickListener{item, view ->
-            val intent = Intent(this, chatLogActivity::class.java)
+            val intent = Intent(this, ChatLogActivity::class.java)
             val row = item as LatestMessageRow
             intent.putExtra(NewMessageActivity.USER_KEY,row.chatPartnerUser)
             startActivity(intent)
@@ -49,7 +50,7 @@ class ChatListActivity: AppCompatActivity()  {
     }
 
 
-    class LatestMessageRow(val chatMessage: chatLogActivity.chatMessage): com.xwray.groupie.Item<GroupieViewHolder>() {
+    class LatestMessageRow(val chatMessage: ChatLogActivity.ChatMessage): com.xwray.groupie.Item<GroupieViewHolder>() {
         var chatPartnerUser : User?=null
         private fun loadUser(snapshot: DataSnapshot):User{
             val user :User = User()
@@ -95,21 +96,27 @@ class ChatListActivity: AppCompatActivity()  {
             return R.layout.latest_message_row
         }
     }
-    val latestMessagesMap = HashMap<String, chatLogActivity.chatMessage>()
+    val latestMessagesMap = HashMap<String, ChatLogActivity.ChatMessage>()
     private fun refreshRecycleViewMessages(){
         adapter.clear()
-        latestMessagesMap.toList().sortedBy { (_, value) -> value.timeStamp}.toMap()
-        latestMessagesMap.toSortedMap(reverseOrder())
+        var messages = mutableListOf<ChatLogActivity.ChatMessage>()
         latestMessagesMap.values.forEach{
+            messages.add(it) // get all the messages from dictionary
+        }
+        messages.sortBy { it.timeStamp} //sort the messages with increasing order
+        // reverse the lists so that it will show the latest messages first!
+        messages= messages.asIterable().reversed() as MutableList<ChatLogActivity.ChatMessage>
+        messages.forEach {
             adapter.add(LatestMessageRow(it))
         }
+
     }
     private fun listenForLatestMessages(){
         val fromId = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId")
         ref.addChildEventListener(object :ChildEventListener{
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val chatMessage = snapshot.getValue(chatLogActivity.chatMessage::class.java)?:return
+                val chatMessage = snapshot.getValue(ChatLogActivity.ChatMessage::class.java)?:return
                 latestMessagesMap[snapshot.key!!]=chatMessage
                 refreshRecycleViewMessages()
             }
@@ -118,7 +125,7 @@ class ChatListActivity: AppCompatActivity()  {
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                val chatMsg = snapshot.getValue(chatLogActivity.chatMessage::class.java)?:return
+                val chatMsg = snapshot.getValue(ChatLogActivity.ChatMessage::class.java)?:return
                 latestMessagesMap[snapshot.key!!]=chatMsg
                 refreshRecycleViewMessages()
             }

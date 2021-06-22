@@ -1,24 +1,19 @@
 package com.example.qlique.CreateEvent;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.qlique.R;
 import com.google.android.material.navigation.NavigationView;
-
 import java.util.Arrays;
 
 public class EventMembers extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
     RecyclerView recyclerView;
     MembersAdapter adapter;
     String[] members={};
@@ -43,6 +38,7 @@ public class EventMembers extends AppCompatActivity implements NavigationView.On
         Event event = i.getParcelableExtra("eventobj");
         recyclerView = findViewById(R.id.members_rec);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        assert event != null;
         fetchMembers(event);
         adapter = new MembersAdapter(this,members); // our adapter takes two string array
         recyclerView.setAdapter(adapter);

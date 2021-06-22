@@ -53,7 +53,7 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
                                 )
                             updateViewOfBottomDialog(bottom_sheet_view, event)
                             bottom_sheet_view.findViewById<TextView>(R.id.description_post).text =
-                                "hey"
+                               event.description
                             // updateViewOfBottomDialog(bottom_sheet_view,event)
                             bottomSheetDialogIn.setContentView(bottom_sheet_view)
                             if (!(this@DisplayEventsMapActivity).isFinishing) {

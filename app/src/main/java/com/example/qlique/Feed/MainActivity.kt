@@ -23,7 +23,6 @@ import com.example.qlique.EventsDisplay.EventsManager
 import com.example.qlique.LoginAndSignUp.LoginActivity
 import com.example.qlique.LoginAndSignUp.UpdatePassword
 import com.example.qlique.Map.DisplayEventsMapActivity
-//import com.example.qlique.Map.DisplayEventsMapActivity
 import com.example.qlique.Profile.ProfilePage
 import com.example.qlique.Profile.User
 import com.example.qlique.R
@@ -47,7 +46,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var navigationView: NavigationView
-    private lateinit var  profile:ImageView
     private val ERROR_DIALOG_REQUEST = 9001
     private var floatingBtn: FloatingActionButton? =null
 
@@ -57,11 +55,8 @@ class MainActivity : AppCompatActivity() {
         val lay: View = findViewById(R.id.app_bar_main_layout)
         val toolbar: Toolbar = lay.findViewById(R.id.toolbar_main)
         title = "Clique"
-        val profilePic = lay.nav_ProfileCircularImage
         setSupportActionBar(toolbar)
         drawer = findViewById(R.id.drawer_layout)
-
-
         toggle = ActionBarDrawerToggle(
             this,
             drawer,
@@ -72,10 +67,7 @@ class MainActivity : AppCompatActivity() {
         drawer.addDrawerListener(toggle)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
-
         navigationView = findViewById(R.id.nav_view)
-
-
         auth = FirebaseAuth.getInstance()
         if (auth.currentUser == null) {
             val intent = Intent(this, LoginActivity::class.java)
@@ -84,7 +76,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Already logged in", Toast.LENGTH_LONG).show()
         }
-
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.Profile -> profileClicked()
@@ -93,9 +84,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.EventsManager ->eventsManagerClicked()
                 R.id.Logout -> logoutClicked()
                 R.id.Map -> mapClicked()
-
             }
-
             return@setNavigationItemSelectedListener true
         }
         fetchPosts()
@@ -108,10 +97,7 @@ class MainActivity : AppCompatActivity() {
             newEventClicked()
             fetchPosts()
         }
-
     }
-
-
     private fun isServicesOK(): Boolean {
         Log.d(TAG, "isServicesOK: checking google services version")
         val available =
@@ -129,7 +115,6 @@ class MainActivity : AppCompatActivity() {
         }
         return false
     }
-
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
@@ -182,27 +167,6 @@ class MainActivity : AppCompatActivity() {
     private fun newEventClicked() {
         val intent = Intent(this, NewEvent::class.java)
         startActivity(intent)
-    }
-    private fun fetchCurUser(){
-
-        // Picasso.get().load(SignupActivity?.currentUser?.url).into(profilePic)
-        val curUser =
-            FirebaseDatabase.getInstance().getReference("users/${FirebaseAuth.getInstance().uid}")
-        val newUser =
-            Firebase.database.reference.child("users").child(FirebaseAuth.getInstance().uid!!)
-                .addValueEventListener(object :
-                    ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        val user1 = dataSnapshot.getValue(User::class.java)
-                        if (user1 != null) {
-                            //Picasso.get().load(user1?.url).into(profilePic)
-                        }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        //Failed to read value
-                    }
-                })
     }
     private fun  fetchPosts(){
         val events : ArrayList<Event> = ArrayList()

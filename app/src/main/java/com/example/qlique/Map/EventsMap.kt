@@ -1,13 +1,11 @@
 package com.example.qlique.Map
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.opengl.Visibility
 import android.os.CountDownTimer
 import android.os.Parcelable
 import android.text.method.ScrollingMovementMethod
@@ -23,7 +21,7 @@ import com.example.qlique.CreateEvent.EventMembers
 import com.example.qlique.NewMessageActivity
 import com.example.qlique.Profile.User
 import com.example.qlique.R
-import com.example.qlique.chatLogActivity
+import com.example.qlique.ChatLogActivity
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.firebase.auth.FirebaseAuth
@@ -187,7 +185,7 @@ open class EventsMap : BasicMapActivity() {
                         ).value.toString()
                     val chat = view.findViewById<View>(R.id.post_image_chat_btn) as ImageView
                     chat.setOnClickListener {
-                        val intent = Intent(view.context, chatLogActivity::class.java)
+                        val intent = Intent(view.context, ChatLogActivity::class.java)
                         intent.putExtra(NewMessageActivity.USER_KEY, user)
                         view.context.startActivity(intent)
                     }
