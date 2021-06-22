@@ -1,35 +1,25 @@
 package com.example.qlique.Map
 
-import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.text.method.ScrollingMovementMethod
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import com.example.qlique.CreateEvent.CalendarEvent
 import com.example.qlique.CreateEvent.Event
-import com.example.qlique.NewMessageActivity.Companion.USER_KEY
 import com.example.qlique.Profile.User
 import com.example.qlique.R
-import com.example.qlique.chatLogActivity
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQuery
 import com.firebase.geofire.GeoQueryEventListener
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.squareup.picasso.Picasso
 
 
 class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListener {
@@ -44,7 +34,7 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
                 .addValueEventListener(object :
                     ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        if (isJoinDialogOpen){
+                        if (isJoinDialogOpen) {
                             return
                         }
                         val event = dataSnapshot.getValue(Event::class.java)
@@ -55,19 +45,21 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
                                 this@DisplayEventsMapActivity,
                                 R.style.BottomSheetDialogTheme
                             )
-                            val bottom_sheet_view:View =
+                            val bottom_sheet_view: View =
                                 LayoutInflater.from(this@DisplayEventsMapActivity).inflate(
                                     R.layout.post_in_feed, findViewById(
                                         R.id.bottomContainer
                                     )
                                 )
-                            updateViewOfBottomDialog(bottom_sheet_view,event)
+                            updateViewOfBottomDialog(bottom_sheet_view, event)
                             bottom_sheet_view.findViewById<TextView>(R.id.description_post).text =
                                 "hey"
                             // updateViewOfBottomDialog(bottom_sheet_view,event)
                             bottomSheetDialogIn.setContentView(bottom_sheet_view)
-                            bottomSheetDialogIn.show()
-
+                            if (!(this@DisplayEventsMapActivity).isFinishing) {
+                                // alert.show()
+                                bottomSheetDialogIn.show()
+                            }
                         }
                     }
 
@@ -147,8 +139,12 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
                  event?.uid = snapshot.child("uid").value.toString()
                  event?.description = snapshot.child("description").value.toString()
                  if (event != null) {
-                     if(CalendarEvent.isEventPassed(event.date,event.hour)) { // show only future events
-                        return;
+                     if (CalendarEvent.isEventPassed(
+                             event.date,
+                             event.hour
+                         )
+                     ) { // show only future events
+                         return;
                      }
                      events.add(event)
                  }
