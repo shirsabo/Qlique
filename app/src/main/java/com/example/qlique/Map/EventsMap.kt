@@ -142,13 +142,13 @@ open class EventsMap : BasicMapActivity() {
         val height = (DisplayMetrics().heightPixels * 0.4).toInt()
         dialog.window?.setLayout(width, height)
         dialog.show()
-        view.leave_btn.setOnClickListener {
+        view.join_btn.setOnClickListener {
             isJoinDialogOpen = true
             joinCurUserToEvent(eventUid)
             dialog.cancel()
             setTimer()
         }
-        view.cancle_leave_btn.setOnClickListener {
+        view.cancle_join_btn.setOnClickListener {
             isJoinDialogOpen = true
             dialog.cancel()
             setTimer()

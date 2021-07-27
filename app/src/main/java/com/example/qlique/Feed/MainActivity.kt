@@ -37,6 +37,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 
@@ -96,6 +97,12 @@ class MainActivity : AppCompatActivity() {
         floatingBtn!!.setOnClickListener{
             newEventClicked()
             fetchPosts()
+        }
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            val deviceToken = task.result!!
+            val ref =FirebaseDatabase.getInstance().getReference("/users/${auth.currentUser?.uid+"/tokenFCM"}")
+            ref.setValue(deviceToken)
+            Log.d(TAG, "fcm token = $deviceToken")
         }
     }
     private fun isServicesOK(): Boolean {

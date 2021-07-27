@@ -67,16 +67,6 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
         val refPost = FirebaseDatabase.getInstance().getReference("/posts/${event.eventUid}")
         refPost.setValue(event)
     }
-    private fun saveUser(user: User){
-        val refUser = FirebaseDatabase.getInstance().getReference("/users/${user.uid}")
-        refUser.setValue(user)
-    }
-    private fun addMe(ref: DatabaseReference, root: String, member: String){
-        val map: MutableMap<String, String> = HashMap()
-        map[member]= ""
-        ref.child(root).updateChildren(map as Map<String, String>)
-    }
-
     private fun addMemberToEvent(eventUid: String, memberUID: String, holder: ViewHolder){
         val refPost = FirebaseDatabase.getInstance().getReference("/posts/$eventUid")
         refPost.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -128,11 +118,11 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
         val height = (DisplayMetrics().heightPixels * 0.4).toInt()
        dialog.window?.setLayout(width, height)
         dialog.show()
-        view.leave_btn.setOnClickListener {
+        view.join_btn.setOnClickListener {
             joinEvent(eventUid, holder)
             dialog.cancel()
         }
-        view.cancle_leave_btn.setOnClickListener {
+        view.cancle_join_btn.setOnClickListener {
             dialog.cancel()
         }
     }

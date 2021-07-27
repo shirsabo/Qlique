@@ -254,6 +254,7 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
                     mDatabase.child("/posts").push() //creates blank record in db
                 val postKey = dbRef.key.toString() //the UniqueID/key you seek
                 event.eventUid = postKey
+                event.members.add(authorUid)
                 dbRef.setValue(event)
                 writeEventLocation(event, postKey)
                 PostAdapter.addEventToUser(event.eventUid)

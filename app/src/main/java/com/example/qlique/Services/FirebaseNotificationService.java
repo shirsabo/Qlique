@@ -61,7 +61,6 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(@NonNull String s) {
-
         super.onNewToken(s);
     }
     public void fetchUser(String uidOfSender,String title, String message){

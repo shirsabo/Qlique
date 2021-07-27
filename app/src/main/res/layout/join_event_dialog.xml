@@ -72,7 +72,7 @@
         app:srcCompat="@drawable/ic_party" />
 
     <Button
-        android:id="@+id/leave_btn"
+        android:id="@+id/join_btn"
         android:layout_width="146dp"
         android:layout_height="39dp"
         android:layout_gravity="center"
@@ -86,7 +86,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/cancle_leave_btn"
+        android:id="@+id/cancle_join_btn"
         android:layout_width="146dp"
         android:layout_height="39dp"
         android:layout_gravity="center"
