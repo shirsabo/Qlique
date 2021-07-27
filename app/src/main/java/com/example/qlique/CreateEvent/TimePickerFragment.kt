@@ -24,10 +24,14 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
 
     @SuppressLint("SetTextI18n")
     override fun onTimeSet(view: TimePicker, hourOfDayIn: Int, minuteIn: Int) {
+        var m=minuteIn.toString()
+        if (minuteIn<10){
+            m="0$m"
+        }
         hourOfDay =hourOfDayIn
-        minute = minuteIn
+        //minute = minuteIn
         if ( NewEvent.savedtime!=null){
-            NewEvent.savedtime!!.text  = "$hourOfDay:$minute"
+            NewEvent.savedtime!!.text  = "$hourOfDay:$m"
         }
     }
 }

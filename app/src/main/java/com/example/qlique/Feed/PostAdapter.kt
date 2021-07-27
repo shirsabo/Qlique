@@ -36,6 +36,9 @@ class PostAdapter(val events: ArrayList<Event>) :RecyclerView.Adapter<PostAdapte
                     if (user.events == null) {
                         user.events = java.util.ArrayList()
                     }
+                    if( user.events.contains(eventUid)){ //already signed
+                        return
+                    }
                     user.events.add(eventUid)
                     refPost.setValue(user)
                 }

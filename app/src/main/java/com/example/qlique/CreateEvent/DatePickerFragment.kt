@@ -31,12 +31,12 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
     @SuppressLint("SetTextI18n")
     override fun onDateSet(view: DatePicker, yearIn: Int, monthIn: Int, dayIn: Int) {
         val c = Calendar.getInstance()
-        val year = c.get(Calendar.YEAR)
-        val month = c.get(Calendar.MONTH)
-        val day = c.get(Calendar.DAY_OF_MONTH)
-        isEventToday = yearIn == year && monthIn==month&&dayIn==day
+        val curYear = c.get(Calendar.YEAR)
+        val curMonth = c.get(Calendar.MONTH)
+        val curDay = c.get(Calendar.DAY_OF_MONTH)
+        isEventToday = yearIn == curYear && monthIn==curMonth&&dayIn==curDay
         if ( NewEvent.savedDate!=null){
-            NewEvent.savedDate!!.text  = day.toString()+"."+(month+1)+"."+year
+            NewEvent.savedDate!!.text  = dayIn.toString()+"."+(monthIn+1)+"."+yearIn
         }
     }
 }
