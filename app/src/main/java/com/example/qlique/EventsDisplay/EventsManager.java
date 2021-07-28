@@ -31,7 +31,6 @@ import com.example.qlique.R;
 import com.google.android.material.navigation.NavigationView;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import com.example.qlique.CreateEvent.Event;
