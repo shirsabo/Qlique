@@ -36,15 +36,18 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
-
+/**
+ * Class NewEvent
+ * responsible for collecting the future event's data from user and posting it to the Firebase DB.
+ */
 class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener {
 
     companion object {
-        var savedtime: TextView? = null
-        var savedDate: TextView? = null
-        var chosenLat by Delegates.notNull<Double>()
-        var chosenLon by Delegates.notNull<Double>()
-        var capacityMembers by Delegates.notNull<Int>()
+        var savedtime: TextView? = null //the time of the event
+        var savedDate: TextView? = null //the date of the event
+        var chosenLat by Delegates.notNull<Double>() //the latitude of the event
+        var chosenLon by Delegates.notNull<Double>() //the longitude of the event
+        var capacityMembers by Delegates.notNull<Int>() // the members capacity of the event
     }
     var urLImage: Uri? = null
     var authorUid: String? = null
@@ -53,25 +56,40 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
     var firstTime = true
     var timePickerFragment = TimePickerFragment()
     private var datePickerFragment = DatePickerFragment()
-    private var launchSomeActivity =
+    private var chooseImageActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                urLImage = result.data?.data
+                urLImage = result.data?.data // updates the url of the image
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, result.data?.data)
-                photo_event_new.setImageBitmap(bitmap)
+                photo_event_new.setImageBitmap(bitmap) // shows the image in the activity
             }
         }
+    /**
+     * Opens the Dialog which responsible of choosing number of members
+     */
     private fun openCapacityDialog(){
         RequestCapacityDialog().show(supportFragmentManager, "MyCustomFragment")
     }
+    /**
+     * checks if a header was set by the user.
+     * @return True if header exists, else False
+     */
     private fun isHeaderExists(): Boolean {
         val textHeader = findViewById<TextView>(R.id.headerNewEvent)
         return textHeader.length()!=0
     }
+    /**
+     * checks if a desc was set by the user.
+     * @return True if desc exists,, else False
+     */
     private fun isDescExists(): Boolean {
         val textDesc = findViewById<TextView>(R.id.descNewEvent)
         return textDesc.length()!=0
     }
+    /**
+     * checks if all the values were set by the user before submitting
+     * @return True if everything exist, else  False
+     */
     private fun checkIfAllValuesExist(): Boolean {
         if(!isHeaderExists()){
             Toast.makeText(this, "Please write header", Toast.LENGTH_LONG).show()
@@ -102,20 +120,24 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
         }
         return  true
     }
-
     @SuppressLint("CutPasteId")
+    /**
+     * Sets contentView, sets onclick listeners, sets default variables.
+     * @param savedInstanceState -  param for super.onCreate
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_event)
-
         savedDate = DateNewEvent
         savedtime = hourNewEvent
         authorUid = FirebaseAuth.getInstance().currentUser?.uid
+        // sets Click Listener for uploading image
         photo_event_new.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
-            launchSomeActivity.launch(intent)
+            chooseImageActivity.launch(intent)
         }
+        //// sets Click Listener for choosing event's hobbies
         btnCatergories.setOnClickListener {
             categories = ArrayList(0)
             val builder = AlertDialog.Builder(this@NewEvent)
@@ -193,9 +215,8 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
             val description: TextView = findViewById(R.id.descNewEvent)
             description.movementMethod = ScrollingMovementMethod()
         }
+        //sets onClick event for posting the new event to Firebase
         next_first_step.setOnClickListener {
-            val textHeader = findViewById<TextView>(R.id.headerNewEvent)
-            //val textDesc = findViewById<TextView>(R.id.textInputDesc)
             if (checkIfAllValuesExist()&&checkIfTimeNotPassed(timePickerFragment.hourOfDay,timePickerFragment.minute)){
                 val event =
                     Event(
@@ -204,7 +225,7 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
                         textInputDesc.editText?.text.toString(),
                         categories
                     )
-                createEvent(event)
+                createEvent(event) //posts it on Firebase
                 finish()
             } else{
                 Toast.makeText(this, "Please check if all fields are correct", Toast.LENGTH_LONG).show()
@@ -213,13 +234,18 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
         setCurrentTime()
         setCurrentDate()
     }
-
+    /**
+     * Checks if the event is not in the past.
+     * @params - hourOfDayIn: Int,minuteIn: Int
+     * @return true if time has not passed, else False
+     */
     private fun checkIfTimeNotPassed(hourOfDayIn: Int,minuteIn: Int): Boolean {
+        //cannot chose event from the past in the dialog picker
         if (!datePickerFragment.isEventToday){
             return true;
         }
         val c = Calendar.getInstance()
-        if(hourOfDayIn<c.get(Calendar.HOUR_OF_DAY)){
+        if(hourOfDayIn<c.get(Calendar.HOUR_OF_DAY)){ // if the hour is in the future , return false
             Toast.makeText(
                 this, "Wrong hour",
                 Toast.LENGTH_SHORT).show()
@@ -235,12 +261,15 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
             true
         }
     }
-
+    /**
+     * creates Event object according to the data collected from user, posting the object to Firebase.
+     * @params -Event
+     */
     private fun createEvent(event: Event) {
         val filename = UUID.randomUUID().toString()
         var mDatabase = FirebaseDatabase.getInstance().reference
         val ref = FirebaseStorage.getInstance().getReference("images/$filename")
-        ref.putFile(urLImage!!).addOnSuccessListener {
+        ref.putFile(urLImage!!).addOnSuccessListener { //uploads the photo to Firebase
             ref.downloadUrl.addOnSuccessListener {
                 event.photoUrl = it.toString()
                 val headerText: TextView = findViewById(R.id.headerNewEvent)
@@ -255,29 +284,25 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
                 val postKey = dbRef.key.toString() //the UniqueID/key you seek
                 event.eventUid = postKey
                 event.members.add(authorUid)
-                dbRef.setValue(event)
+                dbRef.setValue(event) //saves the event in Firebase in "/posts"
                 writeEventLocation(event, postKey)
-                PostAdapter.addEventToUser(event.eventUid)
+                PostAdapter.addEventToUser(event.eventUid) //add the event to the author's events
             }
         }
     }
-
+    /**
+     * Saves the event's location in "/geoFire" which enables to fetch events by radius very easily.
+     * @params - event: Event, postKey: String
+     */
     private fun writeEventLocation(event: Event, postKey: String) {
         val firebaseDatabase = FirebaseDatabase.getInstance()
         val ref: DatabaseReference = firebaseDatabase.getReference("geoFire")
         val geoFire = GeoFire(ref)
+        //sets the location with the coordinates the user chose
         geoFire.setLocation(
             postKey,
             GeoLocation(event.latitude, event.longitude),
             object : GeoFire.CompletionListener {
-                fun onComplete(key: String?, error: FirebaseError?) {
-                    if (error != null) {
-                        System.err.println("There was an error saving the location to GeoFire: $error")
-                    } else {
-                        println("Location saved on server successfully!")
-                    }
-                }
-
                 override fun onComplete(key: String?, error: DatabaseError?) {
                     if (error != null) {
                         System.err.println("There was an error saving the location to GeoFire: $error")
@@ -287,20 +312,29 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
                 }
             })
     }
-
-    fun showTimePickerDialog(v: View) {
+    /**
+     * shows the TimePickerDialog
+     */
+    fun showTimePickerDialog() {
         timePickerFragment.show(supportFragmentManager, "timePicker")
-        hourNewEvent.text = timePickerFragment.time
+        hourNewEvent.text = timePickerFragment.time //updates the picked time
     }
+    /**
+     * shows the DatePickerDialog
+     */
 
-    fun showDatePickerDialog(v: View) {
+    fun showDatePickerDialog() {
         datePickerFragment .show(supportFragmentManager, "datePicker")
-        DateNewEvent.text = datePickerFragment.date
+        DateNewEvent.text = datePickerFragment.date //updates the picked date
     }
-
-    fun openCreateEventMapActivity(v: View) {
+    /**
+     * Starts the [CreateEventMapActivity].
+     * in this activity the user can choose the events location, sees how to get to his/hers location
+     */
+    fun openCreateEventMapActivity() {
         val intent = Intent(this, CreateEventMapActivity::class.java)
         startActivityForResult(intent, 19)
+        // passes a flag if its the first time opening this activity
         intent.putExtra("FirstTime", firstTime)
         startActivity(intent)
         firstTime = false
@@ -308,42 +342,66 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
         firstTime = true
 
     }
-
     @SuppressLint("SetTextI18n")
+    /**
+     * saves the date of the event in [DateNewEvent]
+     * @params view: DatePicker?, year: Int, month: Int, dayOfMonth: Int
+     */
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         DateNewEvent.text = "$dayOfMonth.$month.$year"
     }
-
+    /**
+     * saves the time of the event in [ hourNewEvent]
+     * @params view: TimePicker?, hourOfDay: Int, minute: Int
+     */
     @SuppressLint("SetTextI18n")
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         hourNewEvent.text = "$hourOfDay:$minute"
     }
     @SuppressLint("SimpleDateFormat")
+    /**
+     * Returns the current time
+     * @return curTime - the current time
+     */
     private fun getCurrentTime(): String {
         val timeFormat: DateFormat = SimpleDateFormat("HH:mm")
         timeFormat.timeZone = TimeZone.getTimeZone("Asia/Jerusalem")
         val curTime: String = timeFormat.format(Date())
         return curTime
     }
-
+    /**
+     * Sets the current time in [hourNewEvent]
+     */
     private fun setCurrentTime() {
         hourNewEvent.text = getCurrentTime()
     }
+    /**
+     *Gets the current date
+     * @return c.time - current time
+     */
     private fun getCurrentDate(): Date {
         val c = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jerusalem"));
-        return c.getTime()
+        return c.time
     }
     @SuppressLint("SimpleDateFormat")
+    /**
+     *Sets the current date in [DateNewEvent]
+     */
     private fun setCurrentDate() {
         val dateFormat: SimpleDateFormat? = SimpleDateFormat("MMMM dd, yyyy");
         DateNewEvent.text = dateFormat?.format(getCurrentDate())
     }
-
+    /**
+     * Sets the [capacityMembers] when complete
+     *@param r - members capacity
+     */
     override fun onComplete(r: String) {
         capacityMembers = r.toInt()
     }
-
-    fun capacityOnClick(view: View) {
+    /**
+     * Opens Capacity Dialog
+     */
+    fun capacityOnClick() {
         openCapacityDialog()
     }
 }

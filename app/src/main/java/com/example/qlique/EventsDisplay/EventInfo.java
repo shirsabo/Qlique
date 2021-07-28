@@ -26,8 +26,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * EventInfo
- * This activity responsible for presenting the postInfo and adding the elements' functionality
+ * Class EventInfo.
+ * This activity is responsible for presenting the postInfo and adding the elements' functionality
  */
 public class EventInfo extends AppCompatActivity {
     @Override
