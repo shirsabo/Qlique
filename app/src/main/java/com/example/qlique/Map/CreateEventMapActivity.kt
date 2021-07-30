@@ -14,7 +14,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 /**
  * CreateEventMapActivity
- *
+ * when creating a new event the user needs to select the location of the event in this map.
  */
 class CreateEventMapActivity : BasicMapActivity() {
     private lateinit var back: Button

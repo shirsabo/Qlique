@@ -21,9 +21,15 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-
+/**
+ * displays a single events in the map.
+ */
 class ShowEventMap : EventsMap() {
     lateinit var event:Event
+
+    /**
+     * when the map is ready we put the center of the map to be the location of the event.
+     */
     override fun onMapReady(googleMap: GoogleMap) {
         super.onMapReady(googleMap)
         val event :Event= intent.getSerializableExtra("event") as Event
@@ -43,7 +49,9 @@ class ShowEventMap : EventsMap() {
         displayInfo(event)
     }
 
-
+    /**
+     * displays the description of the event in the map.
+     */
     private fun displayInfo(event: Event) {
         // Display the information of the event.
         val bottomSheetDialogIn = BottomSheetDialog(
@@ -64,6 +72,9 @@ class ShowEventMap : EventsMap() {
         bottomSheetDialogIn.show()
     }
 
+    /**
+     * adds the marker of the event in the map.
+     */
     private fun addMarkerToMap(event: Event){
         val hobby = if (event.hobbiesRelated != null && event.hobbiesRelated.size > 0){
             event.hobbiesRelated[0]
@@ -87,20 +98,22 @@ class ShowEventMap : EventsMap() {
         })
     }
 
+    /**
+     * being called after the map is ready, creates google api client and sets the gps
+     * on click listener.
+     */
     override fun init() {
         Log.d(ContentValues.TAG, "init: initializing")
-
         mGoogleApiClient = GoogleApiClient.Builder(this)
             .addApi(Places.GEO_DATA_API)
             .addApi(Places.PLACE_DETECTION_API)
             .enableAutoManage(this, this)
             .build()
-
         mGps!!.setOnClickListener {
             Log.d(ContentValues.TAG, "onClick: clicked gps icon")
         }
     }
-    override fun getDeviceLocation() {
 
+    override fun getDeviceLocation() {
     }
 }

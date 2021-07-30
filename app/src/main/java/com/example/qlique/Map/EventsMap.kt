@@ -32,9 +32,16 @@ import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.join_event_dialog.view.*
 
+/**
+ * EventsMap
+ * displays events in the map, ShowEventMap and DisplayEventsMapActivity implements this class.
+ */
 open class EventsMap : BasicMapActivity() {
     var isJoinDialogOpen = false
 
+    /**
+     * updates the event's description.
+     */
     protected fun updateViewOfBottomDialog(view: View, event: Event){
         val map = view.findViewById<View>(R.id.map_image_view) as ImageView
         map.visibility = GONE
@@ -64,6 +71,10 @@ open class EventsMap : BasicMapActivity() {
         }
         updateAuthor(view, event.uid)
     }
+
+    /**
+     * joins to the event.
+     */
     private fun joinCurUserToEvent(eventUid :String){
         val curUidUser = FirebaseAuth.getInstance().currentUser?.uid ?: return
         if(eventUid.isEmpty()){
@@ -71,10 +82,18 @@ open class EventsMap : BasicMapActivity() {
         }
         addMemberToEvent(eventUid, curUidUser)
     }
+
+    /**
+     * saves the event in the firebase.
+     */
     fun saveEvent(event: Event){
         val refPost = FirebaseDatabase.getInstance().getReference("/posts/${event.eventUid}")
         refPost.setValue(event)
     }
+
+    /**
+     * adds the event to the user's list of events in tje firebase.
+     */
     private fun addEventToCurUser(eventUid: String){
         val refPost = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().currentUser?.uid}")
         refPost.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -94,6 +113,9 @@ open class EventsMap : BasicMapActivity() {
 
     }
 
+    /**
+     * adds the user to the event.
+     */
     private fun addMemberToEvent(eventUid: String, curUidUser: String) {
         val refPost = FirebaseDatabase.getInstance().getReference("/posts/$eventUid")
         refPost.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -132,6 +154,10 @@ open class EventsMap : BasicMapActivity() {
 
     }
 
+    /**
+     * opens the join dialog after the user selects the join button to make sure he wants
+     * to sign in.
+     */
     private fun openJoinDialog(applicationContext: Context, eventUid: String) {
         isJoinDialogOpen = true
         val view = View.inflate(applicationContext, R.layout.join_event_dialog, null)
@@ -156,6 +182,9 @@ open class EventsMap : BasicMapActivity() {
         isJoinDialogOpen = false
     }
 
+    /**
+     * sets a timer of 3 econds.
+     */
     private fun setTimer(){
         object : CountDownTimer(3000, 1000) {
 
@@ -168,6 +197,9 @@ open class EventsMap : BasicMapActivity() {
         }.start()
     }
 
+    /**
+     * update the author of the post so the user will be able to send him a message in the chat.
+     */
     private fun updateAuthor(view:View, uid: String){
         FirebaseDatabase.getInstance().getReference("/users/$uid")
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -193,6 +225,10 @@ open class EventsMap : BasicMapActivity() {
                 override fun onCancelled(error: DatabaseError) {}
             })
     }
+
+    /**
+     * gets the bitmap descriptor.
+     */
     fun getBitmapDescriptorFromVector(context: Context, vectorDrawableResourceId: Int): BitmapDescriptor? {
         val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
         val bitmap = Bitmap.createBitmap(
@@ -203,9 +239,13 @@ open class EventsMap : BasicMapActivity() {
         val canvas = Canvas(bitmap)
         vectorDrawable.setBounds(0, 0, canvas.width, canvas.height)
         vectorDrawable.draw(canvas)
-
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
+
+    /**
+     * returns an image of the hobby entered in order to display this image in
+     * the map for this event.
+     */
     fun getImageByHobby(hobby: String): Int {
         if(hobby == "Ball Games"){
             return R.drawable.ic_baseline_sports_soccer_24

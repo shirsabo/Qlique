@@ -13,7 +13,11 @@ import androidx.fragment.app.DialogFragment
 import com.example.qlique.R
 import kotlinx.android.synthetic.main.request_radius.*
 
-
+/**
+ * RequestRadiusDialog
+ * when the user enters to the map we ask him to choose the radius of the events
+ * we will present him.
+ */
 class RequestRadiusDialog : DialogFragment() {
     var layout: LinearLayout? = null
     lateinit var button: Button
@@ -26,7 +30,9 @@ class RequestRadiusDialog : DialogFragment() {
 
     private var mListener: OnCompleteListener? = null
 
-    // make sure the Activity implemented it
+    /**
+     * make sure the Activity implemented it, setts a listener
+     */
     override fun onAttach(activity: Activity) {
         super.onAttach(activity)
         try {
@@ -36,12 +42,16 @@ class RequestRadiusDialog : DialogFragment() {
         }
     }
 
-
+    /**
+     * calls when the view in being created.
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        //dialog!!.window?.setBackgroundDrawableResource(R.drawable.round_corner)
         return inflater.inflate(R.layout.request_radius, container, false)
     }
 
+    /**
+     * displays the button and the seek bar so the user could choose rhe radius.
+     */
     override fun onStart() {
         super.onStart()
         val width = (resources.displayMetrics.widthPixels).toInt()
@@ -70,7 +80,7 @@ class RequestRadiusDialog : DialogFragment() {
                 // write custom code for progress is stopped
             }
         })
-        dialog!!.window?.setLayout(width, height)//ViewGroup.LayoutParams.WRAP_CONTENT, width)
+        dialog!!.window?.setLayout(width, height)
     }
 
 }
