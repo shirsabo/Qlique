@@ -9,18 +9,29 @@ import java.util.List;
 import kotlinx.android.parcel.Parcelize;
 
 @Parcelize
+/**
+ * User
+ * represents a user and the information we save for each one in firebase.
+ */
 public class User implements Parcelable{
     public String firstName, lastName, email, city, gender, uid, url, instagramUserName, tokenFCM;
     public List<String> friends;
     public List<String> hobbies;
     public List<String> events;
 
-    public void setInstagramUserName(String instagramUserName) {
-        this.instagramUserName = instagramUserName;
-    }
-
-    public User(String firstName, String lastName, String city, String email, String gender, String uid, String url, String instagramUserName)
-    {
+    /**
+     * constructor.
+     * @param firstName
+     * @param lastName
+     * @param city
+     * @param email
+     * @param gender
+     * @param uid
+     * @param url
+     * @param instagramUserName
+     */
+    public User(String firstName, String lastName, String city, String email, String gender,
+                String uid, String url, String instagramUserName) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -34,9 +45,16 @@ public class User implements Parcelable{
         this.events =  new ArrayList<>();
     }
 
+    /**
+     * constructor.
+     */
     public User() {
     }
 
+    /**
+     * constructor.
+     * @param in
+     */
     protected User(Parcel in) {
         firstName = in.readString();
         lastName = in.readString();
@@ -63,6 +81,10 @@ public class User implements Parcelable{
         }
     };
 
+    /**
+     * getter.
+     * @return
+     */
     public List<String> getFriends() {
         return friends;
     }
@@ -73,6 +95,9 @@ public class User implements Parcelable{
     }
 
     @Override
+    /**
+      write the user info into parcel.
+     */
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(firstName);
         dest.writeString(lastName);
@@ -85,14 +110,5 @@ public class User implements Parcelable{
         dest.writeStringList(hobbies);
         dest.writeStringList(events);
         dest.writeString(tokenFCM);
-    }
-    public static User createUserFromHashMap(HashMap map){
-        User user = new User(map.get("firstName").toString(), map.get("lastName").toString(), map.get("city").toString(),
-                map.get("email").toString(), map.get("gender").toString(),
-                map.get("uid").toString(), map.get("url").toString(), map.get("instagramUserName").toString());
-        user.events = (List<String>) map.get("events");
-        user.friends = (List<String>) map.get("friends");
-        user.hobbies = (List<String>) map.get("hobbies");
-        return user;
     }
 }

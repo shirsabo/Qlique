@@ -29,11 +29,19 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
+/**
+ * ProfilePage
+ * displays the information of the user
+ */
 public class ProfilePage extends AppCompatActivity{
     private TextView name, city, profileName, eventsNumber, gender;
     private User user;
     private String userIdProfile;
 
+    /**
+     * sets the profile of the user with his information.
+     * @param uid
+     */
     void setProfile(String uid){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users/"+uid);
@@ -43,7 +51,7 @@ public class ProfilePage extends AppCompatActivity{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 String  url = user.url;
-                if(url==null){
+                if(url == null){
                     return;
                 }
                 ImageView profile = findViewById(R.id.ProfileCircularImage);
@@ -53,19 +61,20 @@ public class ProfilePage extends AppCompatActivity{
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
-
         });
     }
+
+    /**
+     * sets the information of the user from firebase.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_page);
-        Context context = this;
         name = findViewById(R.id.name);
         city = findViewById(R.id.city);
-        Button instagram = findViewById(R.id.instagram);
         profileName =findViewById(R.id.profile_name);
         eventsNumber = findViewById(R.id.events_number);
         gender = findViewById(R.id.gender);
@@ -104,21 +113,6 @@ public class ProfilePage extends AppCompatActivity{
             }
 
         });
-        instagram.setOnClickListener(view -> {
-            if (user.instagramUserName == null || user.instagramUserName.length() == 0){
-                return;
-            }
-            String inst = "http://instagram.com/_u/" + user.instagramUserName;
-            Uri uri = Uri.parse(inst);
-            Intent likeIng = new Intent(Intent.ACTION_VIEW, uri);
-            likeIng.setPackage("com.instagram.android");
-            try {
-                startActivity(likeIng);
-            } catch (ActivityNotFoundException e) {
-                startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(inst)));
-            }
-        });
         chat.setOnClickListener(view -> {
             if (userIdProfile.equals(FirebaseAuth.getInstance().getUid())){
                 // We view our own profile.
@@ -133,6 +127,10 @@ public class ProfilePage extends AppCompatActivity{
         back.setOnClickListener(view -> finish());
     }
 
+    /**
+     * if the profile isn't of the current user he can chat with other users.
+     * @param view
+     */
     public void openChatActivity(View view) {
         Intent intent = new Intent(this, ChatLogActivity.class);
         intent.putExtra(NewMessageActivity.USER_KEY, user);
