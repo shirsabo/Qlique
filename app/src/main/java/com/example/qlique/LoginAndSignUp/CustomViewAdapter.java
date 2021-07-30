@@ -16,9 +16,19 @@ import com.example.qlique.R;
 
 import java.util.List;
 
+/**
+ * CustomViewAdapter
+ * holds the view in the hobbies selection, each row represents a different hobby.
+ */
 public class CustomViewAdapter extends ArrayAdapter<RowItemHobby> {
     private final Context context;
 
+    /**
+     * constructor.
+     * @param context
+     * @param resource
+     * @param objects
+     */
     public CustomViewAdapter(@NonNull Context context, int resource, @NonNull List<RowItemHobby> objects) {
         super(context, resource, objects);
         this.context = context;
@@ -30,14 +40,14 @@ public class CustomViewAdapter extends ArrayAdapter<RowItemHobby> {
     }
 
 
-
     @NonNull
     @Override
+    /**
+     * return the view from the view holder.
+     */
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder viewHolder = null;
         RowItemHobby rowItemHobby = getItem(position);
-
-
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null){
             convertView = mInflater.inflate(R.layout.list_item, null);

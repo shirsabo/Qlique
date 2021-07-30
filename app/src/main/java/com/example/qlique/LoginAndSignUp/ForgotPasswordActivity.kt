@@ -1,4 +1,5 @@
 package com.example.qlique.LoginAndSignUp
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
@@ -9,31 +10,29 @@ import com.example.qlique.R
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 
+/**
+ * ForgotPasswordActivity
+ * This activity is responsible for updating the password of the user in case he forgets it.
+ */
 class ForgotPasswordActivity : AppCompatActivity() {
-
     private lateinit var auth: FirebaseAuth
-
     private lateinit var emailEt: EditText
-
     private lateinit var resetPasswordBtn: Button
     private lateinit var back: Button
 
-
+    /**
+     * initializes the buttons and the text views.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password)
-
         auth = FirebaseAuth.getInstance()
-
         emailEt = findViewById(R.id.email_edt_text)
-
         resetPasswordBtn = findViewById(R.id.reset_pass_btn)
         back = findViewById(R.id.back_button_forgot_pass)
-
         back.setOnClickListener {
             finish()
         }
-
         resetPasswordBtn.setOnClickListener {
             val email: String = emailEt.text.toString()
             if (TextUtils.isEmpty(email)) {

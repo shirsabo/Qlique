@@ -14,7 +14,7 @@ import kotlinx.android.parcel.Parcelize;
  * represents a user and the information we save for each one in firebase.
  */
 public class User implements Parcelable{
-    public String firstName, lastName, email, city, gender, uid, url, instagramUserName, tokenFCM;
+    public String firstName, lastName, email, city, gender, uid, url, tokenFCM;
     public List<String> friends;
     public List<String> hobbies;
     public List<String> events;
@@ -28,10 +28,9 @@ public class User implements Parcelable{
      * @param gender
      * @param uid
      * @param url
-     * @param instagramUserName
      */
     public User(String firstName, String lastName, String city, String email, String gender,
-                String uid, String url, String instagramUserName) {
+                String uid, String url) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -41,7 +40,6 @@ public class User implements Parcelable{
         friends.add("shirsabo");
         this.uid = uid;
         this.url = url;
-        this.instagramUserName = instagramUserName;
         this.events =  new ArrayList<>();
     }
 

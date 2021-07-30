@@ -14,19 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <!-- <Toolbar
-         android:id="@+id/toolbar"
-         android:layout_width="match_parent"
-         android:layout_height="?attr/actionBarSize"
-         android:background="?attr/colorPrimary"
-         app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toTopOf="parent"
-         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-     <include layout="@layout/layout_toolbar_profile" />
-     -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="fill_parent"
@@ -74,17 +62,6 @@
                 app:srcCompat="@drawable/ic_plus1"
                 app:civ_shadow="true"
                 app:civ_shadow_radius="1dp"
-                tools:layout_editor_absoluteX="221dp"
-                tools:layout_editor_absoluteY="58dp" />
-
-            <com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/imp_instagram"
-                android:layout_width="@dimen/ic_plus_width"
-                android:layout_height="@dimen/ic_plus_width"
-                android:layout_gravity="center"
-                app:civ_shadow="true"
-                app:civ_shadow_radius="1dp"
-                app:srcCompat="@drawable/ic_instagram"
                 tools:layout_editor_absoluteX="221dp"
                 tools:layout_editor_absoluteY="58dp" />
 

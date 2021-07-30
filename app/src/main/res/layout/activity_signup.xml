@@ -7,21 +7,6 @@
     android:background="@color/colorPrimary"
     tools:context=".LoginAndSignUp.SignupActivity">
 
-    <!-- <Toolbar
-         android:id="@+id/toolbar"
-         android:layout_width="match_parent"
-         android:layout_height="?attr/actionBarSize"
-         android:background="?attr/colorPrimary"
-         app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toTopOf="parent"
-         app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-     <include layout="@layout/layout_toolbar_profile" />
-     -->
-
-
     <LinearLayout
         android:id="@+id/linearLayout5"
         android:layout_width="370dp"
@@ -35,32 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
-
-        <!--
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="200dp">
-
-                <ImageView
-                    android:layout_width="193dp"
-                    android:layout_height="200dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="80dp"
-                    android:layout_marginLeft="80dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="75dp"
-                    android:layout_marginRight="75dp"
-                    android:layout_marginBottom="0dp"
-                    android:onClick="handleImageClick"/>
-
-            </RelativeLayout>
-            -->
-
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/img_profile"
@@ -81,16 +40,6 @@
             android:layout_width="@dimen/ic_plus_width"
             android:layout_height="@dimen/ic_plus_width"
             android:layout_gravity="center"
-            app:civ_shadow="true"
-            app:civ_shadow_radius="1dp"
-            tools:layout_editor_absoluteX="221dp"
-            tools:layout_editor_absoluteY="58dp" />
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:id="@+id/imp_instagram"
-            android:layout_width="@dimen/ic_plus_width"
-            android:layout_height="@dimen/ic_plus_width"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_instagram"
             app:civ_shadow="true"
             app:civ_shadow_radius="1dp"
             tools:layout_editor_absoluteX="221dp"
@@ -179,48 +128,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--
-        <TextView
-            android:id="@+id/txtview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/rounded"
-            android:text="@string/interests"
-            android:textSize="18sp" />
--->
-        <!--
-            <Button
-                android:id="@+id/btnChoose"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="0dp"
-                android:layout_weight="1"
-                android:text="Choose profile photo" />
-
-            <Button
-                android:id="@+id/btnUpload"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="0dp"
-                android:layout_weight="1"
-                android:text="Upload" />
-
-            <ImageView
-                android:id="@+id/imgView"
-                android:layout_width="match_parent"
-                android:layout_height="268dp" />
-    -->
-        <!--
-        <ListView
-            android:id="@+id/multiple_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="253dp"
-            android:background="@drawable/rounded"
-            android:gravity="center"
-            android:textColor="@color/colorPrimary"
-            android:textSize="25sp"
-            android:textStyle="italic" />
--->
         <RadioGroup
             android:id="@+id/Gender"
             android:layout_width="match_parent"
@@ -229,7 +136,6 @@
             android:paddingVertical="20dp"
             android:paddingLeft="20dp"
             android:paddingTop="20dp"
-
             android:paddingBottom="20dp">
 
             <RadioButton
