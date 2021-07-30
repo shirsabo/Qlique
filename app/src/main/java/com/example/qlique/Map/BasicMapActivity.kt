@@ -38,14 +38,18 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import java.io.IOException
 import java.util.*
 import kotlin.properties.Delegates
-
+/**
+ * BasicMapActivity
+ * This activity is responsible for fetching posts that are in a wanted radius and presenting them
+ * in the map.
+ **/
 abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.OnConnectionFailedListener{
     private val FINE_LOCATION: String = Manifest.permission.ACCESS_FINE_LOCATION
     private val COURSE_LOCATION: String = Manifest.permission.ACCESS_COARSE_LOCATION
     private val LOCATION_PERMISSION_REQUEST_CODE = 1234
-    protected var mLocationPermissionsGranted = false
+    private var mLocationPermissionsGranted = false
     protected var mMap: GoogleMap? = null
-    protected var mFusedLocationProviderClient: FusedLocationProviderClient? = null
+    private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     val DEFAULT_ZOOM = 15f
     private var mSearchText: AutocompleteSupportFragment? = null
     protected var mGps: ImageView? = null
@@ -64,43 +68,41 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
     protected var chosenLon by Delegates.notNull<Double>()
 
 
-
+    /**
+     * when the map is ready we request the user location and checks the map has permissions.
+     */
     override fun onMapReady(googleMap: GoogleMap) {
-        Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show()
         Log.d(TAG, "onMapReady: map is ready")
         mMap = googleMap
         if (mLocationPermissionsGranted) {
             getDeviceLocation()
-
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
+                return
             }
             mMap!!.isMyLocationEnabled = true;
             mMap!!.uiSettings.isMyLocationButtonEnabled = false;
-
             init()
         }
     }
 
+    /**
+     * initializes the buttons and text, finds the location the user typed in the search input.
+     **/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
-        /*mSearchText = supportFragmentManager.findFragmentById(R.id.autocomplete_fragment)
-                as AutocompleteSupportFragment*/
         mGps = findViewById(R.id.ic_gps)
         mInfo = findViewById(R.id.ic_information)
         mInfoTxt = findViewById(R.id.info_text)
         getLocationPermission()
         back = findViewById(R.id.back_button)
         back.setOnClickListener {
-
             finish()
         }
         Places.initialize(this, resources.getString(R.string.google_maps_API_key))
         mPlacesClient = Places.createClient(this)
-
         mPlaceSearch = findViewById(R.id.input_search)
         mPlaceSearch.setOnEditorActionListener { _, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
@@ -113,6 +115,10 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
             false
         }
     }
+
+    /**
+     * counts 5 seconds with a timer and changes the visibility of the text view accordingly.
+     */
     fun startTimeCounter(view: View) {
         val countTime: TextView = findViewById(R.id.info_text)
         object : CountDownTimer(5000, 1000) {
@@ -124,27 +130,28 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
             }
         }.start()
     }
+
+    /**
+     * calls onActivityResult of Autocomplete Support Fragment.
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         mSearchText?.onActivityResult(requestCode, resultCode, data)
     }
 
+    /**
+     * getting location permissions.
+     */
     private fun getLocationPermission() {
         Log.d(TAG, "getLocationPermission: getting location permissions")
         val permissions = arrayOf<String>(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
-        if (ContextCompat.checkSelfPermission(
-                this.applicationContext,
-                FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            if (ContextCompat.checkSelfPermission(
-                    this.applicationContext,
-                    COURSE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
+        if (ContextCompat.checkSelfPermission(this.applicationContext, FINE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this.applicationContext, COURSE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionsGranted = true
                 initMap()
             } else {
@@ -163,11 +170,11 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray
-    ) {
+    /**
+     * if permission granted initializes the map.
+     */
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>,
+        grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         Log.d(TAG, "onRequestPermissionsResult: called.")
         mLocationPermissionsGranted = false
@@ -192,6 +199,9 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
         }
     }
 
+    /**
+     * getting the device's current location.
+     */
     protected open fun getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location")
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -227,6 +237,9 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
         }
     }
 
+    /**
+     * moving the camera to the latitude and longitude entered.
+     */
     open fun moveCamera(latLng: LatLng, zoom: Float, title: String){
         Log.d(
             TAG,
@@ -235,9 +248,18 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
         mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
         hideSoftKeyboard()
     }
+
+    /**
+     * hides Soft Keyboard.
+     */
     protected fun hideSoftKeyboard() {
         this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
+
+    /**
+     * initializing the map.
+     * being called after receiving permissions.
+     */
     private fun initMap() {
         Log.d(TAG, "initMap: initializing map")
         val mapFragment : SupportMapFragment=
@@ -245,26 +267,28 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
         mapFragment.getMapAsync(this@BasicMapActivity)
     }
 
+    /**
+     * being called after the map is ready, creates google api client and sets the gps
+     * on click listener.
+     */
     open fun init() {
         Log.d(TAG, "init: initializing")
-
         mGoogleApiClient = GoogleApiClient.Builder(this)
             .addApi(GEO_DATA_API)
             .addApi(PLACE_DETECTION_API)
             .enableAutoManage(this, this)
             .build()
-
         mGps!!.setOnClickListener {
             Log.d(TAG, "onClick: clicked gps icon")
             getDeviceLocation()
         }
     }
 
-    /*
+    /**
     finds the location the user typed in the search input, saves the location and moves
     the map so the center will be in this location.
-     */
-    protected fun geoLocate() {
+     **/
+    private fun geoLocate() {
         clearMap()
         Log.d(TAG, "geoLocate: geolocating")
         val searchString = mPlaceSearch.text.toString()
@@ -291,9 +315,15 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
         }
     }
 
+    /**
+     * Connection Failed.
+     */
     override fun onConnectionFailed(p0: ConnectionResult) {
-        TODO("Not yet implemented")
     }
+
+    /**
+     * clears the previous marker that was clicked.
+     */
     protected fun clearMap(){
         prevMarker = null
         mMap?.clear()
