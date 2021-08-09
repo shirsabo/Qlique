@@ -247,49 +247,70 @@ open class EventsMap : BasicMapActivity() {
      * the map for this event.
      */
     fun getImageByHobby(hobby: String): Int {
-        if(hobby == "Ball Games"){
-            return R.drawable.ic_baseline_sports_soccer_24
-        }
-        if (hobby == "Sport"){
-            return  R.drawable.ic_sport
-        } else if (hobby == "Initiative"){
-            return R.drawable.ic_light_bulb
-        }else if (hobby == "Business"){
-            return R.drawable.ic_buisnessicon
-        }else if (hobby == "Fashion"){
-            return R.drawable.ic_fashion
-        }else if (hobby == "Social"){
-            return R.drawable.ic_friends
-        }else if (hobby == "Entertainment"){
-            return R.drawable.ic_movies
-        }else if (hobby == "Study"){
-            return R.drawable.ic_studying
-        }else if (hobby == "Beauty and style"){
-            return R.drawable.ic_eye_treatment
-        }else if (hobby == "Comedy"){
-            return R.drawable.ic_lol
-        }else if (hobby == "Food"){
-            return R.drawable.ic_spaguetti
-        }else if (hobby == "Animals"){
-            return R.drawable.ic_pets
-        }else if (hobby == "Talent"){
-            return R.drawable.ic_talent
-        }else if (hobby == "Cars"){
-            return R.drawable.ic_cars1
-        }else if (hobby == "Love and dating"){
-            return R.drawable.ic_hearts
-        }else if (hobby == "Fitness and health"){
-            return R.drawable.ic_meditation
-        }else if (hobby == "Dance"){
-            return R.drawable.ic_dancing
-        }else if (hobby == "Outdoor activities"){
-            return R.drawable.ic_sport
-        }else if (hobby == "Home and garden"){
-            return R.drawable.ic_plant_pot
-        }else if (hobby == "Gaming"){
-            return R.drawable.ic_joystick
-        } else {
-            return R.drawable.ic_location
+        when (hobby) {
+            "Ball Games" -> {
+                return R.drawable.ic_baseline_sports_soccer_24
+            }
+            "Sport" -> {
+                return  R.drawable.ic_sport
+            }
+            "Initiative" -> {
+                return R.drawable.ic_light_bulb
+            }
+            "Business" -> {
+                return R.drawable.ic_buisnessicon
+            }
+            "Fashion" -> {
+                return R.drawable.ic_fashion
+            }
+            "Social" -> {
+                return R.drawable.ic_friends
+            }
+            "Entertainment" -> {
+                return R.drawable.ic_movies
+            }
+            "Study" -> {
+                return R.drawable.ic_studying
+            }
+            "Beauty and style" -> {
+                return R.drawable.ic_eye_treatment
+            }
+            "Comedy" -> {
+                return R.drawable.ic_lol
+            }
+            "Food" -> {
+                return R.drawable.ic_spaguetti
+            }
+            "Animals" -> {
+                return R.drawable.ic_pets
+            }
+            "Talent" -> {
+                return R.drawable.ic_talent
+            }
+            "Cars" -> {
+                return R.drawable.ic_cars1
+            }
+            "Love and dating" -> {
+                return R.drawable.ic_hearts
+            }
+            "Fitness and health" -> {
+                return R.drawable.ic_meditation
+            }
+            "Dance" -> {
+                return R.drawable.ic_dancing
+            }
+            "Outdoor activities" -> {
+                return R.drawable.ic_sport
+            }
+            "Home and garden" -> {
+                return R.drawable.ic_plant_pot
+            }
+            "Gaming" -> {
+                return R.drawable.ic_joystick
+            }
+            else -> {
+                return R.drawable.ic_location
+            }
         }
     }
 

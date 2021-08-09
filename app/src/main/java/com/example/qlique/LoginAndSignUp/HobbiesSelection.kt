@@ -24,7 +24,8 @@ class HobbiesSelection : AppCompatActivity(), AdapterView.OnItemClickListener {
         "Sport", "Initiative", "Business", "Fashion", "Social",
         "Entertainment", "Study", "Beauty and style", "Comedy", "Food", "Animals",
         "Talent", "Cars", "Love and dating", "Fitness and health",
-        "Dance", "Outdoor activities", "Home and garden", "Gaming"
+        "Dance", "Outdoor activities", "Home and garden", "Gaming",
+        "Ball Game", "Biking", "Cooking", "Art"
     )
     private val images = intArrayOf(
         R.drawable.ic_sports,
@@ -45,7 +46,11 @@ class HobbiesSelection : AppCompatActivity(), AdapterView.OnItemClickListener {
         R.drawable.ic_dance,
         R.drawable.ic_outdoor_activities,
         R.drawable.ic_home_and_garden,
-        R.drawable.ic_gaming
+        R.drawable.ic_gaming,
+        R.drawable.ic_baseline_sports_soccer_24,
+        R.drawable.ic_location,
+        R.drawable.ic_location,
+        R.drawable.ic_location
     )
 
     /**
