@@ -1,38 +1,59 @@
 package com.example.qlique.RecommendationSystem
 
-import android.app.Activity
+import android.Manifest
 import android.content.ContentValues
+import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Looper
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.example.qlique.CreateEvent.CalendarEvent
 import com.example.qlique.CreateEvent.Event
+import com.example.qlique.Feed.MainActivity
 import com.example.qlique.Feed.PostAdapter
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQuery
 import com.firebase.geofire.GeoQueryEventListener
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import java.util.*
 
-class HobbiesRecommendationSystem(var activity: Activity, var feedAdapter: PostAdapter) :
-    RecommendationModel {
+class HobbiesRecommendationSystem(
+    var activity: MainActivity,
+    var feed: RecyclerView
+) : RecommendationModel, GoogleApiClient.OnConnectionFailedListener {
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     private var mLocationPermissionsGranted = false
     var user: FirebaseUser? = null
+    private val FINE_LOCATION: String = Manifest.permission.ACCESS_FINE_LOCATION
+    private val COURSE_LOCATION: String = Manifest.permission.ACCESS_COARSE_LOCATION
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1234
 
+    /**
+     * Connection Failed.
+     */
+    override fun onConnectionFailed(p0: ConnectionResult) {
+    }
 
     /**
     displays the events in the wanted activity according to location, hobbies and registered events.
      */
     override fun getRecommendedEvents() {
-        // get the current user instance
-        val auth = FirebaseAuth.getInstance()
-        user = auth.currentUser!!
+        getLocationPermission()
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
         // displays the events in the wanted activity according to location, hobbies and registered events.
         requestFilteredEvents()
     }
@@ -45,24 +66,54 @@ class HobbiesRecommendationSystem(var activity: Activity, var feedAdapter: PostA
         Log.d(ContentValues.TAG, "getDeviceLocation: getting the devices current location")
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
         try {
-            if (mLocationPermissionsGranted) {
-                val location: Task<*> =
-                    mFusedLocationProviderClient!!.lastLocation
-                location.addOnCompleteListener(activity) { task ->
-                    if (task.isSuccessful) {
-                        Log.d(ContentValues.TAG, "onComplete: found location!")
-                        val currentLocation: Location? = task.result as Location?
-                        if (currentLocation != null) {
-                            fetchNearbyEvents(currentLocation.latitude, currentLocation.longitude)
-                        }
+            mFusedLocationProviderClient!!.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    // Got last known location. In some rare situations this can be null.
+                    if (location != null) {
+                        fetchNearbyEvents(location.latitude, location.longitude)
                     } else {
-                        Log.d(ContentValues.TAG, "onComplete: current location is null")
+                        requestNewLocationData()
                     }
                 }
-            }
         } catch (e: SecurityException) {
             Log.e(ContentValues.TAG, "getDeviceLocation: SecurityException: " + e.message)
         }
+    }
+
+    var mLocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            val mLastLocation: Location = locationResult.lastLocation
+            // When we will receive the user's location this will be executed.
+            fetchNearbyEvents(mLastLocation.latitude, mLastLocation.longitude)
+        }
+    }
+
+    /**
+     * requests location updates on the user's location in case the location we receives was null..
+     */
+    private fun requestNewLocationData() {
+        val mLocationRequest = LocationRequest()
+        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        mLocationRequest.interval = 0
+        mLocationRequest.fastestInterval = 0
+        mLocationRequest.numUpdates = 1
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
+        if (ActivityCompat.checkSelfPermission(
+                activity.applicationContext,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                activity.applicationContext,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // There are'nt permissions.
+            return
+        }
+        mFusedLocationProviderClient!!.requestLocationUpdates(
+            mLocationRequest, this.mLocationCallback,
+            Looper.myLooper()
+        )
+
     }
 
     /**
@@ -76,19 +127,20 @@ class HobbiesRecommendationSystem(var activity: Activity, var feedAdapter: PostA
                 val event = snapshot.getValue(Event::class.java)
                 event?.uid = snapshot.child("uid").value.toString()
                 event?.description = snapshot.child("description").value.toString()
+                event?.hour = snapshot.child("hour").value.toString()
+                event?.date = snapshot.child("date").value.toString()
                 if (event != null) {
                     if (CalendarEvent.isEventPassed(event.date, event.hour)) {
                         // show only future events
                         return
                     }
+                    event.setEventUid(snapshot.key)
                     events.add(event)
                 }
-                event?.latitude = snapshot.child("latitude").getValue(Double::class.java)
-                event?.longitude = snapshot.child("longitude").getValue(Double::class.java)
                 // filter the events list according to the user's hobbies.
                 /*********************************************************************/
                 // sets the PostAdapter which receives the array of event objects that were just fetched
-                feedAdapter = PostAdapter(events)
+                feed.adapter = PostAdapter(events)
             }
 
             override fun onCancelled(po: DatabaseError) {
@@ -146,4 +198,37 @@ class HobbiesRecommendationSystem(var activity: Activity, var feedAdapter: PostA
             }
         })
     }
+
+    /**
+     * getting location permissions.
+     */
+    private fun getLocationPermission() {
+        Log.d(ContentValues.TAG, "getLocationPermission: getting location permissions")
+        val permissions = arrayOf<String>(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+        if (ContextCompat.checkSelfPermission(activity.applicationContext, FINE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            if (ContextCompat.checkSelfPermission(activity.applicationContext, COURSE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                mLocationPermissionsGranted = true
+            } else {
+                ActivityCompat.requestPermissions(
+                    activity,
+                    permissions,
+                    LOCATION_PERMISSION_REQUEST_CODE
+                )
+            }
+        } else {
+            ActivityCompat.requestPermissions(
+                activity,
+                permissions,
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
 }
