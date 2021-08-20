@@ -228,6 +228,7 @@ class MainActivity : AppCompatActivity() , GoogleApiClient.OnConnectionFailedLis
      *
      */
     private fun  fetchPosts(){
+        feed.layoutManager = LinearLayoutManager(this)
         val hobbiesRecommendationSystem = HobbiesRecommendationSystem(this, feed)
         hobbiesRecommendationSystem.getRecommendedEvents()
         /*val events : ArrayList<Event> = ArrayList()

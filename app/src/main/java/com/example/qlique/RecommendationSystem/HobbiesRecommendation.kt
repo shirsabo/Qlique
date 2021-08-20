@@ -34,7 +34,13 @@ class HobbiesRecommendationSystem(
     private val FINE_LOCATION: String = Manifest.permission.ACCESS_FINE_LOCATION
     private val COURSE_LOCATION: String = Manifest.permission.ACCESS_COARSE_LOCATION
     private val LOCATION_PERMISSION_REQUEST_CODE = 1234
-
+    var events: ArrayList<Event> = ArrayList()
+    val HobbiestoIndex = mapOf("Sport" to 0, "Ball Game" to 1, "Biking" to 2,  "Initiative" to 3,
+        "Business" to 4, "Fashion" to 5, "Social" to 6,  "Entertainment" to 7,"Cooking" to 8,
+        "Study" to 9, "Art" to 10,  "Beauty and style" to 11, "Comedy" to 12, "Food" to 13,
+        "Animals" to 14,  "Talent" to 15, "Cars" to 16, "Love and dating" to 17,
+        "Fitness and health" to 18,  "Dance" to 19,
+        "Outdoor activities" to 20, "Home and garden" to 21,"Gaming" to 22)
     /**
      * Connection Failed.
      */
@@ -45,6 +51,7 @@ class HobbiesRecommendationSystem(
     displays the events in the wanted activity according to location, hobbies and registered events.
      */
     override fun getRecommendedEvents() {
+        events = ArrayList()
         getLocationPermission()
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
@@ -120,7 +127,6 @@ class HobbiesRecommendationSystem(
      *
      */
     private fun fetchEventFromFirebase(uid: String) {
-        val events: ArrayList<Event> = ArrayList()
         val ref = FirebaseDatabase.getInstance().getReference("/posts/$uid")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -129,16 +135,21 @@ class HobbiesRecommendationSystem(
                 event?.description = snapshot.child("description").value.toString()
                 event?.hour = snapshot.child("hour").value.toString()
                 event?.date = snapshot.child("date").value.toString()
+                event?.setEventUid(snapshot.key)
                 if (event != null) {
                     if (CalendarEvent.isEventPassed(event.date, event.hour)) {
                         // show only future events
                         return
                     }
-                    event.setEventUid(snapshot.key)
+                    println("Added event")
+                    // filter the events list according to the user's hobbies.
+                    filterEvent()
+                    /*********************************************************************/
                     events.add(event)
                 }
-                // filter the events list according to the user's hobbies.
-                /*********************************************************************/
+                else{
+                    return
+                }
                 // sets the PostAdapter which receives the array of event objects that were just fetched
                 feed.adapter = PostAdapter(events)
             }
@@ -146,6 +157,9 @@ class HobbiesRecommendationSystem(
             override fun onCancelled(po: DatabaseError) {
             }
         })
+    }
+    private fun filterEvent() {
+        TODO("Not yet implemented")
     }
 
     /**
