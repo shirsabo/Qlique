@@ -6,8 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
@@ -15,9 +13,6 @@ import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import com.example.qlique.AppConfig
-import com.example.qlique.Instagram.*
 import com.example.qlique.Profile.User
 import com.example.qlique.R
 import com.google.android.gms.tasks.OnCompleteListener
@@ -28,13 +23,13 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.scwang.wave.MultiWaveHeader
-import kotlinx.android.synthetic.main.activity_signup.view.*
 import java.util.*
 
-
 /**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */class SignupActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
+ * SignupActivity
+ * This activity is responsible for registering
+ */
+class SignupActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
@@ -44,57 +39,33 @@ import java.util.*
     private lateinit var signUpBtn: Button
     private lateinit var loginBtn: Button
     private lateinit var btnUpload: com.mikhaellopez.circularimageview.CircularImageView
-    private lateinit var firstNameEt : EditText
-    private lateinit var lastNameEt : EditText
-    private lateinit var genderbtn : RadioGroup
-    private lateinit var maleBtn : RadioButton
-    private lateinit var femaleBtn : RadioButton
-    private lateinit var instagram : ImageView
-    private lateinit var profilPicture : com.mikhaellopez.circularimageview.CircularImageView
-    private lateinit var mApp : InstagramApp
-    private lateinit var userInfoHashMap: HashMap<String, String>
-    private var instagranUserName : String = ""
-    companion object{
-        var currentUser: User?=null
+    private lateinit var firstNameEt: EditText
+    private lateinit var lastNameEt: EditText
+    private lateinit var genderbtn: RadioGroup
+    private lateinit var maleBtn: RadioButton
+    private lateinit var femaleBtn: RadioButton
+    private lateinit var profilPicture: com.mikhaellopez.circularimageview.CircularImageView
+
+    companion object {
+        var currentUser: User? = null
     }
-    private var handler = object : Handler(){
-        override fun handleMessage(message: Message) {
-            if (message.what == InstagramApp.WHAT_FINALIZE){
-                userInfoHashMap = mApp.userInfo
-            } else if (message.what == InstagramApp.WHAT_FINALIZE){
-                Toast.makeText(this@SignupActivity, "Please check tour network", Toast.LENGTH_LONG).show()
+
+    var url: String? = ""
+    var hobbiesList: MutableList<String> = mutableListOf<String>()
+    var selectedPhotoUri: Uri? = null
+    private var launchSomeActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                selectedPhotoUri = result.data?.data
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
+                BitmapDrawable(bitmap)
+                profilPicture.setImageBitmap(bitmap)
             }
-            //return false
         }
-    }
-    var url : String? = ""
 
-    var listView: ListView? = null
-    var arrayAdapter:ArrayAdapter<String> ? = null
-    var hobbiesList:MutableList<String> = mutableListOf<String>()
-    var selectedPhotoUri:Uri?=null
-    private var launchSomeActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            selectedPhotoUri = result.data?.data
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
-            val bitmapDrawble= BitmapDrawable(bitmap)
-            profilPicture.setImageBitmap(bitmap)
-        }
-    }
-
-    private fun fetchCurrentUser(){
-        val uid = FirebaseAuth.getInstance().uid
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                currentUser = snapshot.getValue(User::class.java)
-            }
-
-            override fun onCancelled(po: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        })
-    }
+    /**
+     * initializes the buttons and the text view, gets the information the user entered.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
@@ -120,42 +91,22 @@ import java.util.*
         btnUpload = findViewById(R.id.img_plus)
         profilPicture = findViewById(R.id.img_profile)
         femaleBtn = findViewById(R.id.radioF)
-        instagram =  findViewById(R.id.imp_instagram)
-        mApp = InstagramApp(
-            this,
-            AppConfig.CLIENT_ID,
-            AppConfig.CLIENT_SECRET,
-            AppConfig.CALLBACK_URL
-        )
-        mApp.setListener(object : InstagramApp.OAuthAuthenticationListener {
-            override fun onSuccess() {
-                mApp.fetchUserName(handler)
-            }
-
-            override fun onFail(error: String?) {
-                Toast.makeText(this@SignupActivity, error.toString(), Toast.LENGTH_LONG).show()
-
-            }
-        })
-        loginBtn.setOnClickListener{
+        loginBtn.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
-        }
-
-        instagram.setOnClickListener{
-            mApp.authorize()
         }
         signUpBtn.setOnClickListener {
             val email: String = emailEt.text.toString()
             val password: String = passwordEt.text.toString()
             val city: String = cityEt.text.toString()
-            val fname : String = firstNameEt.text.toString()
-            val lname : String = lastNameEt.text.toString()
-            var gender : String
+            val fname: String = firstNameEt.text.toString()
+            val lname: String = lastNameEt.text.toString()
+            var gender: String
             if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(city)
                 || TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname) || selectedPhotoUri == null
-                || genderbtn.checkedRadioButtonId == -1) {
+                || genderbtn.checkedRadioButtonId == -1
+            ) {
                 Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()
             } else {
                 auth.createUserWithEmailAndPassword(email, password)
@@ -177,35 +128,28 @@ import java.util.*
                         }
                     })
             }
-
-
         }
-        btnUpload.setOnClickListener{
+        btnUpload.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
-            intent.type="image/*"
+            intent.type = "image/*"
             launchSomeActivity.launch(intent)
         }
-
-
     }
 
+    /**
+     * creates a new user and moves to the intent of the hobbies selection.
+     */
     private fun writeNewUser(
         userId: String, fName: String, lName: String, city: String,
         email: String, gender: String, url: String
     ) {
         val uid: String? = FirebaseAuth.getInstance().uid
-        var instagram = ""
-        if (mApp.userName != null){
-            instagram = mApp.userName
-        }
-        val user = User(fName, lName, city, email, gender, uid, url, instagram)
+        val user = User(fName, lName, city, email, gender, uid, url)
         SetCurDeviceToken(user)
         // Creating a new user and saving it in the real time database.
         database.child("users").child(userId).setValue(user)
-
         // Send a verification email to the new user.
         FirebaseAuth.getInstance().currentUser?.sendEmailVerification()
-
         // Creating a new intent if selecting hobbies and passing the uid to it.
         val myIntent = Intent(this, HobbiesSelection::class.java)
         myIntent.putExtra("StringVariableName", uid)
@@ -213,6 +157,9 @@ import java.util.*
         finish()
     }
 
+    /**
+     * sets the device token of the user.
+     */
     private fun SetCurDeviceToken(user: User) {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             val deviceToken = task.result!!
@@ -221,36 +168,46 @@ import java.util.*
         }
     }
 
+    /**
+     * updates the user and saves it in the firebase.
+     */
     private fun updateFcm(user: User) {
-        if(user.uid==null){
+        if (user.uid == null) {
             return
         }
-        val ref =FirebaseDatabase.getInstance().getReference("/users/${user.uid}")
+        val ref = FirebaseDatabase.getInstance().getReference("/users/${user.uid}")
         ref.setValue(user)
     }
 
+    /**
+     * adds or removes hobbies,  when clicking one of the hobbies we
+     * will add or remove them from the hobbies list.
+     */
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         // when clicking one of the hobbies we will add or remove them from the hobbies list
-        val items:String = parent?.getItemAtPosition(position) as String
-        if (items in hobbiesList){
+        val items: String = parent?.getItemAtPosition(position) as String
+        if (items in hobbiesList) {
             hobbiesList.remove(items)
         } else {
             hobbiesList.add(items)
         }
     }
 
-    private fun uploadImage(){
-        if(selectedPhotoUri==null){
+    /**
+     * the user chooses a profile picture and it sets to be his profile picture.
+     */
+    private fun uploadImage() {
+        if (selectedPhotoUri == null) {
             return
-        }else{
+        } else {
             val filename = UUID.randomUUID().toString()
             val ref = FirebaseStorage.getInstance().getReference("images/$filename")
             ref.putFile(selectedPhotoUri!!).addOnSuccessListener {
                 ref.downloadUrl.addOnSuccessListener {
                     url = it.toString()
                     val uid = FirebaseAuth.getInstance().uid
-                    val ref =FirebaseDatabase.getInstance().getReference("/users/$uid")
-                    val newUser =Firebase.database.reference.child("/users/$uid").addValueEventListener(
+                    val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+                    Firebase.database.reference.child("/users/$uid").addValueEventListener(
                         object :
                             ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -268,13 +225,7 @@ import java.util.*
                             }
                         })
                 }
-
             }
-
-
-
         }
-
     }
-
 }

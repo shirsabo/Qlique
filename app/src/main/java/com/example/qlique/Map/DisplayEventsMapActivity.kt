@@ -21,10 +21,16 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-
+/**
+ * DisplayEventsMapActivity
+ * displays the events in a map.
+ */
 class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListener {
     private var radius :Double = 0.0
 
+    /**
+     * when the map is ready we request the user location and checks the map has permissions.
+     */
     override fun onMapReady(googleMap: GoogleMap) {
         super.onMapReady(googleMap)
         // Change the information presented in the basic map.
@@ -63,6 +69,9 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
                         }
                     }
 
+                    /**
+                     * on Cancelled.
+                     */
                     override fun onCancelled(error: DatabaseError) {
                         //Failed to read value
                     }
@@ -73,41 +82,31 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
         requestRadiusFromUserAndDisplayEvents()
     }
 
-    private fun loadUser(snapshot: DataSnapshot):User{
-        val user :User = User()
-        user.firstName = snapshot.child("firstName").value.toString()
-        user.lastName = snapshot.child("lastName").value.toString()
-        user.email  =  snapshot.child("email").value.toString()
-        user.city =  snapshot.child("city").value.toString()
-        user.gender =  snapshot.child("gender").value.toString()
-        user.uid = snapshot.child("uid").value.toString()
-        user. url = snapshot.child("url").value.toString()
-        return user;
-    }
-    private fun addRadiusImageView() {
-        val radiusImage: ImageView = findViewById(R.id.radiusImageView)
-        radiusImage.visibility = View.VISIBLE
-        radiusImage.setOnClickListener {
-            radiusButtonClicked(it)
-        }
-    }
-       private fun chanceInfoText(){
+    /**
+     * changes the Info Text presented to the user.
+     */
+    private fun chanceInfoText(){
         val infoImageView: TextView = findViewById(R.id.info_text)
         infoImageView.text = "Move the map or search for a location where you want to see events"
     }
-    /*
+
+    /**
     Request Radius from the user with the dialog and display the events in this radius.
      */
     private fun requestRadiusFromUserAndDisplayEvents(){
         RequestRadiusDialog().show(supportFragmentManager, "MyCustomFragment")
     }
-    /*
+
+    /**
     Request Radius from the user with the dialog when clicking the radius button on the map.
      */
     private fun radiusButtonClicked(view: View){
         requestRadiusFromUserAndDisplayEvents()
     }
 
+    /**
+     * get the locations of the events nearby and add markers in their locations.
+     */
     private fun displayEventsNearby(events: ArrayList<Event>, uid: String) {
         // get the locations of the events nearby and add markers in their locations.
         for (event in events){
@@ -130,6 +129,9 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
         }
     }
 
+    /**
+     * add event from firebase to tje map only if it's date is in the future.
+     */
     private fun addEventFromFirebase(uid: String) {
         val events: ArrayList<Event> = ArrayList()
         val ref = FirebaseDatabase.getInstance().getReference("/posts/$uid")
@@ -139,12 +141,9 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
                  event?.uid = snapshot.child("uid").value.toString()
                  event?.description = snapshot.child("description").value.toString()
                  if (event != null) {
-                     if (CalendarEvent.isEventPassed(
-                             event.date,
-                             event.hour
-                         )
-                     ) { // show only future events
-                         return;
+                     if (CalendarEvent.isEventPassed(event.date, event.hour)) {
+                         // show only future events
+                         return
                      }
                      events.add(event)
                  }
@@ -158,56 +157,59 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
          })
 
     }
+
+    /**
+     * adds events from a nearby radius.
+     */
     private fun fetchNearbyEvents(){
-
-            val firebaseDatabase = FirebaseDatabase.getInstance()
-            val ref: DatabaseReference = firebaseDatabase.getReference("geoFire")
-            val geoFire = GeoFire(ref)
-            val geoQuery: GeoQuery = geoFire.queryAtLocation(
-                GeoLocation(32.0528, 34.8219),
-                radius
-            )
-            geoQuery.addGeoQueryEventListener(object : GeoQueryEventListener {
-                override fun onKeyEntered(key: String, location: GeoLocation) {
-                    println(
-                        String.format(
-                            "Key %s entered the search area at [%f,%f]",
-                            key,
-                            location.latitude,
-                            location.longitude
-                        )
+        val firebaseDatabase = FirebaseDatabase.getInstance()
+        val ref: DatabaseReference = firebaseDatabase.getReference("geoFire")
+        val geoFire = GeoFire(ref)
+        val geoQuery: GeoQuery = geoFire.queryAtLocation(
+            GeoLocation(32.0528, 34.8219),
+            radius
+        )
+        geoQuery.addGeoQueryEventListener(object : GeoQueryEventListener {
+            override fun onKeyEntered(key: String, location: GeoLocation) {
+                println(
+                    String.format(
+                        "Key %s entered the search area at [%f,%f]",
+                        key,
+                        location.latitude,
+                        location.longitude
                     )
-                    addEventFromFirebase(key) // fetches to uid of post_in_feed from firebase and adds it to list of events
-                }
+                )
+                addEventFromFirebase(key) // fetches to uid of post_in_feed from firebase and adds it to list of events
+            }
 
 
-                override fun onKeyExited(key: String) {
-                    println(String.format("Key %s is no longer in the search area", key))
-                }
+            override fun onKeyExited(key: String) {
+                println(String.format("Key %s is no longer in the search area", key))
+            }
 
-                override fun onKeyMoved(key: String, location: GeoLocation) {
-                    println(
-                        String.format(
-                            "Key %s moved within the search area to [%f,%f]",
-                            key,
-                            location.latitude,
-                            location.longitude
-                        )
+            override fun onKeyMoved(key: String, location: GeoLocation) {
+                println(
+                    String.format(
+                        "Key %s moved within the search area to [%f,%f]",
+                        key,
+                        location.latitude,
+                        location.longitude
                     )
+                )
 
-                }
+            }
 
-                override fun onGeoQueryReady() {
-                    println("All initial data has been loaded and events have been fired!")
-                }
+            override fun onGeoQueryReady() {
+                println("All initial data has been loaded and events have been fired!")
+            }
 
-                override fun onGeoQueryError(error: DatabaseError) {
-                    System.err.println("There was an error with this query: $error")
-                }
-            })
-        }
+            override fun onGeoQueryError(error: DatabaseError) {
+                System.err.println("There was an error with this query: $error")
+            }
+        })
+    }
 
-    /*
+    /**
     After the dialog fragment completes, it calls this callback.
      */
     override fun onComplete(r: String) {

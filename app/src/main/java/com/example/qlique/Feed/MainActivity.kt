@@ -1,11 +1,12 @@
 package com.example.qlique.Feed
 
-import com.example.qlique.CreateEvent.Event
 import com.example.qlique.CreateEvent.NewEvent
 import android.app.Dialog
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.res.Configuration
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -18,14 +19,19 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qlique.Chat.ChatListActivity
 import com.example.qlique.CreateEvent.CalendarEvent
+import com.example.qlique.CreateEvent.Event
 import com.example.qlique.EventsDisplay.EventsManager
 import com.example.qlique.LoginAndSignUp.LoginActivity
 import com.example.qlique.LoginAndSignUp.UpdatePassword
 import com.example.qlique.Map.DisplayEventsMapActivity
 import com.example.qlique.Profile.ProfilePage
 import com.example.qlique.R
+import com.example.qlique.RecommendationSystem.HobbiesRecommendationSystem
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -35,19 +41,21 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.nav_header_main.view.*
+
 /**
  * Main activity
  * This activity responsible for fetching posts to feed, responsible for the side menu functionality,
  * configures the fcm token, google services etc(google map,account) and firebase.
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , GoogleApiClient.OnConnectionFailedListener{
     private lateinit var auth: FirebaseAuth
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var navigationView: NavigationView
     private val ERROR_DIALOG_REQUEST = 9001
     private var floatingBtn: FloatingActionButton? =null
+    private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
+
     /**
      * responsible for configurations (Title, Navigation menu,creating necessary instances,FCM)
      * fetches posts to feed from firebase , checks google services
@@ -220,7 +228,9 @@ class MainActivity : AppCompatActivity() {
      *
      */
     private fun  fetchPosts(){
-        val events : ArrayList<Event> = ArrayList()
+        val hobbiesRecommendationSystem = HobbiesRecommendationSystem(this, feed)
+        hobbiesRecommendationSystem.getRecommendedEvents()
+        /*val events : ArrayList<Event> = ArrayList()
         var mDatabase = FirebaseDatabase.getInstance().reference
         feed.layoutManager = LinearLayoutManager(this)
         mDatabase.child("/posts").addListenerForSingleValueEvent(object : ValueEventListener {
@@ -248,5 +258,17 @@ class MainActivity : AppCompatActivity() {
                 // sets the PostAdapter which receives the array of event objects that were just fetched
                 feed.adapter= PostAdapter(events)
             }})
+         */
+
+    }
+
+    public override fun onStart() {
+        super.onStart()
+    }
+
+    /**
+     * Connection Failed.
+     */
+    override fun onConnectionFailed(p0: ConnectionResult) {
     }
 }

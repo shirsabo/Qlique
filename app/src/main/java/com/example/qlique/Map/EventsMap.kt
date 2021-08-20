@@ -32,9 +32,16 @@ import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.join_event_dialog.view.*
 
+/**
+ * EventsMap
+ * displays events in the map, ShowEventMap and DisplayEventsMapActivity implements this class.
+ */
 open class EventsMap : BasicMapActivity() {
     var isJoinDialogOpen = false
 
+    /**
+     * updates the event's description.
+     */
     protected fun updateViewOfBottomDialog(view: View, event: Event){
         val map = view.findViewById<View>(R.id.map_image_view) as ImageView
         map.visibility = GONE
@@ -64,6 +71,10 @@ open class EventsMap : BasicMapActivity() {
         }
         updateAuthor(view, event.uid)
     }
+
+    /**
+     * joins to the event.
+     */
     private fun joinCurUserToEvent(eventUid :String){
         val curUidUser = FirebaseAuth.getInstance().currentUser?.uid ?: return
         if(eventUid.isEmpty()){
@@ -71,10 +82,18 @@ open class EventsMap : BasicMapActivity() {
         }
         addMemberToEvent(eventUid, curUidUser)
     }
+
+    /**
+     * saves the event in the firebase.
+     */
     fun saveEvent(event: Event){
         val refPost = FirebaseDatabase.getInstance().getReference("/posts/${event.eventUid}")
         refPost.setValue(event)
     }
+
+    /**
+     * adds the event to the user's list of events in tje firebase.
+     */
     private fun addEventToCurUser(eventUid: String){
         val refPost = FirebaseDatabase.getInstance().getReference("/users/${FirebaseAuth.getInstance().currentUser?.uid}")
         refPost.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -94,6 +113,9 @@ open class EventsMap : BasicMapActivity() {
 
     }
 
+    /**
+     * adds the user to the event.
+     */
     private fun addMemberToEvent(eventUid: String, curUidUser: String) {
         val refPost = FirebaseDatabase.getInstance().getReference("/posts/$eventUid")
         refPost.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -132,6 +154,10 @@ open class EventsMap : BasicMapActivity() {
 
     }
 
+    /**
+     * opens the join dialog after the user selects the join button to make sure he wants
+     * to sign in.
+     */
     private fun openJoinDialog(applicationContext: Context, eventUid: String) {
         isJoinDialogOpen = true
         val view = View.inflate(applicationContext, R.layout.join_event_dialog, null)
@@ -156,6 +182,9 @@ open class EventsMap : BasicMapActivity() {
         isJoinDialogOpen = false
     }
 
+    /**
+     * sets a timer of 3 econds.
+     */
     private fun setTimer(){
         object : CountDownTimer(3000, 1000) {
 
@@ -168,6 +197,9 @@ open class EventsMap : BasicMapActivity() {
         }.start()
     }
 
+    /**
+     * update the author of the post so the user will be able to send him a message in the chat.
+     */
     private fun updateAuthor(view:View, uid: String){
         FirebaseDatabase.getInstance().getReference("/users/$uid")
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -193,6 +225,10 @@ open class EventsMap : BasicMapActivity() {
                 override fun onCancelled(error: DatabaseError) {}
             })
     }
+
+    /**
+     * gets the bitmap descriptor.
+     */
     fun getBitmapDescriptorFromVector(context: Context, vectorDrawableResourceId: Int): BitmapDescriptor? {
         val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
         val bitmap = Bitmap.createBitmap(
@@ -203,53 +239,78 @@ open class EventsMap : BasicMapActivity() {
         val canvas = Canvas(bitmap)
         vectorDrawable.setBounds(0, 0, canvas.width, canvas.height)
         vectorDrawable.draw(canvas)
-
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
+
+    /**
+     * returns an image of the hobby entered in order to display this image in
+     * the map for this event.
+     */
     fun getImageByHobby(hobby: String): Int {
-        if(hobby == "Ball Games"){
-            return R.drawable.ic_baseline_sports_soccer_24
-        }
-        if (hobby == "Sport"){
-            return  R.drawable.ic_sport
-        } else if (hobby == "Initiative"){
-            return R.drawable.ic_light_bulb
-        }else if (hobby == "Business"){
-            return R.drawable.ic_buisnessicon
-        }else if (hobby == "Fashion"){
-            return R.drawable.ic_fashion
-        }else if (hobby == "Social"){
-            return R.drawable.ic_friends
-        }else if (hobby == "Entertainment"){
-            return R.drawable.ic_movies
-        }else if (hobby == "Study"){
-            return R.drawable.ic_studying
-        }else if (hobby == "Beauty and style"){
-            return R.drawable.ic_eye_treatment
-        }else if (hobby == "Comedy"){
-            return R.drawable.ic_lol
-        }else if (hobby == "Food"){
-            return R.drawable.ic_spaguetti
-        }else if (hobby == "Animals"){
-            return R.drawable.ic_pets
-        }else if (hobby == "Talent"){
-            return R.drawable.ic_talent
-        }else if (hobby == "Cars"){
-            return R.drawable.ic_cars1
-        }else if (hobby == "Love and dating"){
-            return R.drawable.ic_hearts
-        }else if (hobby == "Fitness and health"){
-            return R.drawable.ic_meditation
-        }else if (hobby == "Dance"){
-            return R.drawable.ic_dancing
-        }else if (hobby == "Outdoor activities"){
-            return R.drawable.ic_sport
-        }else if (hobby == "Home and garden"){
-            return R.drawable.ic_plant_pot
-        }else if (hobby == "Gaming"){
-            return R.drawable.ic_joystick
-        } else {
-            return R.drawable.ic_location
+        when (hobby) {
+            "Ball Games" -> {
+                return R.drawable.ic_baseline_sports_soccer_24
+            }
+            "Sport" -> {
+                return  R.drawable.ic_sport
+            }
+            "Initiative" -> {
+                return R.drawable.ic_light_bulb
+            }
+            "Business" -> {
+                return R.drawable.ic_buisnessicon
+            }
+            "Fashion" -> {
+                return R.drawable.ic_fashion
+            }
+            "Social" -> {
+                return R.drawable.ic_friends
+            }
+            "Entertainment" -> {
+                return R.drawable.ic_movies
+            }
+            "Study" -> {
+                return R.drawable.ic_studying
+            }
+            "Beauty and style" -> {
+                return R.drawable.ic_eye_treatment
+            }
+            "Comedy" -> {
+                return R.drawable.ic_lol
+            }
+            "Food" -> {
+                return R.drawable.ic_spaguetti
+            }
+            "Animals" -> {
+                return R.drawable.ic_pets
+            }
+            "Talent" -> {
+                return R.drawable.ic_talent
+            }
+            "Cars" -> {
+                return R.drawable.ic_cars1
+            }
+            "Love and dating" -> {
+                return R.drawable.ic_hearts
+            }
+            "Fitness and health" -> {
+                return R.drawable.ic_meditation
+            }
+            "Dance" -> {
+                return R.drawable.ic_dancing
+            }
+            "Outdoor activities" -> {
+                return R.drawable.ic_sport
+            }
+            "Home and garden" -> {
+                return R.drawable.ic_plant_pot
+            }
+            "Gaming" -> {
+                return R.drawable.ic_joystick
+            }
+            else -> {
+                return R.drawable.ic_location
+            }
         }
     }
 

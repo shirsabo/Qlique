@@ -12,7 +12,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
-
+/**
+ * CreateEventMapActivity
+ * when creating a new event the user needs to select the location of the event in this map.
+ */
 class CreateEventMapActivity : BasicMapActivity() {
     private lateinit var back: Button
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,11 +25,15 @@ class CreateEventMapActivity : BasicMapActivity() {
 
         super.onCreate(savedInstanceState)
     }
+
+    /**
+     * when the map is ready we request the user location and checks the map has permissions.
+     */
     override fun onMapReady(googleMap: GoogleMap) {
         super.onMapReady(googleMap)
         mMap?.setOnMarkerClickListener { marker ->
             prevMarker?.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-            //leave Marker default color if re-click current Marker
+            //leave Marker default color if re-click current Marker.
             if (marker != prevMarker) {
                 marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                 prevMarker = marker
@@ -40,11 +47,8 @@ class CreateEventMapActivity : BasicMapActivity() {
             // Animating to the touched position
             mMap?.animateCamera(CameraUpdateFactory.newLatLng(latlng))
             // Save the chosen location.
-
-                NewEvent.chosenLat = latlng.latitude
-                NewEvent.chosenLon = latlng.longitude
-
-
+            NewEvent.chosenLat = latlng.latitude
+            NewEvent.chosenLon = latlng.longitude
             val location = LatLng(latlng.latitude, latlng.longitude)
             mMap?.addMarker(MarkerOptions().position(location))
         }
@@ -59,7 +63,12 @@ class CreateEventMapActivity : BasicMapActivity() {
             super.finish()
         }
     }
-     override fun moveCamera(latLng: LatLng, zoom: Float, title: String) {
+
+    /**
+     * moving the camera to the latitude and longitude entered and adds the marker
+     * of the event chosen.
+     */
+    override fun moveCamera(latLng: LatLng, zoom: Float, title: String) {
         Log.d(
             ContentValues.TAG,
             "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude
@@ -71,14 +80,12 @@ class CreateEventMapActivity : BasicMapActivity() {
                 .title(title)
             mMap!!.addMarker(options)
         }
-
         hideSoftKeyboard()
     }
-    override fun finish() {
 
-        super.finish()
-
-    }
+    /**
+     * calls onRestart of super and finish.
+     */
     override fun onRestart() {
         super.onRestart()
         super.finish()
