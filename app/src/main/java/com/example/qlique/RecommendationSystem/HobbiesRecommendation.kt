@@ -39,13 +39,18 @@ class HobbiesRecommendationSystem(
     private val COURSE_LOCATION: String = Manifest.permission.ACCESS_COARSE_LOCATION
     private val LOCATION_PERMISSION_REQUEST_CODE = 1234
     var events: ArrayList<Event> = ArrayList()
+    /*
+    * ,"Ball Game" ,"Sport" ,,"Biking",,"Outdoor activities","Dance"  "Fitness and health",
+    * "Food","Cooking","Study","Gaming","Cars" "Business,"Initiative"
+    * "Art","Fashion","Beauty and style", "Home and garden","Animals"
+    * "Love and dating","Social","Entertainment","Comedy","Talent"
+    *  */
     val hobbiestoIndex = mapOf(
-        "Sport" to 0, "Ball Game" to 1, "Biking" to 2, "Initiative" to 3,
-        "Business" to 4, "Fashion" to 5, "Social" to 6, "Entertainment" to 7, "Cooking" to 8,
-        "Study" to 9, "Art" to 10, "Beauty and style" to 11, "Comedy" to 12, "Food" to 13,
-        "Animals" to 14, "Talent" to 15, "Cars" to 16, "Love and dating" to 17,
-        "Fitness and health" to 18, "Dance" to 19,
-        "Outdoor activities" to 20, "Home and garden" to 21, "Gaming" to 22
+        "Ball Game" to 0, "Sport" to 1, "Biking" to 2, "Outdoor activities" to 3, "Dance" to 4,
+        "Fitness and health" to 5, "Food" to 6, "Cooking" to 7, "Study" to 8, "Gaming" to 9,
+        "Cars" to 10, "Business" to 11, "Initiative" to 12, "Art" to 13, "Fashion" to 14,
+        "Beauty and style" to 15, "Home and garden" to 16, "Animals" to 17, "Love and dating" to 18,
+        "Social" to 19, "Entertainment" to 20,"Comedy" to 21, "Talent" to 22
     )
     /**
      * Connection Failed.
@@ -186,12 +191,12 @@ class HobbiesRecommendationSystem(
                 val insertionProb = calcProbability(hobbiesDiff)
                 if(insertionDecision(insertionProb)){
                     events.add(optionalEvent)
+                    println("events size: "+ events.size)
                     // sets the PostAdapter which receives the array of event objects that were just fetched
                     feed.adapter = PostAdapter(events)
-                    println("events size: " + events.size)
                 }
                 else{
-                    println("events size: " + events.size)
+                    println("event is not not inserted "+ optionalEvent.eventUid )
                 }
             }
             override fun onCancelled(error: DatabaseError) {

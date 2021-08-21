@@ -315,7 +315,7 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
     /**
      * shows the TimePickerDialog
      */
-    fun showTimePickerDialog() {
+    fun showTimePickerDialog(v: View) {
         timePickerFragment.show(supportFragmentManager, "timePicker")
         hourNewEvent.text = timePickerFragment.time //updates the picked time
     }
@@ -323,7 +323,7 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
      * shows the DatePickerDialog
      */
 
-    fun showDatePickerDialog() {
+    fun showDatePickerDialog(v: View) {
         datePickerFragment .show(supportFragmentManager, "datePicker")
         DateNewEvent.text = datePickerFragment.date //updates the picked date
     }
@@ -331,7 +331,7 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
      * Starts the [CreateEventMapActivity].
      * in this activity the user can choose the events location, sees how to get to his/hers location
      */
-    fun openCreateEventMapActivity() {
+    fun openCreateEventMapActivity(v: View) {
         val intent = Intent(this, CreateEventMapActivity::class.java)
         startActivityForResult(intent, 19)
         // passes a flag if its the first time opening this activity
@@ -401,7 +401,7 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
     /**
      * Opens Capacity Dialog
      */
-    fun capacityOnClick() {
+    fun capacityOnClick(view: View) {
         openCapacityDialog()
     }
 }
