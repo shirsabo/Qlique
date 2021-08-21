@@ -13,6 +13,7 @@ import com.example.qlique.CreateEvent.CalendarEvent
 import com.example.qlique.CreateEvent.Event
 import com.example.qlique.Feed.MainActivity
 import com.example.qlique.Feed.PostAdapter
+import com.example.qlique.Profile.User
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQuery
@@ -20,9 +21,12 @@ import com.firebase.geofire.GeoQueryEventListener
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.*
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import java.util.*
+import kotlin.random.Random.Default.nextDouble
+
 
 class HobbiesRecommendationSystem(
     var activity: MainActivity,
@@ -35,12 +39,14 @@ class HobbiesRecommendationSystem(
     private val COURSE_LOCATION: String = Manifest.permission.ACCESS_COARSE_LOCATION
     private val LOCATION_PERMISSION_REQUEST_CODE = 1234
     var events: ArrayList<Event> = ArrayList()
-    val HobbiestoIndex = mapOf("Sport" to 0, "Ball Game" to 1, "Biking" to 2,  "Initiative" to 3,
-        "Business" to 4, "Fashion" to 5, "Social" to 6,  "Entertainment" to 7,"Cooking" to 8,
-        "Study" to 9, "Art" to 10,  "Beauty and style" to 11, "Comedy" to 12, "Food" to 13,
-        "Animals" to 14,  "Talent" to 15, "Cars" to 16, "Love and dating" to 17,
-        "Fitness and health" to 18,  "Dance" to 19,
-        "Outdoor activities" to 20, "Home and garden" to 21,"Gaming" to 22)
+    val hobbiestoIndex = mapOf(
+        "Sport" to 0, "Ball Game" to 1, "Biking" to 2, "Initiative" to 3,
+        "Business" to 4, "Fashion" to 5, "Social" to 6, "Entertainment" to 7, "Cooking" to 8,
+        "Study" to 9, "Art" to 10, "Beauty and style" to 11, "Comedy" to 12, "Food" to 13,
+        "Animals" to 14, "Talent" to 15, "Cars" to 16, "Love and dating" to 17,
+        "Fitness and health" to 18, "Dance" to 19,
+        "Outdoor activities" to 20, "Home and garden" to 21, "Gaming" to 22
+    )
     /**
      * Connection Failed.
      */
@@ -141,25 +147,93 @@ class HobbiesRecommendationSystem(
                         // show only future events
                         return
                     }
-                    println("Added event")
                     // filter the events list according to the user's hobbies.
-                    filterEvent()
+                    filterEvent(event)
                     /*********************************************************************/
-                    events.add(event)
-                }
-                else{
+                    //events.add(event)
+                } else {
                     return
                 }
-                // sets the PostAdapter which receives the array of event objects that were just fetched
-                feed.adapter = PostAdapter(events)
+
             }
 
             override fun onCancelled(po: DatabaseError) {
             }
         })
     }
-    private fun filterEvent() {
-        TODO("Not yet implemented")
+
+    private fun filterEvent(optionalEvent: Event?) {
+        val ref = FirebaseDatabase.getInstance().getReference("users/${FirebaseAuth.getInstance().currentUser?.uid}")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user: User? = snapshot.getValue<User>(
+                    User::class.java
+                )
+                val userHobbies = user?.hobbies
+                if (optionalEvent==null||(optionalEvent.hobbiesRelated.size==0)){
+                    //ignore
+                    return
+                }
+                if ((userHobbies== null ||userHobbies.size==0)){
+                    events.add(optionalEvent)
+                    // sets the PostAdapter which receives the array of event objects that were just fetched
+                    feed.adapter = PostAdapter(events)
+                    return
+                }
+                val userHobbiesVec:BooleanArray = buildHobbiesVec(userHobbies)
+                val optionalEventVec:BooleanArray  = buildHobbiesVec(optionalEvent.hobbiesRelated)
+                val hobbiesDiff = calcVectorsDistance(userHobbiesVec,optionalEventVec)
+                val insertionProb = calcProbability(hobbiesDiff)
+                if(insertionDecision(insertionProb)){
+                    events.add(optionalEvent)
+                    // sets the PostAdapter which receives the array of event objects that were just fetched
+                    feed.adapter = PostAdapter(events)
+                    println("events size: " + events.size)
+                }
+                else{
+                    println("events size: " + events.size)
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+    }
+
+    private fun insertionDecision(insertionProb: Double): Boolean {
+        val randomNum:Int = (0..100).random()
+        return randomNum.toDouble() < (insertionProb * 100)
+    }
+
+    private fun calcProbability(hobbiesDiff: Int): Double {
+        val hobbiesSize = hobbiestoIndex.size
+        var insertionProb = 0.0
+        if(hobbiesSize!=0){
+            insertionProb = (1 - (hobbiesDiff.toDouble() / hobbiesSize.toDouble()))
+        }
+        return insertionProb
+    }
+    private fun calcVectorsDistance(vec1: BooleanArray, vec2: BooleanArray): Int {
+        var minDiff = vec1.size
+        for (i in vec1.indices) {
+            for (j in vec1.indices) {
+                val localDist = kotlin.math.abs(i - j)
+                if ((vec1[i] && vec2[j]) && (minDiff > localDist)){
+                    minDiff = localDist
+                }
+            }
+        }
+        return minDiff
+    }
+
+    private fun buildHobbiesVec(hobbies: List<String>): BooleanArray {
+        val hobbiesVec = BooleanArray(hobbiestoIndex.keys.size){false}
+        for (hobby in hobbies){
+            if( hobbiestoIndex.containsKey(hobby)){
+                hobbiesVec[hobbiestoIndex[hobby]!!]=true
+            }
+        }
+        return hobbiesVec
     }
 
     /**

@@ -54,11 +54,6 @@ class ChatListActivity: AppCompatActivity()  {
         var chatPartnerUser : User?=null
         private fun loadUser(snapshot: DataSnapshot):User{
             val user :User = User()
-            /*
-                public String firstName, lastName, email, city, gender, uid, url, instagramUserName;
-        public List<String> friends;
-        public List<String> hobbies;
-        public List<String> events;*/
             user.firstName = snapshot.child("firstName").value.toString()
             user.lastName = snapshot.child("lastName").value.toString()
             user.email  =  snapshot.child("email").value.toString()

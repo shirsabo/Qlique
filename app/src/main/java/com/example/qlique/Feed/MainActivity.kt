@@ -54,8 +54,6 @@ class MainActivity : AppCompatActivity() , GoogleApiClient.OnConnectionFailedLis
     private lateinit var navigationView: NavigationView
     private val ERROR_DIALOG_REQUEST = 9001
     private var floatingBtn: FloatingActionButton? =null
-    private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
-
     /**
      * responsible for configurations (Title, Navigation menu,creating necessary instances,FCM)
      * fetches posts to feed from firebase , checks google services
