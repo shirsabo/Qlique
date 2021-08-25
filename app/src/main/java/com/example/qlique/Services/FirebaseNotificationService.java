@@ -33,7 +33,7 @@ import java.util.Random;
 
 
 public class FirebaseNotificationService extends FirebaseMessagingService {
-    String CHANNEL_ID = "1000";
+    private String  CHANNEL_ID = "1000";
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         if (remoteMessage.getData().size() > 0) {
@@ -43,12 +43,6 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
             String uidOfSender = map.get("SenderUid");
             Log.d("TAG", "onMessageReceived: Title is " + title + "\n hisID" + uidOfSender);
             fetchUser(uidOfSender,title,  message);
-/*
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O)
-                createOreoNotification(title, message, uidOfSender,name);
-            else
-                createNormalNotification(title, message, uidOfSender,name);
-                */
         } else Log.d("TAG", "onMessageReceived: no data ");
 
         super.onMessageReceived(remoteMessage);

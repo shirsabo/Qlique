@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.random.Random.Default.nextDouble
 
 
@@ -38,20 +39,17 @@ class HobbiesRecommendationSystem(
     private val FINE_LOCATION: String = Manifest.permission.ACCESS_FINE_LOCATION
     private val COURSE_LOCATION: String = Manifest.permission.ACCESS_COARSE_LOCATION
     private val LOCATION_PERMISSION_REQUEST_CODE = 1234
-    var events: ArrayList<Event> = ArrayList()
-    /*
-    * ,"Ball Game" ,"Sport" ,,"Biking",,"Outdoor activities","Dance"  "Fitness and health",
-    * "Food","Cooking","Study","Gaming","Cars" "Business,"Initiative"
-    * "Art","Fashion","Beauty and style", "Home and garden","Animals"
-    * "Love and dating","Social","Entertainment","Comedy","Talent"
-    *  */
+
+    //var events: ArrayList<Event> = ArrayList()
+    var insertedEvents: ArrayList<Pair<Event, Double>> = ArrayList()
     val hobbiestoIndex = mapOf(
         "Ball Game" to 0, "Sport" to 1, "Biking" to 2, "Outdoor activities" to 3, "Dance" to 4,
         "Fitness and health" to 5, "Food" to 6, "Cooking" to 7, "Study" to 8, "Gaming" to 9,
         "Cars" to 10, "Business" to 11, "Initiative" to 12, "Art" to 13, "Fashion" to 14,
         "Beauty and style" to 15, "Home and garden" to 16, "Animals" to 17, "Love and dating" to 18,
-        "Social" to 19, "Entertainment" to 20,"Comedy" to 21, "Talent" to 22
+        "Social" to 19, "Entertainment" to 20, "Comedy" to 21, "Talent" to 22
     )
+
     /**
      * Connection Failed.
      */
@@ -62,7 +60,7 @@ class HobbiesRecommendationSystem(
     displays the events in the wanted activity according to location, hobbies and registered events.
      */
     override fun getRecommendedEvents() {
-        events = ArrayList()
+        insertedEvents = ArrayList()
         getLocationPermission()
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
@@ -154,7 +152,6 @@ class HobbiesRecommendationSystem(
                     }
                     // filter the events list according to the user's hobbies.
                     filterEvent(event)
-                    /*********************************************************************/
                     //events.add(event)
                 } else {
                     return
@@ -168,62 +165,77 @@ class HobbiesRecommendationSystem(
     }
 
     private fun filterEvent(optionalEvent: Event?) {
-        val ref = FirebaseDatabase.getInstance().getReference("users/${FirebaseAuth.getInstance().currentUser?.uid}")
+        val ref = FirebaseDatabase.getInstance()
+            .getReference("users/${FirebaseAuth.getInstance().currentUser?.uid}")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user: User? = snapshot.getValue<User>(
                     User::class.java
                 )
                 val userHobbies = user?.hobbies
-                if (optionalEvent==null||(optionalEvent.hobbiesRelated.size==0)){
-                    //ignore
+                if (optionalEvent == null || (optionalEvent.hobbiesRelated.size == 0)) {
+                    // Ignore.
                     return
                 }
-                if ((userHobbies== null ||userHobbies.size==0)){
-                    events.add(optionalEvent)
-                    // sets the PostAdapter which receives the array of event objects that were just fetched
-                    feed.adapter = PostAdapter(events)
+                if ((userHobbies == null || userHobbies.size == 0)) {
+                    // If the user doesn't have any hobbies we will display all the events nearby.
+                    addEventToEventsList(optionalEvent, 1.0)
                     return
                 }
-                val userHobbiesVec:BooleanArray = buildHobbiesVec(userHobbies)
-                val optionalEventVec:BooleanArray  = buildHobbiesVec(optionalEvent.hobbiesRelated)
-                val hobbiesDiff = calcVectorsDistance(userHobbiesVec,optionalEventVec)
+                // Check if the event's hobbies are related to the user's hobbies.
+                val userHobbiesVec: BooleanArray = buildHobbiesVec(userHobbies)
+                val optionalEventVec: BooleanArray = buildHobbiesVec(optionalEvent.hobbiesRelated)
+                val hobbiesDiff = calcVectorsDistance(userHobbiesVec, optionalEventVec)
                 val insertionProb = calcProbability(hobbiesDiff)
-                if(insertionDecision(insertionProb)){
-                    events.add(optionalEvent)
-                    println("events size: "+ events.size)
-                    // sets the PostAdapter which receives the array of event objects that were just fetched
-                    feed.adapter = PostAdapter(events)
+                if (insertionDecision(insertionProb)) {
+                    addEventToEventsList(optionalEvent, insertionProb)
+                } else {
+                    println("event is not not inserted " + optionalEvent.eventUid)
                 }
-                else{
-                    println("event is not not inserted "+ optionalEvent.eventUid )
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {
             }
 
+            override fun onCancelled(error: DatabaseError) {
+            }
         })
     }
 
+    private fun addEventToEventsList(event: Event, prob: Double) {
+        insertedEvents.add(Pair<Event, Double>(event, prob))
+        // Sets the PostAdapter which receives the array of event objects that were just fetched.
+        feed.adapter = PostAdapter(sortEventsByProb(insertedEvents))
+    }
+
+    private fun sortEventsByProb(insertedEvents: ArrayList<Pair<Event, Double>>): ArrayList<Event> {
+        // Sort the events by the probability.
+        val sortedList = insertedEvents.sortedWith(compareBy { it.second }).reversed()
+        // Add the sorted events to list.
+        var events: ArrayList<Event> = ArrayList()
+        for (event in sortedList) {
+            events.add(event.first)
+        }
+        return events
+    }
+
     private fun insertionDecision(insertionProb: Double): Boolean {
-        val randomNum:Int = (0..100).random()
+        val randomNum: Int = (0..100).random()
         return randomNum.toDouble() < (insertionProb * 100)
     }
 
     private fun calcProbability(hobbiesDiff: Int): Double {
         val hobbiesSize = hobbiestoIndex.size
         var insertionProb = 0.0
-        if(hobbiesSize!=0){
+        if (hobbiesSize != 0) {
             insertionProb = (1 - (hobbiesDiff.toDouble() / hobbiesSize.toDouble()))
         }
         return insertionProb
     }
+
     private fun calcVectorsDistance(vec1: BooleanArray, vec2: BooleanArray): Int {
         var minDiff = vec1.size
         for (i in vec1.indices) {
             for (j in vec1.indices) {
                 val localDist = kotlin.math.abs(i - j)
-                if ((vec1[i] && vec2[j]) && (minDiff > localDist)){
+                if ((vec1[i] && vec2[j]) && (minDiff > localDist)) {
                     minDiff = localDist
                 }
             }
@@ -232,10 +244,10 @@ class HobbiesRecommendationSystem(
     }
 
     private fun buildHobbiesVec(hobbies: List<String>): BooleanArray {
-        val hobbiesVec = BooleanArray(hobbiestoIndex.keys.size){false}
-        for (hobby in hobbies){
-            if( hobbiestoIndex.containsKey(hobby)){
-                hobbiesVec[hobbiestoIndex[hobby]!!]=true
+        val hobbiesVec = BooleanArray(hobbiestoIndex.keys.size) { false }
+        for (hobby in hobbies) {
+            if (hobbiestoIndex.containsKey(hobby)) {
+                hobbiesVec[hobbiestoIndex[hobby]!!] = true
             }
         }
         return hobbiesVec
