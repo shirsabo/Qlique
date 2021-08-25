@@ -209,7 +209,7 @@ class HobbiesRecommendationSystem(
         // Sort the events by the probability.
         val sortedList = insertedEvents.sortedWith(compareBy { it.second }).reversed()
         // Add the sorted events to list.
-        var events: ArrayList<Event> = ArrayList()
+        val events: ArrayList<Event> = ArrayList()
         for (event in sortedList) {
             // Show to events with increased probability.
             events.add(event.first)
