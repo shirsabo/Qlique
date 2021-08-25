@@ -1,15 +1,11 @@
 package com.example.qlique.Map
 
-import android.app.Dialog
 import android.content.ContentValues
-import android.content.Context
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import com.example.qlique.CreateEvent.Event
 import com.example.qlique.R
 import com.google.android.gms.common.api.GoogleApiClient
@@ -114,6 +110,6 @@ class ShowEventMap : EventsMap() {
         }
     }
 
-    override fun getDeviceLocation() {
+    override fun getDeviceLocation(func: (input: LatLng) -> Unit) {
     }
 }

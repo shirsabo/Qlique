@@ -68,16 +68,15 @@ class CreateEventMapActivity : BasicMapActivity() {
      * moving the camera to the latitude and longitude entered and adds the marker
      * of the event chosen.
      */
-    override fun moveCamera(latLng: LatLng, zoom: Float, title: String) {
+    override fun moveCamera(latLng: LatLng) {
         Log.d(
             ContentValues.TAG,
             "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude
         )
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM))
         if (title != "My Location") {
             val options: MarkerOptions = MarkerOptions()
                 .position(latLng)
-                .title(title)
             mMap!!.addMarker(options)
         }
         hideSoftKeyboard()

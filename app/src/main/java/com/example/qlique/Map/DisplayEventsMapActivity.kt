@@ -1,13 +1,10 @@
 package com.example.qlique.Map
 
-import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import com.example.qlique.CreateEvent.CalendarEvent
 import com.example.qlique.CreateEvent.Event
-import com.example.qlique.Profile.User
 import com.example.qlique.R
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
@@ -161,12 +158,12 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
     /**
      * adds events from a nearby radius.
      */
-    private fun fetchNearbyEvents(){
+    private fun fetchNearbyEvents(latLng: LatLng){
         val firebaseDatabase = FirebaseDatabase.getInstance()
         val ref: DatabaseReference = firebaseDatabase.getReference("geoFire")
         val geoFire = GeoFire(ref)
         val geoQuery: GeoQuery = geoFire.queryAtLocation(
-            GeoLocation(32.0528, 34.8219),
+            GeoLocation(latLng.latitude, latLng.longitude),
             radius
         )
         geoQuery.addGeoQueryEventListener(object : GeoQueryEventListener {
@@ -214,7 +211,7 @@ class DisplayEventsMapActivity :EventsMap(), RequestRadiusDialog.OnCompleteListe
      */
     override fun onComplete(r: String) {
         radius = r.toDouble()
-        fetchNearbyEvents()
+        getDeviceLocation(this::fetchNearbyEvents)
     }
 
 }

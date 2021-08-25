@@ -38,12 +38,14 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import java.io.IOException
 import java.util.*
 import kotlin.properties.Delegates
+
 /**
  * BasicMapActivity
  * This activity is responsible for fetching posts that are in a wanted radius and presenting them
  * in the map.
  **/
-abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , GoogleApiClient.OnConnectionFailedListener{
+abstract class BasicMapActivity : AppCompatActivity(), OnMapReadyCallback,
+    GoogleApiClient.OnConnectionFailedListener {
     private val FINE_LOCATION: String = Manifest.permission.ACCESS_FINE_LOCATION
     private val COURSE_LOCATION: String = Manifest.permission.ACCESS_COARSE_LOCATION
     private val LOCATION_PERMISSION_REQUEST_CODE = 1234
@@ -54,9 +56,9 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
     private var mSearchText: AutocompleteSupportFragment? = null
     protected var mGps: ImageView? = null
     private lateinit var back: Button
-    protected var prevMarker : Marker? = null
-    private var mInfo : ImageView? = null
-    private var mInfoTxt : TextView? = null
+    protected var prevMarker: Marker? = null
+    private var mInfo: ImageView? = null
+    private var mInfoTxt: TextView? = null
     private lateinit var mPlacesClient: PlacesClient
     private lateinit var mPlaceSearch: EditText
     protected var mGoogleApiClient: GoogleApiClient? = null
@@ -75,10 +77,13 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
         Log.d(TAG, "onMapReady: map is ready")
         mMap = googleMap
         if (mLocationPermissionsGranted) {
-            getDeviceLocation()
+            getDeviceLocation(this::moveCamera)
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
                 return
             }
             mMap!!.isMyLocationEnabled = true;
@@ -125,6 +130,7 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
             override fun onTick(millisUntilFinished: Long) {
                 countTime.visibility = View.VISIBLE
             }
+
             override fun onFinish() {
                 countTime.visibility = View.GONE
             }
@@ -149,9 +155,11 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
         if (ContextCompat.checkSelfPermission(this.applicationContext, FINE_LOCATION) ==
-            PackageManager.PERMISSION_GRANTED) {
+            PackageManager.PERMISSION_GRANTED
+        ) {
             if (ContextCompat.checkSelfPermission(this.applicationContext, COURSE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED) {
+                PackageManager.PERMISSION_GRANTED
+            ) {
                 mLocationPermissionsGranted = true
                 initMap()
             } else {
@@ -173,8 +181,10 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
     /**
      * if permission granted initializes the map.
      */
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>,
-        grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         Log.d(TAG, "onRequestPermissionsResult: called.")
         mLocationPermissionsGranted = false
@@ -202,7 +212,7 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
     /**
      * getting the device's current location.
      */
-    protected open fun getDeviceLocation() {
+    protected open fun getDeviceLocation(func: (input: LatLng) -> Unit) {
         Log.d(TAG, "getDeviceLocation: getting the devices current location")
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         try {
@@ -214,12 +224,11 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
                         Log.d(TAG, "onComplete: found location!")
                         val currentLocation: Location? = task.result as Location?
                         if (currentLocation != null) {
-                            moveCamera(
+                            func(
                                 LatLng(
                                     currentLocation.latitude,
                                     currentLocation.longitude
-                                ),
-                                DEFAULT_ZOOM, "My Location"
+                                )
                             )
                         }
                     } else {
@@ -240,12 +249,12 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
     /**
      * moving the camera to the latitude and longitude entered.
      */
-    open fun moveCamera(latLng: LatLng, zoom: Float, title: String){
+    open fun moveCamera(latLng: LatLng) {
         Log.d(
             TAG,
             "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude
         )
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM))
         hideSoftKeyboard()
     }
 
@@ -262,7 +271,7 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
      */
     private fun initMap() {
         Log.d(TAG, "initMap: initializing map")
-        val mapFragment : SupportMapFragment=
+        val mapFragment: SupportMapFragment =
             supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this@BasicMapActivity)
     }
@@ -280,7 +289,7 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
             .build()
         mGps!!.setOnClickListener {
             Log.d(TAG, "onClick: clicked gps icon")
-            getDeviceLocation()
+            getDeviceLocation(this::moveCamera)
         }
     }
 
@@ -309,8 +318,7 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
                 LatLng(
                     address.latitude,
                     address.longitude
-                ), DEFAULT_ZOOM,
-                address.getAddressLine(0)
+                )
             )
         }
     }
@@ -324,7 +332,7 @@ abstract class BasicMapActivity : AppCompatActivity() , OnMapReadyCallback , Goo
     /**
      * clears the previous marker that was clicked.
      */
-    protected fun clearMap(){
+    protected fun clearMap() {
         prevMarker = null
         mMap?.clear()
     }
