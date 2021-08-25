@@ -211,6 +211,7 @@ class HobbiesRecommendationSystem(
         // Add the sorted events to list.
         var events: ArrayList<Event> = ArrayList()
         for (event in sortedList) {
+            // Show to events with increased probability.
             events.add(event.first)
         }
         return events
