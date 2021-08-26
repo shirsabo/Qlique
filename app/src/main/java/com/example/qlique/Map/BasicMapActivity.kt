@@ -1,6 +1,7 @@
 package com.example.qlique.Map
 
 import android.Manifest
+import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -14,6 +15,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -30,7 +32,9 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
@@ -60,7 +64,7 @@ abstract class BasicMapActivity : AppCompatActivity(), OnMapReadyCallback,
     private var mInfo: ImageView? = null
     private var mInfoTxt: TextView? = null
     private lateinit var mPlacesClient: PlacesClient
-    private lateinit var mPlaceSearch: EditText
+    protected lateinit var mPlaceSearch: EditText
     protected var mGoogleApiClient: GoogleApiClient? = null
     private val LAT_LNG_BOUNDS: LatLngBounds = LatLngBounds(
         LatLng(-40.0, -168.0),
@@ -108,17 +112,7 @@ abstract class BasicMapActivity : AppCompatActivity(), OnMapReadyCallback,
         }
         Places.initialize(this, resources.getString(R.string.google_maps_API_key))
         mPlacesClient = Places.createClient(this)
-        mPlaceSearch = findViewById(R.id.input_search)
-        mPlaceSearch.setOnEditorActionListener { _, actionId, keyEvent ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
-                || keyEvent.action == KeyEvent.ACTION_DOWN
-                || keyEvent.action == KeyEvent.KEYCODE_ENTER
-            ) {
-                //execute our method for searching
-                geoLocate()
-            }
-            false
-        }
+
     }
 
     /**
@@ -262,7 +256,14 @@ abstract class BasicMapActivity : AppCompatActivity(), OnMapReadyCallback,
      * hides Soft Keyboard.
      */
     protected fun hideSoftKeyboard() {
-        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+        val inputMethodManager: InputMethodManager = this.getSystemService(
+            Activity.INPUT_METHOD_SERVICE
+        ) as InputMethodManager
+        //this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+        inputMethodManager.hideSoftInputFromWindow(
+            this.currentFocus?.windowToken,
+            0
+        );
     }
 
     /**
@@ -297,8 +298,8 @@ abstract class BasicMapActivity : AppCompatActivity(), OnMapReadyCallback,
     finds the location the user typed in the search input, saves the location and moves
     the map so the center will be in this location.
      **/
-    private fun geoLocate() {
-        clearMap()
+    protected fun geoLocate(clearMap: Boolean) {
+        clearMap(clearMap)
         Log.d(TAG, "geoLocate: geolocating")
         val searchString = mPlaceSearch.text.toString()
         val geocoder = Geocoder(this@BasicMapActivity)
@@ -320,6 +321,7 @@ abstract class BasicMapActivity : AppCompatActivity(), OnMapReadyCallback,
                     address.longitude
                 )
             )
+            hideSoftKeyboard()
         }
     }
 
@@ -332,9 +334,11 @@ abstract class BasicMapActivity : AppCompatActivity(), OnMapReadyCallback,
     /**
      * clears the previous marker that was clicked.
      */
-    protected fun clearMap() {
+    protected fun clearMap(clearMap: Boolean) {
         prevMarker = null
-        mMap?.clear()
+        if (clearMap) {
+            mMap?.clear()
+        }
     }
 
 

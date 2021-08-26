@@ -3,6 +3,8 @@ import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import com.example.qlique.CreateEvent.NewEvent
 import com.example.qlique.R
@@ -24,6 +26,17 @@ class CreateEventMapActivity : BasicMapActivity() {
         }
 
         super.onCreate(savedInstanceState)
+        mPlaceSearch = findViewById(R.id.input_search)
+        mPlaceSearch.setOnEditorActionListener { _, actionId, keyEvent ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
+                || keyEvent.action == KeyEvent.ACTION_DOWN
+                || keyEvent.action == KeyEvent.KEYCODE_ENTER
+            ) {
+                // execute our method for searching
+                geoLocate(true)
+            }
+            false
+        }
     }
 
     /**
@@ -38,12 +51,12 @@ class CreateEventMapActivity : BasicMapActivity() {
                 marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                 prevMarker = marker
             } else {
-                clearMap()
+                clearMap(true)
             }
             false
         }
         mMap?.setOnMapClickListener { latlng -> // Clears the previously touched position
-            clearMap()
+            clearMap(true)
             // Animating to the touched position
             mMap?.animateCamera(CameraUpdateFactory.newLatLng(latlng))
             // Save the chosen location.

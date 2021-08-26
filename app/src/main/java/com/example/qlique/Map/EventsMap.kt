@@ -6,12 +6,15 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Parcelable
 import android.text.method.ScrollingMovementMethod
 import android.util.DisplayMetrics
+import android.view.KeyEvent
 import android.view.View
 import android.view.View.GONE
+import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -38,6 +41,22 @@ import kotlinx.android.synthetic.main.join_event_dialog.view.*
  */
 open class EventsMap : BasicMapActivity() {
     var isJoinDialogOpen = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mPlaceSearch = findViewById(R.id.input_search)
+        mPlaceSearch.setOnEditorActionListener { _, actionId, keyEvent ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
+                || keyEvent.action == KeyEvent.ACTION_DOWN
+                || keyEvent.action == KeyEvent.KEYCODE_ENTER
+            ) {
+                // execute our method for searching
+                geoLocate(false)
+            }
+            false
+        }
+    }
+
 
     /**
      * updates the event's description.
