@@ -23,14 +23,17 @@ import kotlinx.android.synthetic.main.chat_to_row.view.*
 import org.json.JSONException
 import org.json.JSONObject
 
-
 class ChatLogActivity : AppCompatActivity() {
     var NOTIFICATION_URL = "https://fcm.googleapis.com/fcm/send"
     var SERVER_KEY = "AAAAxFzL4DI:APA91bF0XL_FWScS0pjrd3xbEpiYQ4tYn99_gHLXWDkxti202bXk9KMxPyuUUGrcHdIWQf9zCdm3Wmmk0_CKKOWWfpOrWQFffEguUytD0mW-U2c5CaTE3pGcIkocOlzGzPGXt9skLgzt"
     val adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
-    //var toUser:User?=intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
+    /**
+     * Returns User object from the Snapshot.
+     * @param snapshot - DataSnapshot
+     * @return User object
+     */
     private fun loadUser(snapshot: DataSnapshot):User{
-        val user :User = User()
+        val user  = User()
         user.firstName = snapshot.child("firstName").value.toString()
         user.lastName = snapshot.child("lastName").value.toString()
         user.email  =  snapshot.child("email").value.toString()
@@ -41,15 +44,18 @@ class ChatLogActivity : AppCompatActivity() {
         return user;
     }
     @SuppressLint("SetTextI18n")
+    /**
+     * Sets the recyclerView , ActionBar , user's data , sending anf recieving logic.
+     * @param savedInstanceState- Bundle?
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
-        recyclerView_chat.adapter= adapter
+        recyclerView_chat.adapter = adapter
         val user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
         supportActionBar?.title= user?.firstName+ " "+user?.lastName
         other_side_user.text = user?.firstName+ " "+user?.lastName
         Picasso.get().load(user?.url).into(other_side_photo)
-        //dummySetUP()
         sendBtn.setOnClickListener{
             performSendMessage()
         }
@@ -68,9 +74,15 @@ class ChatLogActivity : AppCompatActivity() {
             }
         })
     }
+    /**
+     * Return from activity.
+     */
     override fun onBackPressed() {
         finish()
     }
+    /**
+     * Class which represents message from chat.
+     */
     class ChatMessage(
         val id: String, val text: String,
         val fromId: String, val toId: String, val timeStamp: Long
@@ -81,6 +93,10 @@ class ChatLogActivity : AppCompatActivity() {
         )
 
     }
+    /**
+     * Sends the notification to source after performing send.
+     * @param message - the message's content to show, targetUid: the uid of the dest.
+     */
     private fun handleNotificationToSrc(message: String, targetUid: String){
         val database = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().uid.toString())
         database.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -97,7 +113,13 @@ class ChatLogActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {}
         })
     }
-
+    /**
+     * Sends the notification to source after performing send.
+     * @param message: message content,
+     * @param targetUid: Destination uid,
+     * @param userFullName: sender's full name
+     * @param senderUser: User
+     */
     private fun sendNotificationToSrc(
         message: String,
         targetUid: String,
@@ -108,8 +130,7 @@ class ChatLogActivity : AppCompatActivity() {
         database.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
-                val userUid = snapshot.child("uid").value.toString()
-                val token = user?.tokenFCM
+                val token = user?.tokenFCM ?: return
                 val to = JSONObject()
                 val data = JSONObject()
                 try {
@@ -118,6 +139,7 @@ class ChatLogActivity : AppCompatActivity() {
                     data.put("SenderUid", senderUser.uid)
                     to.put("to", token)
                     to.put("data", data)
+                    // Send notification
                     sendNotification(to)
                 } catch (e: JSONException) {
                     e.printStackTrace()
@@ -126,9 +148,13 @@ class ChatLogActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {}
         })
     }
-
+    /**
+     * Sends the notification to source after performing send.
+     */
     private fun performSendMessage(){
+        // Message content
         val textInput = text_message_chat.text.toString()
+        val dividerFactor = 1000
         if(textInput.isEmpty()){
             return
         }
@@ -143,18 +169,22 @@ class ChatLogActivity : AppCompatActivity() {
             textInput,
             fromId,
             toId,
-            System.currentTimeMillis() / 1000
+            System.currentTimeMillis() / dividerFactor
         )
         ref.setValue(chatMsg).addOnSuccessListener {
             text_message_chat.text.clear()
             recyclerView_chat.scrollToPosition(adapter.itemCount - 1) }
         toRef.setValue(chatMsg)
-        val latestMessageRef= FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
+        val latestMessageRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
         latestMessageRef.setValue(chatMsg)
-        val latestMessageRefTo= FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
+        val latestMessageRefTo = FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
         latestMessageRefTo.setValue(chatMsg)
         handleNotificationToSrc(textInput, toId)
     }
+    /**
+     * Sends the by the json object.
+     * @param  messageBody - JSONObject
+     */
     private fun sendNotification(messageBody: JSONObject) {
         val request: JsonObjectRequest = object : JsonObjectRequest(
             Method.POST, NOTIFICATION_URL, messageBody,
@@ -173,7 +203,7 @@ class ChatLogActivity : AppCompatActivity() {
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val map: MutableMap<String, String> = HashMap()
-                map["Authorization"] = "key=" + SERVER_KEY
+                map["Authorization"] = "key=$SERVER_KEY"
                 map["Content-Type"] = "application/json"
                 return map
             }
@@ -191,6 +221,10 @@ class ChatLogActivity : AppCompatActivity() {
         )
         requestQueue.add(request)
     }
+    /**
+     * Inserts received messages to the adapter.
+     * @param  curUser - User
+     */
     fun listenForMessages(curUser: User){
         val fromId= FirebaseAuth.getInstance().uid
         val toId =intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)?.uid
@@ -198,13 +232,16 @@ class ChatLogActivity : AppCompatActivity() {
         ref.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val msg = snapshot.getValue(ChatMessage::class.java)
+                // Gets user's uid
                 val toUser = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
                 if (msg != null) {
                     if (msg.fromId == FirebaseAuth.getInstance().uid && msg.toId == toUser!!.uid) {
                         adapter.add(ChatFromItem(msg.text, curUser!!))
                     } else if (msg.fromId == toUser!!.uid && msg.toId == FirebaseAuth.getInstance().uid) {
+                        //adds message to adapter
                         adapter.add(ChatToItem(msg.text, toUser!!))
                     }
+                    // scroll the recycler view -1 position
                     recyclerView_chat.scrollToPosition(adapter.itemCount - 1)
                 }
             }
@@ -227,9 +264,14 @@ class ChatLogActivity : AppCompatActivity() {
         })
     }
 }
-class ChatFromItem(val string: String, val user: User): Item<com.xwray.groupie.GroupieViewHolder>(){
+/**
+ * Class for messages that user received
+ * @param text - message's content
+ * @param  user: User
+ */
+class ChatFromItem(val text: String, val user: User): Item<com.xwray.groupie.GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int){
-        viewHolder.itemView.messageFrom.text= string
+        viewHolder.itemView.messageFrom.text= text
         //load user image
         val uri = user.url
         val targetImageView = viewHolder.itemView.circularImageViewFrom
@@ -242,6 +284,11 @@ class ChatFromItem(val string: String, val user: User): Item<com.xwray.groupie.G
         return R.layout.chat_from_row
     }
 }
+/**
+ * Class for messages that user sent
+ * @param text - message's content
+ * @param  user: User
+ */
 class ChatToItem(val string: String, val user: User): Item<com.xwray.groupie.GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int){
         viewHolder.itemView.messageTo.text = string

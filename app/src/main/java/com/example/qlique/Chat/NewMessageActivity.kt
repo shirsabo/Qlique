@@ -18,9 +18,11 @@ import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_new_message.*
 import kotlinx.android.synthetic.main.user_row_new_message.view.*
 
-var adapter=GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
+var adapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>()
 val friendsAdded = arrayListOf<String>()
-
+/**
+ * Class for sending new message to chat contacts.
+ */
 class NewMessageActivity : AppCompatActivity() {
     companion object {
         const val USER_KEY="USER_KEY"
@@ -28,9 +30,9 @@ class NewMessageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
-        supportActionBar?.title="Select User"
+        supportActionBar?.title = "Select User"
         fetchFriends()
-        newMessageRecycle.adapter= adapter
+        newMessageRecycle.adapter = adapter
         adapter.setOnItemClickListener{item,view->
             val userItemObj = item as UserItem
             val intent = Intent (view.context,ChatLogActivity::class.java)
@@ -40,6 +42,9 @@ class NewMessageActivity : AppCompatActivity() {
         }
     }
 }
+/**
+ * Returns user from snapshot received from firebase.
+ */
 private fun loadUser(snapshot: DataSnapshot):User{
     val user = User()
     user.firstName = snapshot.child("firstName").value.toString()
@@ -51,6 +56,9 @@ private fun loadUser(snapshot: DataSnapshot):User{
     user. url = snapshot.child("url").value.toString()
     return user
 }
+/**
+ * Fetch current users's friends from firebase.
+ */
 private fun fetchFriends(){
     val mFirebaseInstance= FirebaseDatabase.getInstance()
     val mFirebaseDatabase= mFirebaseInstance.getReference("users")
@@ -61,7 +69,7 @@ private fun fetchFriends(){
             if (user!=null){
                 for (friendKey in user.getFriends()){
                     if (friendKey!=null){
-                        val newUser =Firebase.database.reference.child("users").child(friendKey).addValueEventListener(object :ValueEventListener{
+                        Firebase.database.reference.child("users").child(friendKey).addValueEventListener(object :ValueEventListener{
                             override fun onDataChange(dataSnapshot: DataSnapshot){
                                 val user1= loadUser(dataSnapshot)
                                 if (!friendsAdded.contains(friendKey)){
@@ -81,7 +89,9 @@ private fun fetchFriends(){
     })
 
 }
-
+/**
+ * Class which represents contact on the list.
+ */
 class UserItem(val user: User): Item<com.xwray.groupie.GroupieViewHolder>(){
     @SuppressLint("SetTextI18n")
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {

@@ -9,12 +9,10 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
-
 import com.example.qlique.NewMessageActivity;
 import com.example.qlique.Profile.User;
 import com.example.qlique.R;
 import com.example.qlique.ChatLogActivity;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -27,15 +25,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
 import java.util.Map;
 import java.util.Random;
 
-
+/**
+ * Class which is responsible for receiving notification and maintaining user's fcm Token
+ * in case of changing the token.
+ */
 public class FirebaseNotificationService extends FirebaseMessagingService {
-    private String  CHANNEL_ID = "1000";
+    private static final  String  CHANNEL_ID = "1000";
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+        //logic for presenting the notification.
         if (remoteMessage.getData().size() > 0) {
             Map<String, String> map = remoteMessage.getData();
             String title = map.get("title");
@@ -52,11 +53,23 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
         DatabaseReference ref = database.getReference("users/"+FirebaseAuth.getInstance().getCurrentUser().getUid());
         ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("which field do you want to update").setValue(newToken);
     }
-
+    /**
+     * When token has changed, update it.
+     */
     @Override
     public void onNewToken(@NonNull String s) {
+        if (s.equals("")) {
+            return;
+        }
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/users/"+ FirebaseAuth.getInstance().getCurrentUser().getUid()+"/tokenFCM");
+        ref.setValue(s);
         super.onNewToken(s);
     }
+    /**
+     * @param  uidOfSender - String
+     * @param  title- String
+     * @param message - String
+     */
     public void fetchUser(String uidOfSender,String title, String message){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         if(uidOfSender==null){
@@ -86,15 +99,19 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
-
         });
-
     }
+    /**
+     * When notification is received, shows the message as notification
+     * @param  user - User
+     * @param  title- String
+     * @param message - String
+     */
     private void createNormalNotification(User user, String title, String message) {
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
         builder.setContentTitle(title)
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -112,20 +129,23 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         manager.notify(new Random().nextInt(85 - 65), builder.build());
     }
-
     @RequiresApi(api = Build.VERSION_CODES.O)
+    /**
+     * Oreo notification - view settings.
+     * @param  user - User
+     * @param  title- String
+     * @param message - String
+     */
     private void createOreoNotification(User user, String title, String message) {
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Message", NotificationManager.IMPORTANCE_HIGH);
         channel.setShowBadge(true);
         channel.enableLights(true);
         channel.enableVibration(true);
         channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         manager.createNotificationChannel(channel);
         Intent intent = new Intent(getApplicationContext(), ChatLogActivity.class);
         intent.putExtra(NewMessageActivity.USER_KEY, user);
-       // getBaseContext().startActivity(intent);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
         Notification notification = new Notification.Builder(this, CHANNEL_ID)
                 .setContentTitle(title)

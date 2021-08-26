@@ -115,6 +115,9 @@ class ChatListActivity: AppCompatActivity()  {
         }
     }
     val latestMessagesMap = HashMap<String, ChatLogActivity.ChatMessage>()
+    /**
+     * Refresh RecycleVie: clears adapter and  sorts by timeStamp.
+     */
     private fun refreshRecycleViewMessages(){
         adapter.clear() // in order to refresh we first need to clear
         var messages = mutableListOf<ChatLogActivity.ChatMessage>()
@@ -129,22 +132,31 @@ class ChatListActivity: AppCompatActivity()  {
         }
 
     }
+    /**
+     * listens to the event which message is posted to Firebase.
+     */
     private fun listenForLatestMessages(){
         val fromId = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId")
+        //listens for new message added to the path
         ref.addChildEventListener(object :ChildEventListener{
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val chatMessage = snapshot.getValue(ChatLogActivity.ChatMessage::class.java)?:return
-                latestMessagesMap[snapshot.key!!]=chatMessage
-                refreshRecycleViewMessages()
+                latestMessagesMap[snapshot.key!!] = chatMessage // inserts to map
+                refreshRecycleViewMessages() // refreshes recyclerView
             }
+            // Not relevant
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
                 TODO("Not yet implemented")
             }
-
+            /**
+             * When message is changed - refresh.
+             * @param snapshot- DataSnapshot
+             * @param previousChildName- String?
+             */
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                 val chatMsg = snapshot.getValue(ChatLogActivity.ChatMessage::class.java)?:return
-                latestMessagesMap[snapshot.key!!]=chatMsg
+                latestMessagesMap[snapshot.key!!] = chatMsg
                 refreshRecycleViewMessages()
             }
 
@@ -157,9 +169,11 @@ class ChatListActivity: AppCompatActivity()  {
             }
 
         })
-
-
     }
+    /**
+     * Loads user's data.
+     * @param snapshot- DataSnapshot returned from Firebase
+     */
     private fun loadUser(snapshot: DataSnapshot):User{
         val user :User = User()
         user.firstName = snapshot.child("firstName").value.toString()
@@ -171,41 +185,55 @@ class ChatListActivity: AppCompatActivity()  {
         user. url = snapshot.child("url").value.toString()
         return user;
     }
+    /**
+     * Fetches current user's data.
+     */
     private fun fetchCurrentUser(){
         val uid = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
         ref.addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                SignupActivity.currentUser =loadUser(snapshot)
+                //Sets current user.
+                SignupActivity.currentUser = loadUser(snapshot)
             }
             override fun onCancelled(po: DatabaseError) {
                 TODO("Not yet implemented")
             }
         })
-
     }
+    /**
+     * Checks whether user is still logged i in in order to show its messages
+     * history and allow to send messages.
+     */
     private fun verifyUserIsLoggedIn(){
         val uid = FirebaseAuth.getInstance().uid
         if (uid == null){
+            // If user is not logged in.
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
-
         }
     }
-
+    /**
+     * When Selected users is logged out.
+     * @param item - MenuItem
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
            R.id.menu_sign_out ->{
                 FirebaseAuth.getInstance().signOut()
                 val intent = Intent(this, LoginActivity::class.java)
-                intent.flags=Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
 
         }
         return super.onOptionsItemSelected(item)
     }
+    /**
+     * Configures menu and super class functionality
+     * @param menu - Menu?
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.nav_menu,menu)
         return super.onCreateOptionsMenu(menu)

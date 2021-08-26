@@ -26,7 +26,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.random.Random.Default.nextDouble
+
 
 
 class HobbiesRecommendationSystem(
