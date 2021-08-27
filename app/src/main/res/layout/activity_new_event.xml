@@ -59,10 +59,10 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/descNewEvent"
             android:layout_width="match_parent"
-            android:maxLength="250"
-            android:maxLines="7"
             android:layout_height="77dp"
             android:hint="Enter the event's description"
+            android:maxLength="250"
+            android:maxLines="7"
             android:scrollbars="vertical" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -211,11 +211,11 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="56dp"
         android:text="Choose the number of participants:"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.116"
+        app:layout_constraintHorizontal_bias="0.144"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
@@ -231,7 +231,60 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/imageView5"
-        app:layout_constraintVertical_bias="0.034"
+        app:layout_constraintVertical_bias="0.397"
         app:srcCompat="@drawable/ic_group" />
+
+    <TextView
+        android:id="@+id/Address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginBottom="20dp"
+        android:text="Hello"
+        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="23dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="192dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/Address"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_location" />
+
+    <TextView
+        android:id="@+id/membersCapacity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="66dp"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="@+id/next_first_step"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.014"
+        app:layout_constraintStart_toEndOf="@+id/imageView8"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="28dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:srcCompat="@drawable/ic_friends" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

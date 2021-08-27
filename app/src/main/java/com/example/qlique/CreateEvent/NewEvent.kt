@@ -22,7 +22,6 @@ import com.example.qlique.Map.CreateEventMapActivity
 import com.example.qlique.R
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
-import com.google.firebase.FirebaseError
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -47,12 +46,22 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
         var savedDate: TextView? = null //the date of the event
         var chosenLat by Delegates.notNull<Double>() //the latitude of the event
         var chosenLon by Delegates.notNull<Double>() //the longitude of the event
-        var capacityMembers by Delegates.notNull<Int>() // the members capacity of the event
+        var textViewCapacity: TextView? = null
+        var capacityMembers  by Delegates.observable(-1){ property, oldValue, newValue ->
+            if (newValue>=0){
+                textViewCapacity?.text = newValue.toString()
+            }
+        }// the members capacity of the event
+        const val chooseAddress = "Please Choose Address"
+        var textViewAddress: TextView? = null
+
+        var addressChosen by Delegates.observable("Please Choose Address") { property, oldValue, newValue ->
+            textViewAddress?.text = newValue
+        }
     }
     var urLImage: Uri? = null
     var authorUid: String? = null
     var categories: ArrayList<String> = ArrayList(0)
-    var latlng: DoubleArray? = null
     var firstTime = true
     var timePickerFragment = TimePickerFragment()
     private var datePickerFragment = DatePickerFragment()
@@ -99,18 +108,18 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
             Toast.makeText(this, "Please write description", Toast.LENGTH_LONG).show()
             return false
         }
-        if(urLImage==null){
+        if(urLImage == null){
             Toast.makeText(this, "Please choose photo", Toast.LENGTH_LONG).show()
             return false
         }
         if(authorUid == null){
             return false
         }
-        if(savedDate ==null||savedDate?.text==""){
+        if(savedDate == null || savedDate?.text == ""){
             Toast.makeText(this, "Please choose date", Toast.LENGTH_LONG).show()
             return false
         }
-        if(savedtime==null|| savedtime?.text==""){
+        if(savedtime == null|| savedtime?.text == ""){
             Toast.makeText(this, "Please choose hour", Toast.LENGTH_LONG).show()
             return false
         }
@@ -118,7 +127,11 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
             Toast.makeText(this, "Please choose hobbies related", Toast.LENGTH_LONG).show()
             return false
         }
-        return  true
+        if(capacityMembers < 0){
+            Toast.makeText(this, "Please choose valid number of members", Toast.LENGTH_LONG).show()
+            return false
+        }
+        return true
     }
     @SuppressLint("CutPasteId")
     /**
@@ -130,6 +143,12 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
         setContentView(R.layout.activity_new_event)
         savedDate = DateNewEvent
         savedtime = hourNewEvent
+        val addressTextView = findViewById<TextView>(R.id.Address)
+        textViewAddress = addressTextView
+        val capTextView = findViewById<TextView>(R.id.membersCapacity)
+        textViewCapacity = capTextView
+        addressTextView.text = chooseAddress
+        capacityMembers = -1 // by that we can know if no member number is submitted
         authorUid = FirebaseAuth.getInstance().currentUser?.uid
         // sets Click Listener for uploading image
         photo_event_new.setOnClickListener {

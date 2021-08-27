@@ -235,6 +235,10 @@ open class EventsMap : BasicMapActivity() {
                             "lastName"
                         ).value.toString()
                     val chat = view.findViewById<View>(R.id.post_image_chat_btn) as ImageView
+                    if (user.uid == FirebaseAuth.getInstance().uid){
+                        chat.visibility = GONE
+                        return
+                    }
                     chat.setOnClickListener {
                         val intent = Intent(view.context, ChatLogActivity::class.java)
                         intent.putExtra(NewMessageActivity.USER_KEY, user)

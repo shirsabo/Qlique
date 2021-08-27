@@ -1,6 +1,8 @@
 package com.example.qlique.Map
 import android.content.ContentValues
 import android.content.Intent
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -13,6 +15,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import java.util.*
+
 
 /**
  * CreateEventMapActivity
@@ -21,7 +25,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 class CreateEventMapActivity : BasicMapActivity() {
     private lateinit var back: Button
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (!intent.getBooleanExtra("FirstTime",false)){
+        if (!intent.getBooleanExtra("FirstTime", false)){
             super.finish()
         }
 
@@ -64,6 +68,8 @@ class CreateEventMapActivity : BasicMapActivity() {
             NewEvent.chosenLon = latlng.longitude
             val location = LatLng(latlng.latitude, latlng.longitude)
             mMap?.addMarker(MarkerOptions().position(location))
+            getAddress(latlng.latitude, latlng.longitude)
+
         }
         back = findViewById(R.id.back_button)
         back.setOnClickListener {
@@ -74,6 +80,20 @@ class CreateEventMapActivity : BasicMapActivity() {
             intent.putExtra("coordinates", coordinate)
             setResult(RESULT_OK, intent)
             super.finish()
+        }
+    }
+
+    private fun getAddress(latitude: Double, longitude: Double) {
+        val addresses: List<Address>
+        val geocoder: Geocoder = Geocoder(this, Locale.getDefault())
+        addresses = geocoder.getFromLocation(
+            latitude,
+            longitude,
+            1
+        ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+        val address = addresses[0].getAddressLine(0)
+        if(address != null){
+            NewEvent.addressChosen = address.toString()
         }
     }
 
