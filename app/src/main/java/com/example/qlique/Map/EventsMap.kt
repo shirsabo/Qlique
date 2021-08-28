@@ -331,6 +331,15 @@ open class EventsMap : BasicMapActivity() {
             "Gaming" -> {
                 return R.drawable.ic_joystick
             }
+            "Cooking" -> {
+                return R.drawable.ic_cooking_black
+            }
+            "Art" -> {
+                return R.drawable.ic_art_black
+            }
+            "Biking" -> {
+                return R.drawable.ic_bike_black
+            }
             else -> {
                 return R.drawable.ic_location
             }

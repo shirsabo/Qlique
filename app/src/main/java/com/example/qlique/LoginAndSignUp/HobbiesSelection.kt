@@ -47,10 +47,10 @@ class HobbiesSelection : AppCompatActivity(), AdapterView.OnItemClickListener {
         R.drawable.ic_outdoor_activities,
         R.drawable.ic_home_and_garden,
         R.drawable.ic_gaming,
-        R.drawable.ic_baseline_sports_soccer_24,
-        R.drawable.ic_location,
-        R.drawable.ic_location,
-        R.drawable.ic_location
+        R.drawable.ic_ball,
+        R.drawable.ic_biking_color,
+        R.drawable.ic_cooking_color,
+        R.drawable.ic_art_color
     )
 
     /**
