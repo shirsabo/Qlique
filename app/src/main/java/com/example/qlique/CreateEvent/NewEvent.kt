@@ -206,12 +206,6 @@ class NewEvent : AppCompatActivity(), RequestCapacityDialog.OnCompleteListener,D
                 checkedCategoriesArray[which] = isChecked
                 // Get the current focused item
                 val currentItem = categoriesList[which]
-                // Notify the current action
-                Toast.makeText(
-                    applicationContext,
-                    "$currentItem $isChecked",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
             builder.setPositiveButton("OK") { _, _ ->
                 // Do something when click positive button
