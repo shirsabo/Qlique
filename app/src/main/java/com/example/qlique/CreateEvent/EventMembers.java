@@ -11,6 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.qlique.R;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.Arrays;
 /**
  * Class EventMembers.
@@ -20,6 +26,30 @@ public class EventMembers extends AppCompatActivity implements NavigationView.On
     RecyclerView recyclerView;
     MembersAdapter adapter; // holds all the member items
     String[] members={}; // holds the members' unique ids
+
+  void addMmberIfExists(Integer indexEventMem, Event event ){
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.child(event.members.get(indexEventMem)).getValue()!=null) {
+                    members = Arrays.copyOf(members, members.length+1);
+                    members[members.length-1]= event.members.get(indexEventMem);
+                    adapter = new MembersAdapter(EventMembers.this,members); // our adapter takes two string array
+                    recyclerView.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed, how to handle?
+
+            }
+
+        });
+    }
     /**
      * Fetches the members of the event from the Event object
      * @param event - the event
@@ -31,10 +61,9 @@ public class EventMembers extends AppCompatActivity implements NavigationView.On
             noMembersText.setVisibility(View.VISIBLE);
             return;
         }
-        for (int i=0;i<event.members.size();i++){
+        for (int i=0, insertedMembers=0;i<event.members.size();i++){
             noMembersText.setVisibility(View.GONE);
-            members = Arrays.copyOf(members, members.length+1);
-            members[i]= event.members.get(i);//adds the member to the array
+            addMmberIfExists(i,event);
         }
     }
 
@@ -52,8 +81,6 @@ public class EventMembers extends AppCompatActivity implements NavigationView.On
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         assert event != null;
         fetchMembers(event);
-        adapter = new MembersAdapter(this,members); // our adapter takes two string array
-        recyclerView.setAdapter(adapter);
     }
 
     @Override

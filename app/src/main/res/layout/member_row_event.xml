@@ -16,7 +16,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="101dp">
+            android:layout_height="101dp"
+            android:id="@+id/layoutMember">
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/photo_event_new"
@@ -39,7 +40,6 @@
                 android:layout_width="161dp"
                 android:layout_height="28dp"
                 android:layout_marginEnd="128dp"
-                android:layout_marginRight="128dp"
                 android:maxLines="3"
                 android:text="user_name"
                 android:textSize="18sp"
@@ -52,11 +52,14 @@
                 android:id="@+id/send_msg_member"
                 android:layout_width="46dp"
                 android:layout_height="53dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginRight="24dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="72dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/member_username"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.333"
                 app:srcCompat="@drawable/ic_speech_bubble" />
 
 

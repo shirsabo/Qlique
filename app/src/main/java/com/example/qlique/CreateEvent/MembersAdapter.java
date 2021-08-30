@@ -21,6 +21,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 /**
  * Class MembersAdapter.
@@ -53,15 +57,27 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHold
      * @params snapshot - DataSnapshot from Firebase
      * @return Configured User object
      */
+    private String getField(DataSnapshot snapshot,String field) {
+        Object val =null;
+        if (field==null){
+            return null;
+        }
+        val = snapshot.child(field).getValue();
+        if(val == null){
+            return null;
+        }
+        else return val.toString();
+    }
    private User loadUser(DataSnapshot snapshot){
         User user = new User();
-        user.firstName = Objects.requireNonNull(snapshot.child("firstName").getValue()).toString();
-        user.lastName = Objects.requireNonNull(snapshot.child("lastName").getValue()).toString();
-        user.email  =  Objects.requireNonNull(snapshot.child("email").getValue()).toString();
-        user.city =  Objects.requireNonNull(snapshot.child("city").getValue()).toString();
-        user.gender =  Objects.requireNonNull(snapshot.child("gender").getValue()).toString();
-        user.uid = Objects.requireNonNull(snapshot.child("uid").getValue()).toString();
-        user. url = Objects.requireNonNull(snapshot.child("url").getValue()).toString();
+        user.firstName = getField(snapshot,"firstName");
+        user.lastName = getField(snapshot,"lastName");
+        user.email = getField(snapshot,"email");
+        user.city =  getField(snapshot,"city");
+        user.gender = getField(snapshot,"gender");
+        user.uid = getField(snapshot,"uid");
+        user. url = getField(snapshot,"url");
+        user.tokenFCM = getField(snapshot,"tokenFCM");
         return user;
     }
     @Override
@@ -94,6 +110,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHold
                     // user can not send to himself/herself a message
                     chat.setVisibility(View.GONE);
                 } else {
+                    chat.setVisibility(View.VISIBLE);
                     //sets an event listener so by that, when the chat button is clicked, the chat activity starts
                     chat.setOnClickListener(v -> {
                         Intent intent = new Intent(viewHolder.itemView.getContext(), ChatLogActivity.class);
@@ -101,6 +118,11 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHold
                         viewHolder.itemView.getContext().startActivity(intent);
                     });
                 }
+                viewHolder.itemView.findViewById(R.id.layoutMember).setOnClickListener(v -> {
+                    Intent intent = new Intent(viewHolder.itemView.getContext(), ChatLogActivity.class);
+                    intent.putExtra(NewMessageActivity.USER_KEY, user);
+                    viewHolder.itemView.getContext().startActivity(intent);
+                });
             }
 
             @Override
