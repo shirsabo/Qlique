@@ -81,6 +81,11 @@ class CreateEventMapActivity : BasicMapActivity() {
             setResult(RESULT_OK, intent)
             super.finish()
         }
+        mGps!!.setOnClickListener {
+            clearMap(true)
+            Log.d(ContentValues.TAG, "onClick: clicked gps icon")
+            getDeviceLocation(this::moveCamera)
+        }
     }
 
     private fun getAddress(latitude: Double, longitude: Double) {

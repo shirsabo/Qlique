@@ -48,11 +48,12 @@ class ChatLogActivity : AppCompatActivity() {
      * Sets the recyclerView , ActionBar , user's data , sending anf recieving logic.
      * @param savedInstanceState- Bundle?
      */
+    var user: User? =null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
         recyclerView_chat.adapter = adapter
-        val user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
+        user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
         supportActionBar?.title= user?.firstName+ " "+user?.lastName
         other_side_user.text = user?.firstName+ " "+user?.lastName
         Picasso.get().load(user?.url).into(other_side_photo)
@@ -137,6 +138,7 @@ class ChatLogActivity : AppCompatActivity() {
                     data.put("title", userFullName)
                     data.put("message", message)
                     data.put("SenderUid", senderUser.uid)
+                    data.put("DestUid",user.uid)
                     to.put("to", token)
                     to.put("data", data)
                     // Send notification

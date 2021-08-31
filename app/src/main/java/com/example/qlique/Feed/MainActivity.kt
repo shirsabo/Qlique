@@ -229,36 +229,6 @@ class MainActivity : AppCompatActivity() , GoogleApiClient.OnConnectionFailedLis
         feed.layoutManager = LinearLayoutManager(this)
         val hobbiesRecommendationSystem = HobbiesRecommendationSystem(this, feed)
         hobbiesRecommendationSystem.getRecommendedEvents()
-        /*val events : ArrayList<Event> = ArrayList()
-        var mDatabase = FirebaseDatabase.getInstance().reference
-        feed.layoutManager = LinearLayoutManager(this)
-        mDatabase.child("/posts").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (snapshot in dataSnapshot.children) { //gets all the posts from "/posts"
-                    val event =
-                        snapshot.getValue(Event::class.java)
-                    //updates the event's fields
-                    event?.uid = snapshot.child("uid").value.toString()
-                    event?.description = snapshot.child("description").value.toString()
-                    event?.hour = snapshot.child("hour").value.toString()
-                    event?.date = snapshot.child("date").value.toString()
-                    if (event != null) {
-                       if(CalendarEvent.isEventPassed(event.date,event.hour)) {
-                           // show only future events
-                           continue;
-                       }
-                        event.setEventUid(snapshot.key)
-                        events.add(event)
-                    }
-                }
-                // sets the PostAdapter which receives the array of event objects that were just fetched
-                feed.adapter= PostAdapter(events)
-            }})
-         */
-
     }
 
     public override fun onStart() {

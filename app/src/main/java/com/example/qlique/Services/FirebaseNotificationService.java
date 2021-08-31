@@ -42,6 +42,11 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
             String title = map.get("title");
             String message = map.get("message");
             String uidOfSender = map.get("SenderUid");
+            String  destUid = map.get("DestUid");
+            assert destUid != null;
+            if (!destUid.equals(FirebaseAuth.getInstance().getUid())){
+                return;//its not the user that suppose to get the message
+            }
             Log.d("TAG", "onMessageReceived: Title is " + title + "\n hisID" + uidOfSender);
             fetchUser(uidOfSender,title,  message);
         } else Log.d("TAG", "onMessageReceived: no data ");

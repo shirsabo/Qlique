@@ -22,9 +22,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -35,14 +33,12 @@ class HobbiesRecommendationSystem(
 ) : RecommendationModel, GoogleApiClient.OnConnectionFailedListener {
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     private var mLocationPermissionsGranted = false
-    var user: FirebaseUser? = null
-    private val FINE_LOCATION: String = Manifest.permission.ACCESS_FINE_LOCATION
-    private val COURSE_LOCATION: String = Manifest.permission.ACCESS_COARSE_LOCATION
-    private val LOCATION_PERMISSION_REQUEST_CODE = 1234
-
-    //var events: ArrayList<Event> = ArrayList()
-    var insertedEvents: ArrayList<Pair<Event, Double>> = ArrayList()
-    val hobbiestoIndex = mapOf(
+    private val radius = 40.0
+    private val fineLocation: String = Manifest.permission.ACCESS_FINE_LOCATION
+    private val courseLocation: String = Manifest.permission.ACCESS_COARSE_LOCATION
+    private val locationPermissionsRequestCode = 1234
+    private var insertedEvents: ArrayList<Pair<Event, Double>> = ArrayList()
+    private val hobbiesToIndex = mapOf(
         "Ball Game" to 0, "Sport" to 1, "Biking" to 2, "Outdoor activities" to 3, "Dance" to 4,
         "Fitness and health" to 5, "Food" to 6, "Cooking" to 7, "Study" to 8, "Gaming" to 9,
         "Cars" to 10, "Business" to 11, "Initiative" to 12, "Art" to 13, "Fashion" to 14,
@@ -70,7 +66,7 @@ class HobbiesRecommendationSystem(
         ) {
             return
         }
-        // displays the events in the wanted activity according to location, hobbies and registered events.
+        // displays the events in the wanted activity according to hobbies and registered events.
         requestFilteredEvents()
     }
 
@@ -105,7 +101,7 @@ class HobbiesRecommendationSystem(
     }
 
     /**
-     * requests location updates on the user's location in case the location we receives was null..
+     * Requests location updates on the user's location in case the location we receives was null.
      */
     private fun requestNewLocationData() {
         val mLocationRequest = LocationRequest()
@@ -133,10 +129,10 @@ class HobbiesRecommendationSystem(
     }
 
     /**
-     *
+     * Fetch the event from the firebase according to the event id.
      */
-    private fun fetchEventFromFirebase(uid: String) {
-        val ref = FirebaseDatabase.getInstance().getReference("/posts/$uid")
+    private fun fetchEventFromFirebase(eventId: String) {
+        val ref = FirebaseDatabase.getInstance().getReference("/posts/$eventId")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val event = snapshot.getValue(Event::class.java)
@@ -152,7 +148,6 @@ class HobbiesRecommendationSystem(
                     }
                     // filter the events list according to the user's hobbies.
                     filterEvent(event)
-                    //events.add(event)
                 } else {
                     return
                 }
@@ -164,6 +159,10 @@ class HobbiesRecommendationSystem(
         })
     }
 
+    /**
+     * Checks if the event's hobbies are related to the user's hobbies and displays in the feed
+     * only the events with the highest similarity.
+     */
     private fun filterEvent(optionalEvent: Event?) {
         val ref = FirebaseDatabase.getInstance()
             .getReference("users/${FirebaseAuth.getInstance().currentUser?.uid}")
@@ -199,12 +198,18 @@ class HobbiesRecommendationSystem(
         })
     }
 
+    /**
+     * Sets the PostAdapter which receives the array of event objects that were just fetched.
+     */
     private fun addEventToEventsList(event: Event, prob: Double) {
         insertedEvents.add(Pair<Event, Double>(event, prob))
         // Sets the PostAdapter which receives the array of event objects that were just fetched.
         feed.adapter = PostAdapter(sortEventsByProb(insertedEvents))
     }
 
+    /**
+     * Sort the events by the probability so we can show to events with increased probability.
+     */
     private fun sortEventsByProb(insertedEvents: ArrayList<Pair<Event, Double>>): ArrayList<Event> {
         // Sort the events by the probability.
         val sortedList = insertedEvents.sortedWith(compareBy { it.second }).reversed()
@@ -217,13 +222,19 @@ class HobbiesRecommendationSystem(
         return events
     }
 
+    /**
+     * Returns true if a ransom number has smaller value than the probability.
+     */
     private fun insertionDecision(insertionProb: Double): Boolean {
         val randomNum: Int = (0..100).random()
         return randomNum.toDouble() < (insertionProb * 100)
     }
 
+    /**
+     * Calculate the probability according to the hobbies fidderence.
+     */
     private fun calcProbability(hobbiesDiff: Int): Double {
-        val hobbiesSize = hobbiestoIndex.size
+        val hobbiesSize = hobbiesToIndex.size
         var insertionProb = 0.0
         if (hobbiesSize != 0) {
             insertionProb = (1 - (hobbiesDiff.toDouble() / hobbiesSize.toDouble()))
@@ -231,6 +242,9 @@ class HobbiesRecommendationSystem(
         return insertionProb
     }
 
+    /**
+     * Calculate the distance between two vectors.
+     */
     private fun calcVectorsDistance(vec1: BooleanArray, vec2: BooleanArray): Int {
         var minDiff = vec1.size
         for (i in vec1.indices) {
@@ -244,11 +258,14 @@ class HobbiesRecommendationSystem(
         return minDiff
     }
 
+    /**
+     * Builds a vector according to the list of hobbies anf the hobbiesToIndex map.
+     */
     private fun buildHobbiesVec(hobbies: List<String>): BooleanArray {
-        val hobbiesVec = BooleanArray(hobbiestoIndex.keys.size) { false }
+        val hobbiesVec = BooleanArray(hobbiesToIndex.keys.size) { false }
         for (hobby in hobbies) {
-            if (hobbiestoIndex.containsKey(hobby)) {
-                hobbiesVec[hobbiestoIndex[hobby]!!] = true
+            if (hobbiesToIndex.containsKey(hobby)) {
+                hobbiesVec[hobbiesToIndex[hobby]!!] = true
             }
         }
         return hobbiesVec
@@ -263,7 +280,7 @@ class HobbiesRecommendationSystem(
         val geoFire = GeoFire(ref)
         val geoQuery: GeoQuery = geoFire.queryAtLocation(
             GeoLocation(lat, long),
-            40.0
+            radius
         )
         geoQuery.addGeoQueryEventListener(object : GeoQueryEventListener {
             override fun onKeyEntered(key: String, location: GeoLocation) {
@@ -314,10 +331,10 @@ class HobbiesRecommendationSystem(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
-        if (ContextCompat.checkSelfPermission(activity.applicationContext, FINE_LOCATION) ==
+        if (ContextCompat.checkSelfPermission(activity.applicationContext, fineLocation) ==
             PackageManager.PERMISSION_GRANTED
         ) {
-            if (ContextCompat.checkSelfPermission(activity.applicationContext, COURSE_LOCATION) ==
+            if (ContextCompat.checkSelfPermission(activity.applicationContext, courseLocation) ==
                 PackageManager.PERMISSION_GRANTED
             ) {
                 mLocationPermissionsGranted = true
@@ -325,14 +342,14 @@ class HobbiesRecommendationSystem(
                 ActivityCompat.requestPermissions(
                     activity,
                     permissions,
-                    LOCATION_PERMISSION_REQUEST_CODE
+                    locationPermissionsRequestCode
                 )
             }
         } else {
             ActivityCompat.requestPermissions(
                 activity,
                 permissions,
-                LOCATION_PERMISSION_REQUEST_CODE
+                locationPermissionsRequestCode
             )
         }
     }

@@ -34,6 +34,9 @@ public class EventMembers extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                if (event.members.get(indexEventMem)==null){
+                    return;
+                }
                 if (snapshot.child(event.members.get(indexEventMem)).getValue()!=null) {
                     members = Arrays.copyOf(members, members.length+1);
                     members[members.length-1]= event.members.get(indexEventMem);
